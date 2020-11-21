@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,12 +25,11 @@ import com.ruoyi.system.service.ISysMenuService;
 
 /**
  * 首页 业务处理
- * 
+ *
  * @author ruoyi
  */
 @Controller
-public class SysIndexController extends BaseController
-{
+public class SysIndexController extends BaseController {
     @Autowired
     private ISysMenuService menuService;
 
@@ -38,8 +38,7 @@ public class SysIndexController extends BaseController
 
     // 系统首页
     @GetMapping("/index")
-    public String index(ModelMap mmap)
-    {
+    public String index(ModelMap mmap) {
         // 取身份信息
         SysUser user = ShiroUtils.getSysUser();
         // 根据用户id取出菜单
@@ -61,10 +60,8 @@ public class SysIndexController extends BaseController
 
         // 优先Cookie配置导航菜单
         Cookie[] cookies = ServletUtils.getRequest().getCookies();
-        for (Cookie cookie : cookies)
-        {
-            if (StringUtils.isNotEmpty(cookie.getName()) && "nav-style".equalsIgnoreCase(cookie.getName()))
-            {
+        for (Cookie cookie : cookies) {
+            if (StringUtils.isNotEmpty(cookie.getName()) && "nav-style".equalsIgnoreCase(cookie.getName())) {
                 indexStyle = cookie.getValue();
                 break;
             }
@@ -75,41 +72,34 @@ public class SysIndexController extends BaseController
 
     // 切换主题
     @GetMapping("/system/switchSkin")
-    public String switchSkin()
-    {
+    public String switchSkin() {
         return "skin";
     }
 
     // 切换菜单
     @GetMapping("/system/menuStyle/{style}")
-    public void menuStyle(@PathVariable String style, HttpServletResponse response)
-    {
+    public void menuStyle(@PathVariable String style, HttpServletResponse response) {
         CookieUtils.setCookie(response, "nav-style", style);
     }
 
     // 系统介绍
     @GetMapping("/system/main")
-    public String main(ModelMap mmap)
-    {
+    public String main(ModelMap mmap) {
         mmap.put("version", RuoYiConfig.getVersion());
         return "main";
     }
 
     // 检查初始密码是否提醒修改
-    public boolean initPasswordIsModify(Date pwdUpdateDate)
-    {
+    public boolean initPasswordIsModify(Date pwdUpdateDate) {
         int initPasswordModify = Convert.toInt(configService.selectConfigByKey("sys.account.initPasswordModify"));
         return initPasswordModify == 1 && pwdUpdateDate == null;
     }
 
     // 检查密码是否过期
-    public boolean passwordIsExpiration(Date pwdUpdateDate)
-    {
+    public boolean passwordIsExpiration(Date pwdUpdateDate) {
         int passwordValidateDays = Convert.toInt(configService.selectConfigByKey("sys.account.passwordValidateDays"));
-        if (passwordValidateDays > 0)
-        {
-            if (StringUtils.isNull(pwdUpdateDate))
-            {
+        if (passwordValidateDays > 0) {
+            if (StringUtils.isNull(pwdUpdateDate)) {
                 // 如果从未修改过初始密码，直接提醒过期
                 return true;
             }
