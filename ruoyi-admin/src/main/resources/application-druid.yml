@@ -2,13 +2,17 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    driverClassName: com.mysql.cj.jdbc.Driver
+#    driverClassName: com.mysql.cj.jdbc.Driver
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://114.115.142.38:3306/game?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: root
-        password: Jiangzhong1314
+        url: jdbc:sqlserver://8.134.19.160:1433;DatabaseName=RYPlatformManagerDB
+        username: sa
+        password: abc123@
+#        url: jdbc:mysql://114.115.142.38:3306/game?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#        username: root
+#        password: Jiangzhong1314
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
@@ -31,7 +35,7 @@ spring:
       # 配置一个连接在池中最大生存的时间，单位是毫秒
       maxEvictableIdleTimeMillis: 900000
       # 配置检测连接是否有效
-      validationQuery: SELECT 1 FROM DUAL
+      validationQuery: SELECT 1 FROM SYSUSERS
       testWhileIdle: true
       testOnBorrow: false
       testOnReturn: false
