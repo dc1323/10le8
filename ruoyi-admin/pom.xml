@@ -61,6 +61,13 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <!-- SQLServer驱动包 -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <!-- <version>8.4.1.jre11</version> -->
+        </dependency>
+
         <!-- 核心模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
