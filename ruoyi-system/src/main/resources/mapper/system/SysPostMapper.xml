@@ -55,13 +55,13 @@
     </select>
 
     <select id="checkPostNameUnique" parameterType="String" resultMap="SysPostResult">
-        <include refid="selectPostVo"/>
-        where post_name=#{postName} limit 1
+        select top 1 post_id, post_code, post_name, post_sort, status, create_by, create_time, remark
+		   from sys_post where post_name=#{postName}
     </select>
 
     <select id="checkPostCodeUnique" parameterType="String" resultMap="SysPostResult">
-        <include refid="selectPostVo"/>
-        where post_code=#{postCode} limit 1
+         select top 1 post_id, post_code, post_name, post_sort, status, create_by, create_time, remark
+		   from sys_post where post_code=#{postCode}
     </select>
 
     <delete id="deletePostByIds" parameterType="Long">

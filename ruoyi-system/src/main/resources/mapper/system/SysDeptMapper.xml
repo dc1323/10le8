@@ -64,8 +64,8 @@
     </select>
 
     <select id="checkDeptNameUnique" resultMap="SysDeptResult">
-        <include refid="selectDeptVo"/>
-        where dept_name=#{deptName} and parent_id = #{parentId} limit 1
+        select top 1 d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time
+        from sys_dept d where dept_name=#{deptName} and parent_id = #{parentId}
     </select>
 
     <select id="selectDeptById" parameterType="Long" resultMap="SysDeptResult">

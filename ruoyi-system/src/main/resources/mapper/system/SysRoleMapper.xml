@@ -69,13 +69,13 @@
     </select>
 
     <select id="checkRoleNameUnique" parameterType="String" resultMap="SysRoleResult">
-        <include refid="selectRoleVo"/>
-        where r.role_name=#{roleName} limit 1
+        select top 1 r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status, r.del_flag, r.create_time, r.remark
+          from sys_role r where r.role_name=#{roleName}
     </select>
 
     <select id="checkRoleKeyUnique" parameterType="String" resultMap="SysRoleResult">
-        <include refid="selectRoleVo"/>
-        where r.role_key=#{roleKey} limit 1
+        select top 1 r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status, r.del_flag, r.create_time, r.remark
+          from sys_role r where r.role_key=#{roleKey}
     </select>
 
     <delete id="deleteRoleById" parameterType="Long">

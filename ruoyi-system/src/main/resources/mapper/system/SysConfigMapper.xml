@@ -60,8 +60,8 @@
     </select>
 
     <select id="checkConfigKeyUnique" parameterType="String" resultMap="SysConfigResult">
-        <include refid="selectConfigVo"/>
-        where config_key = #{configKey} limit 1
+        select top 1 config_id, config_name, config_key, config_value, config_type, create_by, create_time, update_by, update_time, remark
+		  from sys_config where config_key = #{configKey}
     </select>
 
     <insert id="insertConfig" parameterType="SysConfig">

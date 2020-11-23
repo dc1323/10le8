@@ -123,8 +123,8 @@
 	</select>
 
     <select id="checkMenuNameUnique" parameterType="SysMenu" resultMap="SysMenuResult">
-        <include refid="selectMenuVo"/>
-        where menu_name=#{menuName} and parent_id = #{parentId} limit 1
+        select top 1 menu_id, menu_name, parent_id, order_num, url, target, menu_type, visible, isnull(perms,'') as perms, icon, create_by, create_time
+		  from sys_menu where menu_name=#{menuName} and parent_id = #{parentId}
     </select>
 
     <update id="updateMenu" parameterType="SysMenu">

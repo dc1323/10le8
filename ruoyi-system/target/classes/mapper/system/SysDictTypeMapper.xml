@@ -56,8 +56,8 @@
     </select>
 
     <select id="checkDictTypeUnique" parameterType="String" resultMap="SysDictTypeResult">
-        <include refid="selectDictTypeVo"/>
-        where dict_type = #{dictType} limit 1
+        select top 1 dict_id, dict_name, dict_type, status, create_by, create_time, remark
+		  from sys_dict_type where dict_type = #{dictType}
     </select>
 
     <delete id="deleteDictTypeById" parameterType="Long">
