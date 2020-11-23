@@ -75,12 +75,14 @@
 		where d.dept_id = #{deptId}
 	</select>
 
-    <select id="selectChildrenDeptById" parameterType="Long" resultMap="SysDeptResult">
-		select * from sys_dept where find_in_set(#{deptId}, ancestors)
+    <select id="selectChildrenDeptById" parameterType="String" resultMap="SysDeptResult">
+		select * from sys_dept where ${deptQueryStr}
+		<!--find_in_set(#{deptId}, ancestors)-->
 	</select>
 
-    <select id="selectNormalChildrenDeptById" parameterType="Long" resultType="int">
-		select count(*) from sys_dept where status = 0 and del_flag = '0' and find_in_set(#{deptId}, ancestors)
+    <select id="selectNormalChildrenDeptById" parameterType="String" resultType="int">
+		select count(*) from sys_dept where status = 0 and del_flag = '0' and ${deptQueryStr}
+		    <!--and find_in_set(#{deptId}, ancestors)-->
 	</select>
 
     <insert id="insertDept" parameterType="SysDept">

@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="364b86f6-063c-4ce2-b174-78b4fe1eaf58" name="Default Changelist" comment="" />
+    <list default="true" id="364b86f6-063c-4ce2-b174-78b4fe1eaf58" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/SysUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/SysUserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-admin/target/classes/com/ruoyi/web/controller/system/SysUserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/com/ruoyi/web/controller/system/SysUserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-common/src/main/java/com/ruoyi/common/core/domain/entity/SysUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-common/src/main/java/com/ruoyi/common/core/domain/entity/SysUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/aspectj/DataScopeAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-framework/src/main/java/com/ruoyi/framework/aspectj/DataScopeAspect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/mapper/SysDeptMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/mapper/SysDeptMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/SysDeptServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/SysDeptServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/resources/mapper/system/SysDeptMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/resources/mapper/system/SysDeptMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-system/src/main/resources/mapper/system/SysUserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/src/main/resources/mapper/system/SysUserMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-system/target/classes/com/ruoyi/system/service/impl/SysDeptServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/target/classes/com/ruoyi/system/service/impl/SysDeptServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-system/target/classes/mapper/system/SysUserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-system/target/classes/mapper/system/SysUserMapper.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +87,7 @@
       <workItem from="1605927005448" duration="2238000" />
       <workItem from="1605929654740" duration="2813000" />
       <workItem from="1605937472281" duration="4670000" />
+      <workItem from="1606135924075" duration="2608000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <created>1605930466770</created>
@@ -88,6 +101,16 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

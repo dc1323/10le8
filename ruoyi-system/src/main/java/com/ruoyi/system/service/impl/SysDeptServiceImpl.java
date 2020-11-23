@@ -20,8 +20,6 @@ import com.ruoyi.system.service.ISysDeptService;
 
 /**
  * 部门管理 服务实现
- *
- * @author ruoyi
  */
 @Service
 public class SysDeptServiceImpl implements ISysDeptService {
@@ -56,8 +54,6 @@ public class SysDeptServiceImpl implements ISysDeptService {
 
     /**
      * 查询部门管理树（排除下级）
-     *
-     * @param deptId 部门ID
      * @return 所有部门信息
      */
     @Override
@@ -232,7 +228,11 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @param oldAncestors 旧的父ID集合
      */
     public void updateDeptChildren(Long deptId, String newAncestors, String oldAncestors) {
-        List<SysDept> children = deptMapper.selectChildrenDeptById(deptId);
+        String deptQueryStr  = "(ancestors like '%," + deptId
+                + "' or ancestors like '" + deptId
+                + ",%' or ancestors like '%," + deptId
+                + ",%' or ancestors = '" + deptId + "')";
+        List<SysDept> children = deptMapper.selectChildrenDeptById(deptQueryStr);
         for (SysDept child : children) {
             child.setAncestors(child.getAncestors().replace(oldAncestors, newAncestors));
         }
@@ -260,7 +260,11 @@ public class SysDeptServiceImpl implements ISysDeptService {
      */
     @Override
     public int selectNormalChildrenDeptById(Long deptId) {
-        return deptMapper.selectNormalChildrenDeptById(deptId);
+        String deptQueryStr  = "(ancestors like '%," + deptId
+                    + "' or ancestors like '" + deptId
+                    + ",%' or ancestors like '%," + deptId
+                    + ",%' or ancestors = '" + deptId + "')";
+        return deptMapper.selectNormalChildrenDeptById(deptQueryStr);
     }
 
     /**

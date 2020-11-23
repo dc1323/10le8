@@ -33,6 +33,8 @@ public class SysUser extends BaseEntity {
     @Excel(name = "部门编号", type = Type.IMPORT)
     private Long deptId;
 
+    private String deptQueryStr;
+
     /**
      * 部门父ID
      */
@@ -250,6 +252,14 @@ public class SysUser extends BaseEntity {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getDeptQueryStr() {
+        return deptQueryStr;
+    }
+
+    public void setDeptQueryStr(String deptQueryStr) {
+        this.deptQueryStr = deptQueryStr;
     }
 
     @JsonIgnore

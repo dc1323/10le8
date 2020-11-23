@@ -33,6 +33,5 @@ com/ruoyi/web/controller/system/SysUserController.class
 com/ruoyi/web/controller/system/SysMenuController.class
 com/ruoyi/web/controller/tool/SwaggerController.class
 com/ruoyi/web/controller/system/SysIndexController.class
-com/ruoyi/RuoYiApplication.class
 com/ruoyi/web/controller/system/SysNoticeController.class
 com/ruoyi/web/controller/demo/domain/GoodsModel.class

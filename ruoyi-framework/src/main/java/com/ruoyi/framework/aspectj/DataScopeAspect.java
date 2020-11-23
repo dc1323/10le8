@@ -102,9 +102,18 @@ public class DataScopeAspect {
             } else if (DATA_SCOPE_DEPT.equals(dataScope)) {
                 sqlString.append(StringUtils.format(" OR {}.dept_id = {} ", deptAlias, user.getDeptId()));
             } else if (DATA_SCOPE_DEPT_AND_CHILD.equals(dataScope)) {
+
+                String deptQueryStr = "";
+                if (null != user.getDeptId()) {
+                    deptQueryStr = "(ancestors like '%," + user.getDeptId()
+                            + "' or ancestors like '" + user.getDeptId()
+                            + ",%' or ancestors like '%," + user.getDeptId()
+                            + ",%' or ancestors = '" + user.getDeptId() + "')";
+                }
+
                 sqlString.append(StringUtils.format(
-                        " OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or find_in_set( {} , ancestors ) )",
-                        deptAlias, user.getDeptId(), user.getDeptId()));
+                        " OR {}.dept_id IN ( SELECT dept_id FROM sys_dept WHERE dept_id = {} or {})",
+                        deptAlias, user.getDeptId(), deptQueryStr));
             } else if (DATA_SCOPE_SELF.equals(dataScope)) {
                 if (StringUtils.isNotBlank(userAlias)) {
                     sqlString.append(StringUtils.format(" OR {}.user_id = {} ", userAlias, user.getUserId()));

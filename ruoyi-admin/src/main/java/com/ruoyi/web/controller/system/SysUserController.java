@@ -63,6 +63,16 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public TableDataInfo list(SysUser user) {
         startPage();
+
+        String deptQueryStr = "";
+        if (null != user.getDeptId()) {
+            deptQueryStr = "(ancestors like '%," + user.getDeptId()
+                    + "' or ancestors like '" + user.getDeptId()
+                    + ",%' or ancestors like '%," + user.getDeptId()
+                    + ",%' or ancestors = '" + user.getDeptId() + "')";
+        }
+
+        user.setDeptQueryStr(deptQueryStr);
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
