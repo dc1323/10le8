@@ -81,9 +81,10 @@ mybatis:
 
 # PageHelper分页插件
 pagehelper:
-  helperDialect: mysql
+  helperDialect: sqlserver
   reasonable: true
   supportMethodsArguments: true
+  dialect-alias: sqlserver=com.github.pagehelper.dialect.helper.SqlServer2012Dialect
   params: count=countSql
 
 # Shiro
