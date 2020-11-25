@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.account;
 
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.games.domain.AccountInfo;
+import com.ruoyi.games.service.AccountInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +22,7 @@ public class AccountInfoController extends BaseController {
     private String prefix = "games/account";
 
     @Autowired
-    private AccountsInfoService accountsInfoService;
+    private AccountInfoService accountInfoService;
 
     @RequiresPermissions("games:account:view")
     @GetMapping()
@@ -32,7 +35,15 @@ public class AccountInfoController extends BaseController {
     @ResponseBody
     public TableDataInfo list(AccountInfo info) {
         startPage();
-        List<AccountInfo> list = accountsInfoService.
+        if(null == info){
+            info = new AccountInfo();
+            info.setPlayingGame("-1");
+        }else{
+            if(StringUtils.isEmpty(info.getPlayingGame())){
+                info.setPlayingGame("-1");
+            }
+        }
+        List<AccountInfo> list = accountInfoService.selectAccountList(info);
         return getDataTable(list);
     }
 

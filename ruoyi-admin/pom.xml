@@ -86,6 +86,12 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!-- 系统管理-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-system</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

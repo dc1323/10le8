@@ -1,6 +1,8 @@
 package com.ruoyi.games.domain;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AccountInfo {
 
@@ -16,12 +18,18 @@ public class AccountInfo {
     private Date registerDate;
     private String lastLogonIp;
     private Date lastLogonDate;
-    private int nullit;
+    private int nullity;
 
     private String score;
     private String insureScore;
     private String orderAmount;
     private String money;
+
+    private String keyWord;
+    /**
+     * 请求参数
+     */
+    private Map<String, Object> params;
 
     public Integer getUserID() {
         return userID;
@@ -119,12 +127,12 @@ public class AccountInfo {
         this.lastLogonDate = lastLogonDate;
     }
 
-    public int getNullit() {
-        return nullit;
+    public int getNullity() {
+        return nullity;
     }
 
-    public void setNullit(int nullit) {
-        this.nullit = nullit;
+    public void setNullity(int nullity) {
+        this.nullity = nullity;
     }
 
     public String getScore() {
@@ -157,5 +165,24 @@ public class AccountInfo {
 
     public void setMoney(String money) {
         this.money = money;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
+
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }

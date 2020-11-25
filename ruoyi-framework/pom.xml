@@ -77,6 +77,11 @@
             <artifactId>ruoyi-system</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-games</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

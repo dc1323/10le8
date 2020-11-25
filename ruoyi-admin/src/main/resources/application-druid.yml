@@ -20,8 +20,9 @@ spring:
         url:
         username:
         password:
-      ryaccountsdb:
-        enabled: false
+      #从数据库，游戏账号数据库
+      accountdb:
+        enabled: true
         url: jdbc:sqlserver://8.134.19.160:1433;DatabaseName=RYAccountsDB
         username: sa
         password: abc123@

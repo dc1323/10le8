@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.AccountInfoMapper">
+
+    <resultMap type="com.ruoyi.games.domain.AccountInfo" id="AccountInfoResult">
+        <id property="userID" column="UserID"/>
+        <result property="gameID" column="GameID"/>
+        <result property="registerMobile" column="RegisterMobile"/>
+        <result property="compellation" column="Compellation"/>
+        <result property="userType" column="UserType"/>
+        <result property="playTimeCount" column="PlayTimeCount"/>
+        <result property="playingGame" column="PlayingGame"/>
+        <result property="registerDate" column="RegisterDate"/>
+        <result property="lastLogonIp" column="LastLogonIp"/>
+        <result property="lastLogonDate" column="LastLogonDate"/>
+        <result property="nullity" column="Nullity"/>
+        <result property="score" column="Score"/>
+        <result property="insureScore" column="InsureScore"/>
+        <result property="orderAmount" column="OrderAmount"/>
+        <result property="money" column="Money"/>
+    </resultMap>
+
+    <sql id="selectAccountVo">
+        SELECT  UserID, GameID, Accounts, IsAgent, RegisterMobile, Compellation, UserType,
+            PlayTimeCount, PlayingGame, RegisterDate, LastLogonIp, LastLogonDate, Nullity
+        FROM
+            dbo.AccountsInfo
+    </sql>
+
+    <select id="selectAccountList" parameterType="com.ruoyi.games.domain.AccountInfo" resultMap="AccountInfoResult">
+        <include refid="selectAccountVo" />
+        <where>
+            <if test="keyWord != null and keyWord != ''">
+                and ( UserID like '%'+#{keyWord}+'%' OR GameID LIKE '%'+#{keyWord}+'%' OR Accounts LIKE  '%'+#{keyWord}+'%' )
+            </if>
+            <if test="playingGame != null and playingGame != ''">
+                and PlayingGame = #{playingGame}
+            </if>
+        </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+</mapper> 
