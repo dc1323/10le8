@@ -47,12 +47,21 @@ public class DruidConfig {
         return druidProperties.dataSource(dataSource);
     }
 
+    @Bean
+    @ConfigurationProperties("spring.datasource.druid.accountdb")
+    @ConditionalOnProperty(prefix = "spring.datasource.druid.accountdb", name = "enabled", havingValue = "true")
+    public DataSource accountDataSource(DruidProperties druidProperties) {
+        DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
+        return druidProperties.dataSource(dataSource);
+    }
+
     @Bean(name = "dynamicDataSource")
     @Primary
     public DynamicDataSource dataSource(DataSource masterDataSource) {
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceType.MASTER.name(), masterDataSource);
         setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource");
+        setDataSource(targetDataSources, DataSourceType.ACCOUNT.name(), "accountDataSource");
         return new DynamicDataSource(masterDataSource, targetDataSources);
     }
 
