@@ -58,6 +58,10 @@ public class BaseController {
         }
     }
 
+    protected PageDomain buildPage(){
+        return TableSupport.buildPageRequest();
+    }
+
     /**
      * 设置请求排序数据
      */
@@ -99,6 +103,14 @@ public class BaseController {
         rspData.setCode(0);
         rspData.setRows(list);
         rspData.setTotal(new PageInfo(list).getTotal());
+        return rspData;
+    }
+
+    protected TableDataInfo getPageDataTable(List<?> list,int total) {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(0);
+        rspData.setRows(list);
+        rspData.setTotal(total);
         return rspData;
     }
 

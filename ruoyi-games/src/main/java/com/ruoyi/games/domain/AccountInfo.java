@@ -20,16 +20,22 @@ public class AccountInfo {
     private Date lastLogonDate;
     private int nullity;
 
+    /**
+     * 账户余额
+     */
     private String score;
     private String insureScore;
     private String orderAmount;
     private String money;
+    private String totalCommission;
 
     private String keyWord;
     /**
      * 请求参数
      */
     private Map<String, Object> params;
+
+    private int total;
 
     public Integer getUserID() {
         return userID;
@@ -184,5 +190,21 @@ public class AccountInfo {
 
     public void setParams(Map<String, Object> params) {
         this.params = params;
+    }
+
+    public String getTotalCommission() {
+        return totalCommission;
+    }
+
+    public void setTotalCommission(String totalCommission) {
+        this.totalCommission = totalCommission;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 }

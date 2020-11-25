@@ -20,6 +20,12 @@ spring:
         url:
         username:
         password:
+      #从数据库，游戏账号数据库
+      accountdb:
+        enabled: true
+        url: jdbc:sqlserver://8.134.19.160:1433;DatabaseName=RYAccountsDB
+        username: sa
+        password: abc123@
       # 初始连接数
       initialSize: 5
       # 最小连接池数量

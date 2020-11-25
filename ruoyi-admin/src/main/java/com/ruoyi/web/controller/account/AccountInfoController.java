@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.account;
 
 import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.games.domain.AccountInfo;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/games/account")
@@ -34,17 +36,18 @@ public class AccountInfoController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(AccountInfo info) {
-        startPage();
-        if(null == info){
-            info = new AccountInfo();
-            info.setPlayingGame("-1");
-        }else{
-            if(StringUtils.isEmpty(info.getPlayingGame())){
-                info.setPlayingGame("-1");
-            }
+        PageDomain pageDomain = buildPage();
+        StringBuilder stringBuilder = new StringBuilder(" 1 = 1 ");
+
+        if(StringUtils.isNotEmpty(info.getKeyWord()))
+        {
+            stringBuilder.append(" AND (UserID like '%"+info.getKeyWord()+"%' OR GameID LIKE '%"+info.getKeyWord()+"%' OR Accounts LIKE '%"+info.getKeyWord()+"%' )");
         }
-        List<AccountInfo> list = accountInfoService.selectAccountList(info);
-        return getDataTable(list);
+        int total = 0;
+        Map<String,Object> dataMap = accountInfoService.selectAccountPage(stringBuilder.toString(),pageDomain.getPageSize(),pageDomain.getPageNum());
+        List<AccountInfo> list = (List<AccountInfo>)dataMap.get("dataList");
+        total = (int)dataMap.get("total");
+        return getPageDataTable(list,total);
     }
 
 

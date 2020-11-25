@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccountInfoServiceImpl implements AccountInfoService {
@@ -24,5 +26,18 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @DataSource(value = DataSourceType.ACCOUNT)
     public List<AccountInfo> selectAccountList(AccountInfo accountInfo) {
         return accountInfoMapper.selectAccountList(accountInfo);
+    }
+
+    @Override
+    public Map<String,Object> selectAccountPage(String strWhere, int pageSize, int pageIndex) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,Object> param = new HashMap<>();
+        param.put("strWhere",strWhere);
+        param.put("pageSize",pageSize);
+        param.put("pageIndex",pageIndex);
+        List<AccountInfo> accountInfoList = accountInfoMapper.selectAccountPage(param);
+        result.put("dataList",accountInfoList);
+        result.put("total",param.get("recordCount"));
+        return result;
     }
 }

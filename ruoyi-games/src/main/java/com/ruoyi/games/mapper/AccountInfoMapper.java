@@ -3,9 +3,11 @@ package com.ruoyi.games.mapper;
 import com.ruoyi.common.annotation.DataSource;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.games.domain.AccountInfo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 游戏账号配置
@@ -16,9 +18,12 @@ public interface AccountInfoMapper {
 
     /**
      * 根据条件分页查询账号信息
+     *
      * @param accountInfo
      * @return
      */
-     List<AccountInfo> selectAccountList(AccountInfo accountInfo);
+    List<AccountInfo> selectAccountList(AccountInfo accountInfo);
+
+    List<AccountInfo> selectAccountPage(Map<String,Object> param);
 
 }
