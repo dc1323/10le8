@@ -1,6 +1,9 @@
 package com.ruoyi.games.domain;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,14 +31,17 @@ public class AccountInfo {
     private String orderAmount;
     private String money;
     private String totalCommission;
+    private String commission;
+    /**
+     * 佣金总额
+     */
+    private String totalMoney;
 
     private String keyWord;
     /**
      * 请求参数
      */
     private Map<String, Object> params;
-
-    private int total;
 
     public Integer getUserID() {
         return userID;
@@ -142,7 +148,12 @@ public class AccountInfo {
     }
 
     public String getScore() {
-        return score;
+        if (null == score || "".equals(score)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(score);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
     }
 
     public void setScore(String score) {
@@ -150,7 +161,12 @@ public class AccountInfo {
     }
 
     public String getInsureScore() {
-        return insureScore;
+        if (null == insureScore || "".equals(insureScore)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(insureScore);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
     }
 
     public void setInsureScore(String insureScore) {
@@ -158,7 +174,12 @@ public class AccountInfo {
     }
 
     public String getOrderAmount() {
-        return orderAmount;
+        if (null == orderAmount || "".equals(orderAmount)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(orderAmount);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
     }
 
     public void setOrderAmount(String orderAmount) {
@@ -166,7 +187,12 @@ public class AccountInfo {
     }
 
     public String getMoney() {
-        return money;
+        if (null == money || "".equals(money)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(money);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
     }
 
     public void setMoney(String money) {
@@ -193,18 +219,46 @@ public class AccountInfo {
     }
 
     public String getTotalCommission() {
-        return totalCommission;
+        if (null == totalCommission || "".equals(totalCommission)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(totalCommission);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
     }
 
     public void setTotalCommission(String totalCommission) {
         this.totalCommission = totalCommission;
     }
 
-    public int getTotal() {
-        return total;
+    public String getCommission() {
+        if (null == commission || "".equals(commission)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(commission);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setCommission(String commission) {
+        this.commission = commission;
+    }
+
+    public String getTotalMoney() {
+        if (null == totalCommission || "".equals(totalCommission)) {
+            totalCommission = "0.00";
+        }
+        if (null == commission || "".equals(commission)) {
+            commission = "0.00";
+        }
+        BigDecimal total = new BigDecimal(totalCommission);
+        BigDecimal count = new BigDecimal(commission);
+        BigDecimal totalCount = total.add(count);
+        totalCount = totalCount.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return totalCount.toString();
+    }
+
+    public void setTotalMoney(String totalMoney) {
+        this.totalMoney = totalMoney;
     }
 }

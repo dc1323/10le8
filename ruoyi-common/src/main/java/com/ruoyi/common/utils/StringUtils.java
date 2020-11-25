@@ -248,6 +248,9 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         boolean nexteCharIsUpperCase = true;
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
+            if(i==0 && Character.isUpperCase(c)){
+                return str;
+            }
             if (i > 0) {
                 preCharIsUpperCase = Character.isUpperCase(str.charAt(i - 1));
             } else {

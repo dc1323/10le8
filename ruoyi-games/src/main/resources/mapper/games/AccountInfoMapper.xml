@@ -21,26 +21,7 @@
         <result property="orderAmount" column="OrderAmount"/>
         <result property="money" column="Money"/>
         <result property="totalCommission" column="TotalCommission"/>
-        <result column="recordCount" property="total" />
     </resultMap>
-
-    <sql id="selectAccountVo">
-        select Ai.UserID,Ai.GameID,Ai.Accounts, Ai.RegisterMobile,Ai.Compellation,Ai.Nullity,Ai.IsAgent,Ai.PlayingGame,ISNULL(gsi.Score, 0) AS Score,
-               ISNULL(gsi.InsureScore, 0) AS InsureScore,Ai.UserType,gsi.PlayTimeCount,ai.RegisterDate,gsi.LastLogonIp,gsi.LastLogonDate,
-               isnull(( select isnull(sum(OrderAmount), 0) from RYTreasureDB.dbo.ShareDetailInfo where ShareID in(201, 202) and UserID = Ai.UserID ), 0) as OrderAmount,
-               isnull(( select isnull(sum(OrderAmount), 0) from RYTreasureDB.dbo.ShareDetailInfo where ShareID = 700 and UserID = Ai.UserID ), 0) as TotalCommission,
-               isnull(( select isnull(sum(Money), 0) from RYTreasureDB.dbo.UserDistills where Result = 1 and UserID = Ai.UserID ), 0) as Money
-        from RYAccountsDB.dbo.AccountsInfo Ai inner join RYTreasureDB.dbo.GameScoreInfo gsi on Ai.UserID = gsi.UserID where Ai.IsAndroid = 0
-    </sql>
-
-    <select id="selectAccountList" parameterType="com.ruoyi.games.domain.AccountInfo" resultMap="AccountInfoResult">
-        <include refid="selectAccountVo" />
-        <if test="keyWord != null and keyWord != ''">
-            and ( Ai.UserID like '%'+#{keyWord}+'%' OR Ai.GameID LIKE '%'+#{keyWord}+'%' OR Ai.Accounts LIKE  '%'+#{keyWord}+'%' )
-        </if>
-        <!-- 数据范围过滤 -->
-        ${params.dataScope}
-    </select>
 
     <select id="selectAccountPage" parameterType="java.util.Map" resultMap="AccountInfoResult" statementType="CALLABLE">
         {call RYTreasureDB.dbo.JSON_GetAccountsList(
@@ -49,6 +30,20 @@
             #{pageIndex,mode=IN,jdbcType=INTEGER},
             #{pageCount,mode=OUT,jdbcType=INTEGER},
             #{recordCount,mode=OUT,jdbcType=INTEGER})}
+    </select>
+
+    <select id="getCanCachOut" parameterType="java.util.Map" resultType="java.lang.String" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_GetCanCachOut(
+                #{userID,mode=IN,jdbcType=INTEGER},
+                #{gameID,mode=IN,jdbcType=INTEGER})}
+    </select>
+
+    <select id="selectAccountByUserID" resultMap="AccountInfoResult">
+        SELECT  UserID, GameID, Accounts, IsAgent, RegisterMobile, Compellation, UserType,
+                PlayTimeCount, PlayingGame, RegisterDate, LastLogonIp, LastLogonDate, Nullity
+        FROM
+            RYAccountsDB.dbo.AccountsInfo
+        WHERE UserID = #{userID,jdbcType=INTEGER}
     </select>
 
 </mapper> 

@@ -1,7 +1,5 @@
 package com.ruoyi.games.service.impl;
 
-import com.ruoyi.common.annotation.DataSource;
-import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.games.domain.AccountInfo;
 import com.ruoyi.games.mapper.AccountInfoMapper;
 import com.ruoyi.games.service.AccountInfoService;
@@ -21,23 +19,43 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Autowired
     private AccountInfoMapper accountInfoMapper;
 
-
     @Override
-    @DataSource(value = DataSourceType.ACCOUNT)
-    public List<AccountInfo> selectAccountList(AccountInfo accountInfo) {
-        return accountInfoMapper.selectAccountList(accountInfo);
+    public Map<String, Object> selectAccountPage(String strWhere, int pageSize, int pageIndex) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
+        param.put("strWhere", strWhere);
+        param.put("pageSize", pageSize);
+        param.put("pageIndex", pageIndex);
+        List<AccountInfo> accountInfoList = accountInfoMapper.selectAccountPage(param);
+        if (null != accountInfoList && accountInfoList.size() > 0) {
+            for (AccountInfo accountInfo : accountInfoList) {
+                Map<String, Object> canMap = new HashMap<>(2);
+                canMap.put("userID", accountInfo.getUserID());
+                canMap.put("gameID", accountInfo.getGameID());
+                String commission = accountInfoMapper.getCanCachOut(canMap);
+                accountInfo.setCommission(commission);
+            }
+        }
+        result.put("dataList", accountInfoList);
+        result.put("total", param.get("recordCount"));
+        return result;
     }
 
     @Override
-    public Map<String,Object> selectAccountPage(String strWhere, int pageSize, int pageIndex) {
-        Map<String,Object> result = new HashMap<>();
-        Map<String,Object> param = new HashMap<>();
-        param.put("strWhere",strWhere);
-        param.put("pageSize",pageSize);
-        param.put("pageIndex",pageIndex);
+    public Map<String, Object> selectAccount(String strWhere, int pageSize, int pageIndex) {
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
+        param.put("strWhere", strWhere);
+        param.put("pageSize", pageSize);
+        param.put("pageIndex", pageIndex);
         List<AccountInfo> accountInfoList = accountInfoMapper.selectAccountPage(param);
-        result.put("dataList",accountInfoList);
-        result.put("total",param.get("recordCount"));
+        result.put("dataList", accountInfoList);
+        result.put("total", param.get("recordCount"));
         return result;
+    }
+
+    @Override
+    public AccountInfo selectAccountByUserID(Integer userID) {
+        return accountInfoMapper.selectAccountByUserID(userID);
     }
 }
