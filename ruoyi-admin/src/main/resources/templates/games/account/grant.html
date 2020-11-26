@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('游戏充值')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal" id="form-account-grant" th:object="${accountInfo}">
+        <input name="userID" type="hidden" th:field="*{userID}"/>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">用户称：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="accounts" id="accounts" th:field="*{accounts}" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">余额：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="score" id="score" th:field="*{score}" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label is-required">充值：</label>
+            <div class="col-sm-8">
+                <input name="money" placeholder="请输入金额,负数表示扣除" class="form-control" type="text" required>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "games/account/grant";
+
+    $("#form-user-edit").validate({
+        onkeyup: false,
+        rules: {
+            money: {
+                money: true
+            }
+        },
+        focusCleanup: true
+    });
+
+    //充值
+    function grant() {
+        var userID = $("input[name='userID']").val();
+        var money = $("input[name='money']").val();
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: prefix,
+            data: {
+                "userID": userID,
+                "gold": money
+            },
+            async: false,
+            error: function (request) {
+                $.modal.alertError("系统错误");
+            },
+            success: function (data) {
+                $.operate.successCallback(data);
+            }
+        });
+    }
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            grant();
+        }
+    }
+</script>
+</body>
+</html>

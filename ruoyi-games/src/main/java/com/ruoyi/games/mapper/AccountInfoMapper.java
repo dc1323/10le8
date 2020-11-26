@@ -12,10 +12,16 @@ import java.util.Map;
 @Repository
 public interface AccountInfoMapper {
 
-    List<AccountInfo> selectAccountPage(Map<String,Object> param);
+    List<AccountInfo> selectAccountPage(Map<String, Object> param);
 
-    String getCanCachOut(Map<String,Object> param);
+    String getCanCachOut(Map<String, Object> param);
 
     AccountInfo selectAccountByUserID(Integer userID);
+
+    void freezeAccount(List<String> userIDs);
+
+    void unFreezeAccount(List<String> userIDs);
+
+    Integer grantTreasure(Map<String, Object> param);
 
 }

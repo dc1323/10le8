@@ -1,5 +1,7 @@
 package com.ruoyi.games.domain;
 
+import com.ruoyi.common.utils.AddressUtils;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -124,7 +126,7 @@ public class AccountInfo {
     }
 
     public String getLastLogonIp() {
-        return lastLogonIp;
+        return AddressUtils.getRealAddressByIP(lastLogonIp);
     }
 
     public void setLastLogonIp(String lastLogonIp) {

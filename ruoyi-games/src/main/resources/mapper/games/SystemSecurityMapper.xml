@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.SystemSecurityMapper">
+
+    <resultMap type="com.ruoyi.games.domain.SystemSecurity" id="SystemSecurityResult">
+        <result property="recordID" column="RecordID"/>
+        <result property="operatingTime" column="OperatingTime"/>
+        <result property="operatingName" column="OperatingName"/>
+        <result property="operatingIP" column="OperatingIP"/>
+        <result property="operatingAccounts" column="OperatingAccounts"/>
+        <result property="remark" column="Remark"/>
+        <result property="objectAccounts" column="ObjectAccounts"/>
+    </resultMap>
+    
+    <insert id="insert" parameterType="com.ruoyi.games.domain.SystemSecurity">
+        insert into SystemSecurity (OperatingTime ,OperatingName ,OperatingIP ,OperatingAccounts, Remark,ObjectAccounts)
+        values (
+                GETDATE(),
+                #{operatingName,jdbcType=VARCHAR},
+                #{operatingIP,jdbcType=VARCHAR},
+                #{operatingAccounts,jdbcType=VARCHAR},
+                #{remark,jdbcType=VARCHAR},
+                #{objectAccounts,jdbcType=VARCHAR}
+               )
+    </insert>
+
+</mapper> 

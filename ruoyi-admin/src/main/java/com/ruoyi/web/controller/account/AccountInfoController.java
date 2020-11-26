@@ -1,23 +1,29 @@
 package com.ruoyi.web.controller.account;
 
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.shiro.util.AuthorizationUtils;
 import com.ruoyi.games.domain.AccountInfo;
 import com.ruoyi.games.service.AccountInfoService;
-import io.swagger.models.auth.In;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/games/account")
@@ -110,6 +116,65 @@ public class AccountInfoController extends BaseController {
         List<AccountInfo> list = (List<AccountInfo>) dataMap.get("dataList");
         total = (int) dataMap.get("total");
         return getPageDataTable(list, total);
+    }
+
+    /**
+     * 冻结
+     * @param userIDs
+     * @return
+     */
+    @RequiresPermissions("games:account:freeze")
+    @Log(title = "冻结账号", businessType = BusinessType.UPDATE)
+    @PostMapping("/freeze")
+    @ResponseBody
+    public AjaxResult freeze(String userIDs) {
+        try {
+            return toAjax(accountInfoService.freezeAccount(userIDs,0));
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
+    }
+
+    /**
+     * 解冻
+     * @param userIDs
+     * @return
+     */
+    @RequiresPermissions("games:account:unfreeze")
+    @Log(title = "解冻账号", businessType = BusinessType.UPDATE)
+    @PostMapping("/unfreeze")
+    @ResponseBody
+    public AjaxResult unfreeze(String userIDs) {
+        try {
+            return toAjax(accountInfoService.freezeAccount(userIDs,1));
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
+    }
+
+    /**
+     * 跳转到游戏充值界面
+     * @param userId
+     * @param mmap
+     * @return
+     */
+    @RequiresPermissions("games:account:grant")
+    @GetMapping("/{userId}/grant")
+    public String grantView(@PathVariable("userId") Integer userId, ModelMap mmap) {
+        AccountInfo accountInfo = accountInfoService.selectAccountByUserID(userId);
+        mmap.put("accountInfo", accountInfo);
+        return prefix + "/grant";
+    }
+
+    /**
+     * 修改保存角色
+     */
+    @RequiresPermissions("games:account:grant")
+    @Log(title = "游戏充值", businessType = BusinessType.UPDATE)
+    @PostMapping("/grant")
+    @ResponseBody
+    public AjaxResult grant(Integer userID, String gold) {
+        return toAjax(accountInfoService.grantTreasure(userID, gold));
     }
 
 

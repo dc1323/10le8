@@ -45,5 +45,30 @@
             RYAccountsDB.dbo.AccountsInfo
         WHERE UserID = #{userID,jdbcType=INTEGER}
     </select>
+    
+    <update id="freezeAccount">
+        UPDATE RYAccountsDB.dbo.AccountsInfo SET Nullity=1 where UserID in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="unFreezeAccount">
+        UPDATE RYAccountsDB.dbo.AccountsInfo SET Nullity = 0 where UserID in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+    
+    <select id="grantTreasure" parameterType="java.util.Map" resultType="java.lang.Integer" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.NET_PM_GrantTreasure(
+                #{dwTypeId,mode=IN},
+                #{strUserIDList,mode=IN},
+                #{dwAddGold,mode=IN},
+                #{dwMasterID,mode=IN},
+                #{strReason,mode=IN},
+                #{strClientIP,mode=IN}
+            )}
+    </select>
 
 </mapper> 

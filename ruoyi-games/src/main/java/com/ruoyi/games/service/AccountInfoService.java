@@ -2,6 +2,7 @@ package com.ruoyi.games.service;
 
 import com.ruoyi.games.domain.AccountInfo;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -31,5 +32,14 @@ public interface AccountInfoService {
      * @return
      */
     AccountInfo selectAccountByUserID(Integer userID);
+
+    /**
+     * 冻结/解冻
+     * @param userIDs
+     * @param operType
+     */
+    int freezeAccount(String userIDs,int operType);
+
+    int grantTreasure(Integer userID, String gold);
 
 }
