@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('用户列表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <input type="hidden" id="deptId" name="deptId">
+                    <input type="hidden" id="parentId" name="parentId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                普通查询：<input type="text" name="keyWord"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary single disabled" onclick="queryPrev()"
+                   shiro:hasPermission="games:account:prev">
+                    <i class="glyphicon glyphicon-upload icon-white"></i> 上级
+                </a>
+                <a class="btn btn-primary single disabled" onclick="queryNext()"
+                   shiro:hasPermission="games:account:next">
+                    <i class="glyphicon glyphicon-download icon-white"></i> 下级
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+                   shiro:hasPermission="system:user:remove">
+                    <i class="glyphicon glyphicon-ban-circle icon-white"></i> 冻结
+                </a>
+                <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:user:import">
+                    <i class="glyphicon glyphicon-ok-circle icon-white"></i> 解冻
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:user:export">
+                    <i class="glyphicon glyphicon-usd icon-white"></i> 游戏充值
+                </a>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('games_account_stats')}]];
+    var prefix = ctx + "games/account";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+        queryUserList();
+    });
+    //查看上级
+    function queryPrev(){
+        var rows = $.table.selectFirstColumns();
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        if(rows.length >= 2) {
+            $.modal.alertWarning("请勿选择多条记录");
+            return;
+        }
+        var userID = rows.join();
+        $.modal.open("查看上级", prefix + "/"+userID+"/prev");
+    }
+
+    function queryNext(){
+        var rows = $.table.selectFirstColumns();
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        if(rows.length >= 2) {
+            $.modal.alertWarning("请勿选择多条记录");
+            return;
+        }
+        var userID = rows.join();
+        $.modal.open("查看下级", prefix + "/"+userID+"/next");
+    }
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/list",
+            sortName: "UserID",
+            sortOrder: "desc",
+            modalName: "账号信息",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'userID',
+                    title: '用户标识'
+                },
+                {
+                    field: 'gameID',
+                    title: '游戏ID',
+                },
+                {
+                    field: 'accounts',
+                    title: '用户账号'
+                },
+                {
+                    field: 'registerMobile',
+                    title: '手机号码',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if(value == 'undefined'){
+                            return "";
+                        }else{
+                            return value;
+                        }
+                    }
+                },
+                {
+                    field: 'compellation',
+                    title: '真实姓名'
+                },
+                {
+                    field: 'score',
+                    title: '账户余额'
+                },
+                {
+                    field: 'orderAmount',
+                    title: '充值总额'
+                },
+                {
+                    field: 'commission',
+                    title: '佣金余额'
+                },
+                {
+                    field: 'money',
+                    title: '提现总额'
+                },
+                {
+                    field: 'totalMoney',
+                    title: '佣金总额'
+                },
+                {
+                    field: 'lastLogonIp',
+                    title: '最后登录地址'
+                },
+                {
+                    field: 'nullity',
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+</script>
+</body>
+</html>

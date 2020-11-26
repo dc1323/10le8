@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('查看上下级')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form" th:object="${accountInfo}">
+                    <input type="hidden" id="gameID" name="gameID" th:field="*{gameID}">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                普通查询：<input type="text" name="keyWord"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('games_account_stats')}]];
+    var prefix = ctx + "games/account";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/nextlist",
+            sortName: "UserID",
+            sortOrder: "desc",
+            modalName: "账号信息",
+            columns: [
+                {
+                    field: 'userID',
+                    title: '用户标识'
+                },
+                {
+                    field: 'gameID',
+                    title: '游戏ID',
+                },
+                {
+                    field: 'accounts',
+                    title: '用户账号'
+                },
+                {
+                    field: 'registerMobile',
+                    title: '手机号码',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if(value == 'undefined'){
+                            return "";
+                        }else{
+                            return value;
+                        }
+                    }
+                },
+                {
+                    field: 'isAgent',
+                    title: '是否代理',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if(value == 0){
+                            return "<font style='color:green'>否</font>";
+                        }else{
+                            return "<font style='color:red'>是</font>";
+                        }
+                    }
+                },
+                {
+                    field: 'compellation',
+                    title: '真实姓名'
+                },
+                {
+                    field: 'score',
+                    title: '金币'
+                },
+                {
+                    field: 'insureScore',
+                    title: '银行金币'
+                },
+                {
+                    field: 'orderAmount',
+                    title: '充值总额'
+                },
+                {
+                    field: 'money',
+                    title: '提现总额'
+                },
+                {
+                    field: 'lastLogonIp',
+                    title: '最后登录地址'
+                },
+                {
+                    field: 'nullity',
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+</script>
+</body>
+</html>
