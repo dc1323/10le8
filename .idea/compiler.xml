@@ -13,6 +13,7 @@
         <module name="ruoyi-quartz" />
         <module name="ruoyi-common" />
         <module name="ruoyi-system" />
+        <module name="ruoyi-games" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,6 +21,7 @@
       <module name="ruoyi-admin" target="1.8" />
       <module name="ruoyi-common" target="1.8" />
       <module name="ruoyi-framework" target="1.8" />
+      <module name="ruoyi-games" target="1.8" />
       <module name="ruoyi-generator" target="1.8" />
       <module name="ruoyi-quartz" target="1.8" />
       <module name="ruoyi-system" target="1.8" />
