@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.ScoreInfoMapper">
+
+    <resultMap type="com.ruoyi.games.domain.ScoreInfo" id="ScoreInfoResult">
+        <id property="userID" column="UserID"/>
+        <result property="gameID" column="GameID"/>
+        <result property="registerMobile" column="RegisterMobile"/>
+        <result property="compellation" column="Compellation"/>
+        <result property="userType" column="UserType"/>
+        <result property="playTimeCount" column="PlayTimeCount"/>
+        <result property="onLineTimeCount" column="OnLineTimeCount"/>
+        <result property="allCount" column="AllCount"/>
+        <result property="winCount" column="WinCount"/>
+        <result property="lostCount" column="LostCount"/>
+        <result property="lastLogonIp" column="LastLogonIp"/>
+        <result property="lastLogonDate" column="LastLogonDate"/>
+        <result property="enterIp" column="EnterIp"/>
+        <result property="score" column="Score"/>
+        <result property="lastLogonIp" column="LastLogonIp"/>
+        <result property="lastLogonDate" column="LastLogonDate"/>
+        <result property="serverName" column="ServerName"/>
+        <result property="kindName" column="KindName"/>
+    </resultMap>
+
+    <select id="getWinVsLossList" parameterType="java.util.Map" resultMap="ScoreInfoResult" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_GetWinVsLossList(
+            #{gameID,mode=IN,jdbcType=VARCHAR},
+            #{userType,mode=IN,jdbcType=INTEGER},
+            #{scoreType,mode=IN,jdbcType=INTEGER},
+            #{pageSize,mode=IN,jdbcType=INTEGER},
+            #{pageIndex,mode=IN,jdbcType=INTEGER},
+            #{pageCount,mode=OUT,jdbcType=INTEGER},
+            #{recordCount,mode=OUT,jdbcType=INTEGER})}
+    </select>
+
+    <select id="getGameNameByUserID" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT KindID FROM RYTreasureDB.dbo.GameScoreLocker WHERE UserID=#{userID}
+    </select>
+
+</mapper> 

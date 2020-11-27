@@ -72,7 +72,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Override
     public int freezeAccount(String userIDs, int operType) {
         if(StringUtils.isEmpty(userIDs)){
-            return 0;
+            return 1;
         }else{
             String[] userIds = userIDs.split(",");
             List<String> userIDList= Arrays.asList(userIds);
@@ -117,5 +117,22 @@ public class AccountInfoServiceImpl implements AccountInfoService {
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public int setTeShu(String userIDs) {
+        if(StringUtils.isEmpty(userIDs)){
+            return 1;
+        }else {
+            String[] userIds = userIDs.split(",");
+            List<String> userIDList = Arrays.asList(userIds);
+            try{
+                accountInfoMapper.setTeShu(userIDList);
+                return 1;
+            }catch (Exception e){
+                log.error("设置特殊账号出错:",e);
+                return 0;
+            }
+        }
     }
 }

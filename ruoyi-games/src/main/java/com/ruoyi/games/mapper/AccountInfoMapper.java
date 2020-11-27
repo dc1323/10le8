@@ -24,4 +24,6 @@ public interface AccountInfoMapper {
 
     Integer grantTreasure(Map<String, Object> param);
 
+    void setTeShu(List<String> userIDs);
+
 }

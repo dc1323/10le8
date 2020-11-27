@@ -42,4 +42,10 @@ public interface AccountInfoService {
 
     int grantTreasure(Integer userID, String gold);
 
+    /**
+     * 设置特殊账号
+     * @param userIDs
+     */
+    int setTeShu(String userIDs);
+
 }

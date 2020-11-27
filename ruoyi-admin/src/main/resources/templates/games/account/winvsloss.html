@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('胜负列表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <input type="hidden" id="deptId" name="deptId">
+                    <input type="hidden" id="parentId" name="parentId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                游戏ID：<input type="text" name="gameID"/>
+                            </li>
+                            <li>
+                                盈亏：<select name="scoreType">
+                                <option value="0">所有</option>
+                                <option value="1">赢</option>
+                                <option value="-1">输</option>
+                            </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary single disabled" onclick="setTeShu()"
+                   shiro:hasPermission="games:account:setteshu">
+                    <i class="glyphicon glyphicon-upload icon-white"></i> 设为特殊
+                </a>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "games/account/score";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+        queryUserList();
+    });
+
+    //设置特殊账号
+    function setTeShu(){
+        table.set();
+        var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要设置选中的" + rows.length + "条数据为特殊账号吗?", function () {
+            var url = prefix+"/setteshu";
+            var data = {"userIDs": rows.join()};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/list",
+            sortName: "KindID",
+            sortOrder: "desc",
+            modalName: "胜负查看",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'userID',
+                    title: '用户ID'
+                },
+                {
+                    field: 'gameID',
+                    title: '游戏ID',
+                },
+                {
+                    field: 'registerMobile',
+                    title: '手机号码',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if(value == 'undefined'){
+                            return "";
+                        }else{
+                            return value;
+                        }
+                    }
+                },
+                {
+                    field: 'compellation',
+                    title: '真实姓名'
+                },
+                {
+                    field: 'allCount',
+                    title: '总局'
+                },
+                {
+                    field: 'winCount',
+                    title: '赢局'
+                },
+                {
+                    field: 'lostCount',
+                    title: '输局'
+                },
+                {
+                    field: 'score',
+                    title: '盈亏'
+                },
+                {
+                    field: 'playTimeCount',
+                    title: '游戏时长',
+                    align: 'center',
+                    formatter: function (value,row,index){
+                        return converTimeToDHMS(value);
+                    }
+                },
+                {
+                    field: 'lastLogonDate',
+                    title: '最后登录时间'
+                },
+                {
+                    field: 'lastLogonIp',
+                    title: '最后登录地址'
+                },
+                {
+                    field: 'userType',
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return getUserType(value);
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+    function converTimeToDHMS (seconds) {
+        if (seconds <= 0)
+            return "0秒";
+        var str = "";
+        var day = parseInt(seconds / 0x15180);
+        var hour = parseInt((seconds % 0x15180) / 0xe10);
+        var minute = parseInt((seconds % 0xe10) / 60);
+        var second = parseInt(seconds % 60);
+        if (day > 0)
+            str += day + "天";
+        if (hour > 0)
+            str += hour + "小时";
+        else
+            str += "0小时";
+        if (minute > 0)
+            str += minute + "分";
+        else
+            str += "0分";
+        if (second > 0)
+            str += second + "秒";
+        else
+            str += "0秒";
+        return str;
+    };
+
+    function getUserType(type) {
+        var str = "正常用户";
+        var nType = parseInt(type);
+        switch (nType)
+        {
+            case 0:
+                str = "<font style='color:green'>正常用户</font>";
+                break;
+            case 5:
+                str = "<font style='color:red'>特殊用户</font>";
+                break;
+        }
+        return str;
+    }
+
+</script>
+</body>
+</html>

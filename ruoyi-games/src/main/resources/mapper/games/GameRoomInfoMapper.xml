@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.GameRoomInfoMapper">
+
+    <resultMap type="com.ruoyi.games.domain.GameRoomInfo" id="GameRoomInfoResult">
+        <id property="serverID" column="ServerID"/>
+        <result property="serverName" column="ServerName"/>
+        <result property="kindID" column="KindID"/>
+        <result property="nodeID" column="NodeID"/>
+        <result property="sortID" column="SortID"/>
+        <result property="gameID" column="GameID"/>
+        <result property="tableCount" column="TableCount"/>
+        <result property="serverKind" column="ServerKind"/>
+        <result property="serverType" column="ServerType"/>
+        <result property="serverPort" column="ServerPort"/>
+        <result property="serverPasswd" column="ServerPasswd"/>
+        <result property="nullity" column="Nullity"/>
+        <result property="dataBaseName" column="DataBaseName"/>
+        <result property="dataBaseAddr" column="DataBaseAddr"/>
+        <result property="cellScore" column="CellScore"/>
+        <result property="revenueRatio" column="RevenueRatio"/>
+        <result property="serviceScore" column="ServiceScore"/>
+        <result property="restrictScore" column="RestrictScore"/>
+        <result property="minTableScore" column="MinTableScore"/>
+        <result property="minEnterScore" column="MinEnterScore"/>
+        <result property="maxEnterScore" column="MaxEnterScore"/>
+        <result property="minEnterMember" column="MinEnterMember"/>
+        <result property="maxEnterMember" column="MaxEnterMember"/>
+        <result property="maxPlayer" column="MaxPlayer"/>
+        <result property="serverRule" column="ServerRule"/>
+        <result property="distributeRule" column="DistributeRule"/>
+        <result property="minDistributeUser" column="MinDistributeUser"/>
+        <result property="distributeTimeSpace" column="DistributeTimeSpace"/>
+        <result property="distributeDrawCount" column="DistributeDrawCount"/>
+        <result property="minPartakeGameUser" column="MinPartakeGameUser"/>
+        <result property="maxPartakeGameUser" column="MaxPartakeGameUser"/>
+        <result property="attachUserRight" column="AttachUserRight"/>
+        <result property="serviceMachine" column="ServiceMachine"/>
+        <result property="customRule" column="CustomRule"/>
+        <result property="serverNote" column="ServerNote"/>
+        <result property="createDateTime" column="CreateDateTime"/>
+        <result property="modifyDateTime" column="ModifyDateTime"/>
+        <result property="enterPassword" column="EnterPassword"/>
+        <result property="serverLevel" column="ServerLevel"/>
+        <result property="attachFiled" column="AttachFiled"/>
+    </resultMap>
+
+    <select id="getGameRoomInfo" parameterType="java.lang.Integer" resultMap="GameRoomInfoResult">
+        SELECT *
+        FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK) WHERE ServerID=#{serverID}
+    </select>
+
+    <select id="getGameRoomInfoByUserID" parameterType="java.lang.Integer" resultMap="GameRoomInfoResult">
+        SELECT gri.*
+        FROM RYPlatformDB.dbo.GameRoomInfo ( NOLOCK ) gri
+        JOIN RYTreasureDB.dbo.GameScoreLocker ( NOLOCK ) gsl ON gri.ServerID = gsl.ServerID
+        WHERE gsl.UserID= #{userID}
+    </select>
+
+</mapper> 
