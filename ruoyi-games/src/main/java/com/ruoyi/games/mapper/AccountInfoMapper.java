@@ -26,4 +26,6 @@ public interface AccountInfoMapper {
 
     void setTeShu(List<String> userIDs);
 
+    void qxTeShu(List<String> userIDs);
+
 }

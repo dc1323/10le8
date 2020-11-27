@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('用户列表')"/>
+    <th:block th:include="include :: header('胜负列表')"/>
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: ztree-css"/>
 </head>
@@ -12,44 +12,31 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="user-form">
-                    <input type="hidden" id="deptId" name="deptId">
-                    <input type="hidden" id="parentId" name="parentId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                普通查询：<input type="text" name="keyWord"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                        class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
-                            </li>
-                        </ul>
-                    </div>
+                    <input type="hidden" id="userType" name="userType" value="5">
+                        <div class="select-list">
+                            <ul>
+                                <li>
+                                    游戏ID：<input type="text" name="gameID"/>
+                                </li>
+                                <li>
+                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                            class="fa fa-search"></i>&nbsp;搜索</a>
+                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                            class="fa fa-refresh"></i>&nbsp;刷新</a>
+                                </li>
+                            </ul>
+                        </div>
                 </form>
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-primary single disabled" onclick="queryPrev()"
-                   shiro:hasPermission="games:account:prev">
-                    <i class="glyphicon glyphicon-upload icon-white"></i> 上级
+                <a class="btn btn-primary multiple disabled" onclick="qxTeShu()"
+                   shiro:hasPermission="games:account:qxteshu">
+                    <i class="glyphicon glyphicon-remove icon-white"></i> 取消特殊
                 </a>
-                <a class="btn btn-primary single disabled" onclick="queryNext()"
-                   shiro:hasPermission="games:account:next">
-                    <i class="glyphicon glyphicon-download icon-white"></i> 下级
-                </a>
-                <a class="btn btn-primary multiple disabled" onclick="freeze()"
+                <a class="btn btn-danger multiple disabled" onclick="freeze()"
                    shiro:hasPermission="games:account:freeze">
                     <i class="glyphicon glyphicon-ban-circle icon-white"></i> 冻结
-                </a>
-                <a class="btn btn-primary multiple disabled" onclick="unfreeze()"
-                   shiro:hasPermission="games:account:unfreeze">
-                    <i class="glyphicon glyphicon-ok-circle icon-white"></i> 解冻
-                </a>
-                <a class="btn btn-primary single disabled" onclick="grantTreasure()"
-                   shiro:hasPermission="games:account:grant">
-                    <i class="glyphicon glyphicon-usd icon-white"></i> 游戏充值
                 </a>
             </div>
 
@@ -64,7 +51,6 @@
 <th:block th:include="include :: layout-latest-js"/>
 <th:block th:include="include :: ztree-js"/>
 <script th:inline="javascript">
-    var datas = [[${@dict.getType('games_account_stats')}]];
     var prefix = ctx + "games/account";
 
     $(function () {
@@ -83,20 +69,6 @@
         }
         queryUserList();
     });
-    //查看上级
-    function queryPrev(){
-        var rows = $.table.selectFirstColumns();
-        if (rows.length == 0) {
-            $.modal.alertWarning("请至少选择一条记录");
-            return;
-        }
-        if(rows.length >= 2) {
-            $.modal.alertWarning("请勿选择多条记录");
-            return;
-        }
-        var userID = rows.join();
-        $.modal.open("查看上下级", prefix + "/"+userID+"/prev");
-    }
 
     //冻结账号
     function freeze(){
@@ -113,70 +85,37 @@
         });
     }
 
-    //解冻账号
-    function unfreeze(){
+    //取消特殊账号
+    function qxTeShu(){
         table.set();
         var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
         if (rows.length == 0) {
             $.modal.alertWarning("请至少选择一条记录");
             return;
         }
-        $.modal.confirm("确认要解冻选中的" + rows.length + "条数据吗?", function () {
-            var url = prefix+"/unfreeze";
+        $.modal.confirm("确认要设置选中的" + rows.length + "条数据为特殊账号吗?", function () {
+            var url = prefix+"/score/qxteshu";
             var data = {"userIDs": rows.join()};
             $.operate.submit(url, "post", "json", data);
         });
     }
 
-    //游戏充值
-    function grantTreasure(){
-        var rows = $.table.selectFirstColumns();
-        if (rows.length == 0) {
-            $.modal.alertWarning("请至少选择一条记录");
-            return;
-        }
-        if(rows.length >= 2) {
-            $.modal.alertWarning("请勿选择多条记录");
-            return;
-        }
-        var userID = rows.join();
-        $.modal.open("游戏充值", prefix + "/"+userID+"/grant");
-    }
-
-    function queryNext(){
-        var rows = $.table.selectFirstColumns();
-        if (rows.length == 0) {
-            $.modal.alertWarning("请至少选择一条记录");
-            return;
-        }
-        if(rows.length >= 2) {
-            $.modal.alertWarning("请勿选择多条记录");
-            return;
-        }
-        var userID = rows.join();
-        $.modal.open("查看上下级", prefix + "/"+userID+"/next");
-    }
-
     function queryUserList() {
         var options = {
-            url: prefix + "/list",
-            sortName: "UserID",
+            url: prefix + "/score/list",
+            sortName: "KindID",
             sortOrder: "desc",
-            modalName: "账号信息",
+            modalName: "胜负查看",
             columns: [{
                 checkbox: true
             },
                 {
                     field: 'userID',
-                    title: '用户标识'
+                    title: '用户ID'
                 },
                 {
                     field: 'gameID',
                     title: '游戏ID',
-                },
-                {
-                    field: 'accounts',
-                    title: '用户账号'
                 },
                 {
                     field: 'registerMobile',
@@ -195,35 +134,43 @@
                     title: '真实姓名'
                 },
                 {
+                    field: 'allCount',
+                    title: '总局'
+                },
+                {
+                    field: 'winCount',
+                    title: '赢局'
+                },
+                {
+                    field: 'lostCount',
+                    title: '输局'
+                },
+                {
                     field: 'score',
-                    title: '账户余额'
+                    title: '盈亏'
                 },
                 {
-                    field: 'orderAmount',
-                    title: '充值总额'
+                    field: 'playTimeCount',
+                    title: '游戏时长',
+                    align: 'center',
+                    formatter: function (value,row,index){
+                        return converTimeToDHMS(value);
+                    }
                 },
                 {
-                    field: 'commission',
-                    title: '佣金余额'
-                },
-                {
-                    field: 'money',
-                    title: '提现总额'
-                },
-                {
-                    field: 'totalMoney',
-                    title: '佣金总额'
+                    field: 'lastLogonDate',
+                    title: '最后登录时间'
                 },
                 {
                     field: 'lastLogonIp',
                     title: '最后登录地址'
                 },
                 {
-                    field: 'nullity',
+                    field: 'userType',
                     title: '状态',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(datas, value);
+                        return getUserType(value);
                     }
                 }]
         };
@@ -241,6 +188,46 @@
         $(this).hide();
         $('#btnExpand').show();
     });
+
+    function converTimeToDHMS (seconds) {
+        if (seconds <= 0)
+            return "0秒";
+        var str = "";
+        var day = parseInt(seconds / 0x15180);
+        var hour = parseInt((seconds % 0x15180) / 0xe10);
+        var minute = parseInt((seconds % 0xe10) / 60);
+        var second = parseInt(seconds % 60);
+        if (day > 0)
+            str += day + "天";
+        if (hour > 0)
+            str += hour + "小时";
+        else
+            str += "0小时";
+        if (minute > 0)
+            str += minute + "分";
+        else
+            str += "0分";
+        if (second > 0)
+            str += second + "秒";
+        else
+            str += "0秒";
+        return str;
+    };
+
+    function getUserType(type) {
+        var str = "正常用户";
+        var nType = parseInt(type);
+        switch (nType)
+        {
+            case 0:
+                str = "<font style='color:green'>正常用户</font>";
+                break;
+            case 5:
+                str = "<font style='color:red'>特殊用户</font>";
+                break;
+        }
+        return str;
+    }
 
 </script>
 </body>

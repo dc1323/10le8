@@ -48,4 +48,10 @@ public interface AccountInfoService {
      */
     int setTeShu(String userIDs);
 
+    /**
+     * 取消特殊账号
+     * @param userIDs
+     */
+    int qxTeShu(String userIDs);
+
 }

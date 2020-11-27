@@ -35,8 +35,8 @@ public class ScoreInfoServiceImpl implements ScoreInfoService {
     public Map<String, Object> selectScoreInfoList(ScoreInfo scoreInfo) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> param = new HashMap<>(5);
-        param.put("gameID", null == scoreInfo.getGameID()?0:scoreInfo.getGameID());
-        param.put("userType", -1);
+        param.put("gameID", null == scoreInfo.getGameID() ? 0 : scoreInfo.getGameID());
+        param.put("userType", 0 == scoreInfo.getUserType() ? -1 : scoreInfo.getUserType());
         param.put("scoreType", scoreInfo.getSocreType());
         param.put("pageSize", scoreInfo.getPageSize());
         param.put("pageIndex", scoreInfo.getPageIndex());

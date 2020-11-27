@@ -186,6 +186,16 @@ public class AccountInfoController extends BaseController {
     }
 
     /**
+     * 玩家异常
+     * @return
+     */
+    @RequiresPermissions("games:score:list")
+    @GetMapping("/score/specialuser")
+    public String specialUser(){
+        return prefix + "/specialuser";
+    }
+
+    /**
      * 胜负查看数据
      * @param info
      * @return
@@ -216,6 +226,23 @@ public class AccountInfoController extends BaseController {
     public AjaxResult setTeShu(String userIDs) {
         try {
             return toAjax(accountInfoService.setTeShu(userIDs));
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
+    }
+
+    /**
+     * 取消特殊账号
+     * @param userIDs
+     * @return
+     */
+    @RequiresPermissions("games:account:qxteshu")
+    @Log(title = "设置特殊账号", businessType = BusinessType.UPDATE)
+    @PostMapping("/score/qxteshu")
+    @ResponseBody
+    public AjaxResult qxTeShu(String userIDs) {
+        try {
+            return toAjax(accountInfoService.qxTeShu(userIDs));
         } catch (Exception e) {
             return error(e.getMessage());
         }

@@ -12,8 +12,6 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="user-form">
-                    <input type="hidden" id="deptId" name="deptId">
-                    <input type="hidden" id="parentId" name="parentId">
                     <div class="select-list">
                         <ul>
                             <li>
@@ -38,7 +36,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-primary single disabled" onclick="setTeShu()"
+                <a class="btn btn-primary multiple disabled" onclick="setTeShu()"
                    shiro:hasPermission="games:account:setteshu">
                     <i class="glyphicon glyphicon-upload icon-white"></i> 设为特殊
                 </a>
