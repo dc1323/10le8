@@ -3,6 +3,7 @@ package com.ruoyi.common.utils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -138,5 +139,33 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         // 计算差多少秒//输出结果
         // long sec = diff % nd % nh % nm / ns;
         return day + "天" + hour + "小时" + min + "分钟";
+    }
+
+    /**
+     * 获取本月第一天
+     * @return
+     */
+    public static String getMonthFirstDay(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.add(Calendar.MONTH,0);
+        String startDate = format.format(calendar.getTime());
+        return startDate+" 00:00:00";
+    }
+
+    /**
+     * 获取本月最后一天
+     * @return
+     */
+    public static String getMonthLastDay(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.DAY_OF_MONTH,0);
+        calendar.add(Calendar.MONTH,1);
+        String endDate = format.format(calendar.getTime());
+        return endDate+" 23:59:59";
     }
 }

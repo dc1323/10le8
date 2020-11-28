@@ -39,14 +39,16 @@
                    shiro:hasPermission="games:account:next">
                     <i class="glyphicon glyphicon-download icon-white"></i> 下级
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-                   shiro:hasPermission="system:user:remove">
+                <a class="btn btn-primary multiple disabled" onclick="freeze()"
+                   shiro:hasPermission="games:account:freeze">
                     <i class="glyphicon glyphicon-ban-circle icon-white"></i> 冻结
                 </a>
-                <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:user:import">
+                <a class="btn btn-primary multiple disabled" onclick="unfreeze()"
+                   shiro:hasPermission="games:account:unfreeze">
                     <i class="glyphicon glyphicon-ok-circle icon-white"></i> 解冻
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:user:export">
+                <a class="btn btn-primary single disabled" onclick="grantTreasure()"
+                   shiro:hasPermission="games:account:grant">
                     <i class="glyphicon glyphicon-usd icon-white"></i> 游戏充值
                 </a>
             </div>
@@ -93,7 +95,52 @@
             return;
         }
         var userID = rows.join();
-        $.modal.open("查看上级", prefix + "/"+userID+"/prev");
+        $.modal.open("查看上下级", prefix + "/"+userID+"/prev");
+    }
+
+    //冻结账号
+    function freeze(){
+        table.set();
+        var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要冻结选中的" + rows.length + "条数据吗?", function () {
+            var url = prefix+"/freeze";
+            var data = {"userIDs": rows.join()};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+    //解冻账号
+    function unfreeze(){
+        table.set();
+        var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要解冻选中的" + rows.length + "条数据吗?", function () {
+            var url = prefix+"/unfreeze";
+            var data = {"userIDs": rows.join()};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+    //游戏充值
+    function grantTreasure(){
+        var rows = $.table.selectFirstColumns();
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        if(rows.length >= 2) {
+            $.modal.alertWarning("请勿选择多条记录");
+            return;
+        }
+        var userID = rows.join();
+        $.modal.open("游戏充值", prefix + "/"+userID+"/grant");
     }
 
     function queryNext(){
@@ -107,7 +154,7 @@
             return;
         }
         var userID = rows.join();
-        $.modal.open("查看下级", prefix + "/"+userID+"/next");
+        $.modal.open("查看上下级", prefix + "/"+userID+"/next");
     }
 
     function queryUserList() {

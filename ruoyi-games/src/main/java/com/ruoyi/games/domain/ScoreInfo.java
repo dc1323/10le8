@@ -1,11 +1,14 @@
 package com.ruoyi.games.domain;
 
+import java.util.Date;
+
 public class ScoreInfo {
 
     private Integer userID;
     private Integer gameID;
     private String registerMobile;
     private String compellation;
+    private String nickName;
     private int allCount;
     private int winCount;
     private int lostCount;
@@ -18,7 +21,11 @@ public class ScoreInfo {
     private String serverName;
     private String kindName;
     private int userType;
-    private int socreType;
+    private int scoreType;
+    private Integer kindID;
+
+    private Date startDate;
+    private Date endDate;
 
     private int pageSize;
     private int pageIndex;
@@ -151,12 +158,12 @@ public class ScoreInfo {
         this.userType = userType;
     }
 
-    public int getSocreType() {
-        return socreType;
+    public int getScoreType() {
+        return scoreType;
     }
 
-    public void setSocreType(int socreType) {
-        this.socreType = socreType;
+    public void setScoreType(int scoreType) {
+        this.scoreType = scoreType;
     }
 
     public int getPageSize() {
@@ -173,5 +180,37 @@ public class ScoreInfo {
 
     public void setPageIndex(int pageIndex) {
         this.pageIndex = pageIndex;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Integer getKindID() {
+        return kindID;
+    }
+
+    public void setKindID(Integer kindID) {
+        this.kindID = kindID;
     }
 }

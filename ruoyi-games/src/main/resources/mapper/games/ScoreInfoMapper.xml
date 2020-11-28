@@ -22,7 +22,9 @@
         <result property="lastLogonIp" column="LastLogonIp"/>
         <result property="lastLogonDate" column="LastLogonDate"/>
         <result property="serverName" column="ServerName"/>
+        <result property="kindID" column="KindID"/>
         <result property="kindName" column="KindName"/>
+        <result property="nickName" column="NickName" />
     </resultMap>
 
     <select id="getWinVsLossList" parameterType="java.util.Map" resultMap="ScoreInfoResult" statementType="CALLABLE">
@@ -36,8 +38,23 @@
             #{recordCount,mode=OUT,jdbcType=INTEGER})}
     </select>
 
-    <select id="getGameNameByUserID" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT KindID FROM RYTreasureDB.dbo.GameScoreLocker WHERE UserID=#{userID}
+    <select id="queryUserRDScore" parameterType="java.util.Map" resultMap="ScoreInfoResult" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_QueryUserRDScore(
+                #{startDate,mode=IN},
+                #{endDate,mode=IN},
+                #{scoreType,mode=IN},
+                #{pageSize,mode=IN},
+                #{pageIndex,mode=IN},
+                #{pageCount,mode=OUT,jdbcType=INTEGER},
+                #{recordCount,mode=OUT,jdbcType=INTEGER})}
+    </select>
+
+    <select id="queryScoreDetail" parameterType="java.util.Map" resultMap="ScoreInfoResult" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.P_QueryUserGameRDScore(
+                #{userID,mode=IN},
+                #{startDate,mode=IN},
+                #{endDate,mode=IN},
+                #{strErr,mode=OUT,jdbcType=VARCHAR})}
     </select>
 
 </mapper> 
