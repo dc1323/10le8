@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('佣金详情')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <input type="hidden" name="orderID" th:value="${orderID}">
+                    <input type="hidden" name="userID" th:value="${userID}">
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('games_account_stats')}]];
+    var prefix = ctx + "games/record";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/querydetaillist",
+            sortName: "InsertTime",
+            sortOrder: "desc",
+            modalName: "佣金明细表",
+            columns: [
+                {
+                    field: 'gameID',
+                    title: '游戏ID'
+                },
+                {
+                    field: 'nickName',
+                    title: '昵称'
+                },
+                {
+                    field: 'kindName',
+                    title: '游戏类型'
+                },
+                {
+                    field: 'roomNumber',
+                    title: '游戏房间'
+                },
+                {
+                    field: 'cellScore',
+                    title: '游戏底注'
+                },
+                {
+                    field: 'tCommission',
+                    title: '所得佣金'
+                },
+                {
+                    field: 'money',
+                    title: '返佣前'
+                },
+                {
+                    field: 'insertTime',
+                    title: '时间'
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+</script>
+</body>
+</html>

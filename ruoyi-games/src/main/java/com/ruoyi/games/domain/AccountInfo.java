@@ -15,6 +15,7 @@ public class AccountInfo {
     private Integer gameID;
     private String accounts;
     private int isAgent;
+    private String nickName;
     private String registerMobile;
     private String compellation;
     private int userType;
@@ -75,6 +76,14 @@ public class AccountInfo {
 
     public void setIsAgent(int isAgent) {
         this.isAgent = isAgent;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getRegisterMobile() {

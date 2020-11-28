@@ -7,6 +7,7 @@
     <resultMap type="com.ruoyi.games.domain.AccountInfo" id="AccountInfoResult">
         <id property="userID" column="UserID"/>
         <result property="gameID" column="GameID"/>
+        <result property="nickName" column="NickName"/>
         <result property="registerMobile" column="RegisterMobile"/>
         <result property="compellation" column="Compellation"/>
         <result property="userType" column="UserType"/>
@@ -39,7 +40,7 @@
     </select>
 
     <select id="selectAccountByUserID" resultMap="AccountInfoResult">
-        SELECT  UserID, GameID, Accounts, IsAgent, RegisterMobile, Compellation, UserType,
+        SELECT  UserID, GameID, Accounts, NickName, IsAgent, RegisterMobile, Compellation, UserType,
                 PlayTimeCount, PlayingGame, RegisterDate, LastLogonIp, LastLogonDate, Nullity
         FROM
             RYAccountsDB.dbo.AccountsInfo

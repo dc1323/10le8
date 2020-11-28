@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('玩家盈亏表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>普通查询：</label>
+                                <input type="text" name="keyWord" placeholder="请输入用户ID或游戏ID或用户账号"/>
+                            </li>
+                            <li>
+                                <label>日期查询： </label>
+                                <input type="text" class="form-control" id="startDate" placeholder="开始时间"
+                                       name="startDate" th:value="${startDate}"/>
+                            </li>
+                            <li>
+                                <input type="text" class="form-control" id="endDate" placeholder="结束时间"
+                                       name="endDate" th:value="${endDate}"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('games_account_stats')}]];
+    var prefix = ctx + "games/record";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            laydate.render({
+                elem: '#startDate',
+                type: 'datetime',
+                trigger: 'click'
+            });
+
+            laydate.render({
+                elem: '#endDate',
+                type: 'datetime',
+                trigger: 'click'
+            });
+
+        });
+
+
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/list",
+            sortName: "ApplyDate",
+            sortOrder: "desc",
+            modalName: "佣金明细表",
+            columns: [
+                {
+                    field: 'gameID',
+                    title: '游戏ID'
+                },
+                {
+                    field: 'gameID',
+                    title: '昵称'
+                },
+                {
+                    field: 'registerMobile',
+                    title: '手机号码',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == 'undefined') {
+                            return "";
+                        } else {
+                            return value;
+                        }
+                    }
+                },
+                {
+                    field: 'compellation',
+                    title: '真实姓名'
+                },
+                {
+                    field: 'payAmount',
+                    title: '所得佣金'
+                },
+                {
+                    title: '详细收益变化',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="###" onclick="queryDetail(\'' + row.userID + '\',\'' + row.orderID + '\')"><i class="fa fa-edit"></i>查看详情</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+    function queryDetail(userID, orderID) {
+        var url = prefix + '/querydetail?userID=' + userID + '&orderID=' + orderID;
+        $.modal.open("佣金详情", url);
+    }
+
+
+</script>
+</body>
+</html>

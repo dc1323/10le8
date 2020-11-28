@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.RecordAchievementMapper">
+
+    <resultMap type="com.ruoyi.games.domain.RecordAchievement" id="RecordAchievementResult">
+        <id property="detailID" column="DetailID"/>
+        <result property="userID" column="UserID"/>
+        <result property="gameID" column="GameID"/>
+        <result property="accounts" column="Accounts"/>
+        <result property="nickName" column="NickName"/>
+        <result property="registerMobile" column="RegisterMobile"/>
+        <result property="compellation" column="Compellation"/>
+        <result property="score" column="Score"/>
+        <result property="insureScore" column="InsureScore"/>
+        <result property="payAmount" column="PayAmount"/>
+        <result property="shareID" column="ShareID"/>
+        <result property="orderID" column="OrderID"/>
+        <result property="applyDate" column="ApplyDate"/>
+    </resultMap>
+
+    <resultMap id="RecordAchievementDetailResult" type="com.ruoyi.games.domain.RecordAchievementDetail">
+        <result property="orderID" column="OrderID"/>
+        <result property="nickName" column="NickName"/>
+        <result property="roomNumber" column="RoomNumber"/>
+        <result property="cellScore" column="CellScore"/>
+        <result property="tCommission" column="TCommission"/>
+        <result property="beforeScore" column="BeforeScore"/>
+        <result property="insertTime" column="InsertTime"/>
+    </resultMap>
+
+    <select id="getRecordAchievementInfo" parameterType="com.ruoyi.games.domain.RecordAchievement"
+            resultMap="RecordAchievementResult">
+        select * from RYTreasureDB.dbo.V_GetShareDetailInfo20200719
+        WHERE 1 = 1 and ShareID = 700
+        <if test="keyWord != null and keyWord != ''">
+            and (UserID like '%'+#{keyWord}+'%' OR GameID LIKE '%'+#{keyWord}+'%' OR Accounts LIKE '%'+#{keyWord}+'%')
+        </if>
+        <if test="startDate != null">
+            and ApplyDate &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and ApplyDate &lt;= #{endDate}
+        </if>
+        ${params.dataScope}
+    </select>
+
+    <select id="queryRecordAchievementDetail" parameterType="com.ruoyi.games.domain.RecordAchievementDetail"
+            resultMap="RecordAchievementDetailResult">
+        select *
+        from RYTreasureDB.dbo.V_RecordAchievementDetail
+        WHERE 1 = 1
+          and OrderID = #{orderID}
+          ${params.dataScope}
+    </select>
+
+</mapper> 
