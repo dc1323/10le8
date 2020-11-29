@@ -13,4 +13,8 @@ public interface RecordAchievementMapper {
 
     List<RecordAchievementDetail> queryRecordAchievementDetail(RecordAchievementDetail detail);
 
+    List<RecordAchievement> getShareDetailInfo(RecordAchievement recordAchievement);
+
+    RecordAchievement getShareDetailInfoSum(RecordAchievement recordAchievement);
+
 }

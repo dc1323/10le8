@@ -4,8 +4,6 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.games.domain.AccountInfo;
 import com.ruoyi.games.domain.ScoreInfo;
 import com.ruoyi.games.service.ScoreInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

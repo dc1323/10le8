@@ -24,9 +24,18 @@ public class RecordAchievement {
     private String orderID;
     private Date applyDate;
 
+    private String beforeGold;
+    private String orderAmount;
+    private String remark;
+    private int orderStatus;
+    private String totalPayAmount;
+    private String afterGold;
+
     private String keyWord;
     private Date startDate;
     private Date endDate;
+    private String minMoney;
+    private String maxMoney;
     /**
      * 请求参数
      */
@@ -151,6 +160,79 @@ public class RecordAchievement {
         this.applyDate = applyDate;
     }
 
+    public String getBeforeGold() {
+        if (null == beforeGold || "".equals(beforeGold)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(beforeGold);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
+    }
+
+    public void setBeforeGold(String beforeGold) {
+        this.beforeGold = beforeGold;
+    }
+
+    public String getOrderAmount() {
+        if (null == orderAmount || "".equals(orderAmount)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(orderAmount);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
+    }
+
+    public void setOrderAmount(String orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(int orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public String getTotalPayAmount() {
+        if (null == totalPayAmount || "".equals(totalPayAmount)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(totalPayAmount);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
+    }
+
+    public void setTotalPayAmount(String totalPayAmount) {
+        this.totalPayAmount = totalPayAmount;
+    }
+
+    public String getAfterGold() {
+        if (null == beforeGold || "".equals(beforeGold)) {
+            beforeGold = "0.00";
+        }
+        if (null == payAmount || "".equals(payAmount)) {
+            payAmount = "0.00";
+        }
+        BigDecimal temp1 = new BigDecimal(beforeGold);
+        BigDecimal temp2 = new BigDecimal(payAmount);
+        BigDecimal temp = temp1.add(temp2);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
+    }
+
+    public void setAfterGold(String afterGold) {
+        this.afterGold = afterGold;
+    }
+
     public String getKeyWord() {
         return keyWord;
     }
@@ -173,6 +255,22 @@ public class RecordAchievement {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public String getMinMoney() {
+        return minMoney;
+    }
+
+    public void setMinMoney(String minMoney) {
+        this.minMoney = minMoney;
+    }
+
+    public String getMaxMoney() {
+        return maxMoney;
+    }
+
+    public void setMaxMoney(String maxMoney) {
+        this.maxMoney = maxMoney;
     }
 
     public Map<String, Object> getParams() {

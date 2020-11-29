@@ -18,6 +18,11 @@
         <result property="shareID" column="ShareID"/>
         <result property="orderID" column="OrderID"/>
         <result property="applyDate" column="ApplyDate"/>
+
+        <result property="beforeGold" column="BeforeGold"/>
+        <result property="orderAmount" column="OrderAmount"/>
+        <result property="remark" column="Remark"/>
+        <result property="orderStatus" column="OrderStatus"/>
     </resultMap>
 
     <resultMap id="RecordAchievementDetailResult" type="com.ruoyi.games.domain.RecordAchievementDetail">
@@ -51,8 +56,57 @@
         select *
         from RYTreasureDB.dbo.V_RecordAchievementDetail
         WHERE 1 = 1
-          and OrderID = #{orderID}
-          ${params.dataScope}
+          and OrderID = #{orderID} ${params.dataScope}
+    </select>
+
+    <select id="getShareDetailInfo" parameterType="com.ruoyi.games.domain.RecordAchievement"
+            resultMap="RecordAchievementResult">
+        select * from RYTreasureDB.dbo.V_GetShareDetailInfo200
+        WHERE 1 = 1 and ShareID in (201, 202, 99998)
+        <if test="keyWord != null and keyWord != ''">
+            and (UserID like '%'+#{keyWord}+'%' OR Accounts LIKE '%'+#{keyWord}+'%')
+        </if>
+        <if test="orderID != null and orderID != ''">
+            and OrderID like '%'+#{orderID}+'%'
+        </if>
+        <if test="minMoney != null and minMoney != ''">
+            and PayAmount &gt;= #{minMoney}
+        </if>
+        <if test="maxMoney != null and maxMoney != ''">
+            and PayAmount &lt;= #{maxMoney}
+        </if>
+        <if test="startDate != null">
+            and ApplyDate &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and ApplyDate &lt;= #{endDate}
+        </if>
+        ${params.dataScope}
+    </select>
+
+    <select id="getShareDetailInfoSum" parameterType="com.ruoyi.games.domain.RecordAchievement"
+            resultMap="RecordAchievementResult">
+        select isnull(Sum(OrderAmount), 0) AS OrderAmount, isnull(Sum(PayAmount), 0) AS PayAmount
+        from RYTreasureDB.dbo.V_GetShareDetailInfo200
+        WHERE 1 = 1 and ShareID in (201, 202, 99998)
+        <if test="keyWord != null and keyWord != ''">
+            and (UserID like '%'+#{keyWord}+'%' OR Accounts LIKE '%'+#{keyWord}+'%')
+        </if>
+        <if test="orderID != null and orderID != ''">
+            and OrderID like '%'+#{orderID}+'%'
+        </if>
+        <if test="minMoney != null and minMoney != ''">
+            and PayAmount &gt;= #{minMoney}
+        </if>
+        <if test="maxMoney != null and maxMoney != ''">
+            and PayAmount &lt;= #{maxMoney}
+        </if>
+        <if test="startDate != null">
+            and ApplyDate &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and ApplyDate &lt;= #{endDate}
+        </if>
     </select>
 
 </mapper> 

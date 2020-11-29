@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('玩家盈亏表')"/>
+    <th:block th:include="include :: header('充值记录')"/>
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: ztree-css"/>
 </head>
@@ -12,12 +12,10 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="user-form">
+                    <input type="hidden" id="deptId" name="deptId">
+                    <input type="hidden" id="parentId" name="parentId">
                     <div class="select-list">
                         <ul>
-                            <li>
-                                <label>普通查询：</label>
-                                <input type="text" name="keyWord" placeholder="请输入用户ID或游戏ID或用户账号"/>
-                            </li>
                             <li class="select-time">
                                 <label>日期查询： </label>
                                 <input type="text" id="startDate" placeholder="开始时间"
@@ -25,6 +23,24 @@
                                 <span>-</span>
                                 <input type="text" id="endDate" placeholder="结束时间"
                                        name="endDate" th:value="${endDate}" readonly/>
+                            </li>
+                            <li class="select-time">
+                                <label>金额范围： </label>
+                                <input type="text" id="minMoney" placeholder="输入金额"
+                                       name="minMoney"/>
+                                <span>至</span>
+                                <input type="text" id="maxMoney" placeholder="输入金额"
+                                       name="maxMoney"/>
+                            </li>
+                            <li>
+                                <label>用户查询： </label>
+                                <input type="text" class="form-control" id="keyWord" placeholder="输入用户查询"
+                                       name="keyWord"/>
+                            </li>
+                            <li>
+                                <label>订单查询： </label>
+                                <input type="text" class="form-control" id="orderID" placeholder="输入订单号"
+                                       name="orderID"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -47,10 +63,9 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
 <th:block th:include="include :: ztree-js"/>
-<th:block th:include="include :: datetimepicker-js"/>
 <script th:inline="javascript">
     var datas = [[${@dict.getType('games_account_stats')}]];
-    var prefix = ctx + "games/record";
+    var prefix = ctx + "games/filled";
 
     $(function () {
         var panehHidden = false;
@@ -84,52 +99,91 @@
 
         });
 
-
-        queryUserList();
+        queryDataList();
     });
 
-    function queryUserList() {
+    function queryDataList() {
         var options = {
-            url: prefix + "/list",
+            url: prefix + "/shareinfolist",
             sortName: "ApplyDate",
             sortOrder: "desc",
-            modalName: "佣金明细表",
+            modalName: "充值记录",
+            showFooter: true,
+            showToggle: false,
+            footerStyle: footerStyle,
             columns: [
                 {
-                    field: 'gameID',
-                    title: '游戏ID'
+                    field: 'userID',
+                    title: '用户标识'
                 },
                 {
                     field: 'nickName',
-                    title: '昵称'
-                },
-                {
-                    field: 'registerMobile',
-                    title: '手机号码',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        if (value == 'undefined') {
-                            return "";
-                        } else {
-                            return value;
-                        }
-                    }
+                    title: '昵称',
                 },
                 {
                     field: 'compellation',
                     title: '真实姓名'
                 },
                 {
-                    field: 'payAmount',
-                    title: '所得佣金'
-                },
-                {
-                    title: '详细收益变化',
+                    field: 'registerMobile',
+                    title: '手机号码',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="###" onclick="queryDetail(\'' + row.userID + '\',\'' + row.orderID + '\')"><i class="fa fa-edit"></i>查看详情</a> ');
-                        return actions.join('');
+                        if(value == 'undefined'){
+                            return "";
+                        }else{
+                            return value;
+                        }
+                    }
+                },
+                {
+                    field: 'orderID',
+                    title: '单号'
+                },
+                {
+                    field: 'shareID',
+                    title: '存款方式',
+                    formatter: function (value, row, index){
+                        if(value == 99998){
+                            return "线下充值";
+                        }else{
+                            return "线上充值";
+                        }
+                    }
+                },
+                {
+                    field: 'beforeGold',
+                    title: '充值前'
+                },
+                {
+                    field: 'payAmount',
+                    title: '充值金额',
+                    footerFormatter: function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            sumBalance = value[i].totalPayAmount;
+                        }
+                        return "总金额：" + sumBalance;
+                    }
+                },
+                {
+                    field: 'afterGold',
+                    title: '充值后'
+                },
+                {
+                    field: 'applyDate',
+                    title: '时间'
+                },
+                {
+                    field: 'orderStatus',
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if(value == 2){
+                            return "成功";
+                        }else{
+                            return "未完成";
+                        }
                     }
                 }]
         };
@@ -148,11 +202,13 @@
         $('#btnExpand').show();
     });
 
-    function queryDetail(userID, orderID) {
-        var url = prefix + '/querydetail?userID=' + userID + '&orderID=' + orderID;
-        $.modal.open("佣金详情", url);
+    function footerStyle(column) {
+        return {
+            userBalance: {
+                css: {color: 'red', 'font-weight': 'normal'}
+            }
+        }[column.field]
     }
-
 
 </script>
 </body>

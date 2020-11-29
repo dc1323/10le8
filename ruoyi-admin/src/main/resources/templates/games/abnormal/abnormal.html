@@ -14,14 +14,13 @@
                 <form id="user-form">
                     <div class="select-list">
                         <ul>
-                            <li>
+                            <li class="select-time">
                                 <label>日期查询： </label>
-                                <input type="text" class="form-control" id="startDate" placeholder="开始时间"
-                                       name="startDate" th:value="${startDate}"/>
-                            </li>
-                            <li>
-                                <input type="text" class="form-control" id="endDate" placeholder="结束时间"
-                                       name="endDate" th:value="${endDate}"/>
+                                <input type="text" id="startDate" placeholder="开始时间"
+                                       name="startDate" th:value="${startDate}" readonly/>
+                                <span>-</span>
+                                <input type="text" id="endDate" placeholder="结束时间"
+                                       name="endDate" th:value="${endDate}" readonly/>
                             </li>
                             <li>
                                 盈亏：<select name="scoreType">
