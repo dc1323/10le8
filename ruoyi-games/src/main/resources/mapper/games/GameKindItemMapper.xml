@@ -17,6 +17,7 @@
         <result property="recommend" column="Recommend"/>
         <result property="gameFlag" column="GameFlag"/>
         <result property="nullity" column="Nullity"/>
+        <result property="webTypeID" column="WebTypeID"/>
     </resultMap>
 
     <select id="getGameKindItemInfo" parameterType="java.lang.Integer" resultMap="GameKindItemResult">
@@ -42,6 +43,10 @@
         FROM RYPlatformDB.dbo.GameKindItem ( NOLOCK ) gki
         JOIN RYTreasureDB.dbo.GameScoreLocker ( NOLOCK ) gsl ON gki.KindID = gsl.KindID
         WHERE gsl.UserID= #{userID}
+    </select>
+    
+    <select id="getGameList" resultMap="GameKindItemResult">
+        SELECT KindID,KindName,WebTypeID FROM RYPlatformDB.dbo.GameKindItem ( NOLOCK ) where Nullity=0
     </select>
 
 </mapper> 

@@ -40,6 +40,17 @@ public class AccountInfo {
      */
     private String totalMoney;
 
+    private Integer kindID;
+    private String kindName;
+    private Integer serverID;
+    private Date collectDate;
+    private String totalScore;
+    private int isAndroid;
+    private String agentName;
+    private String advertiser;
+    private String advertPlat;
+    private String lastLogonIPAddress;
+
     private String keyWord;
     /**
      * 请求参数
@@ -271,5 +282,90 @@ public class AccountInfo {
 
     public void setTotalMoney(String totalMoney) {
         this.totalMoney = totalMoney;
+    }
+
+    public Integer getKindID() {
+        return kindID;
+    }
+
+    public void setKindID(Integer kindID) {
+        this.kindID = kindID;
+    }
+
+    public String getKindName() {
+        return kindName;
+    }
+
+    public void setKindName(String kindName) {
+        this.kindName = kindName;
+    }
+
+    public Integer getServerID() {
+        return serverID;
+    }
+
+    public void setServerID(Integer serverID) {
+        this.serverID = serverID;
+    }
+
+    public Date getCollectDate() {
+        return collectDate;
+    }
+
+    public void setCollectDate(Date collectDate) {
+        this.collectDate = collectDate;
+    }
+
+    public String getTotalScore() {
+        if (null == totalScore || "".equals(totalScore)) {
+            return "0.00";
+        }
+        BigDecimal temp = new BigDecimal(totalScore);
+        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
+        return temp.toString();
+    }
+
+    public void setTotalScore(String totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public int getIsAndroid() {
+        return isAndroid;
+    }
+
+    public void setIsAndroid(int isAndroid) {
+        this.isAndroid = isAndroid;
+    }
+
+    public String getAgentName() {
+        return agentName;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
+    }
+
+    public String getAdvertiser() {
+        return advertiser;
+    }
+
+    public void setAdvertiser(String advertiser) {
+        this.advertiser = advertiser;
+    }
+
+    public String getAdvertPlat() {
+        return advertPlat;
+    }
+
+    public void setAdvertPlat(String advertPlat) {
+        this.advertPlat = advertPlat;
+    }
+
+    public String getLastLogonIPAddress() {
+        return lastLogonIPAddress;
+    }
+
+    public void setLastLogonIPAddress(String lastLogonIPAddress) {
+        this.lastLogonIPAddress = lastLogonIPAddress;
     }
 }

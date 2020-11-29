@@ -28,4 +28,10 @@ public interface AccountInfoMapper {
 
     void qxTeShu(List<String> userIDs);
 
+    List<AccountInfo> getOnlieList(AccountInfo info);
+
+    void deleteGameScoreLocker();
+
+    void deleteGameScoreLockerByUsers(List<String> userIDs);
+
 }

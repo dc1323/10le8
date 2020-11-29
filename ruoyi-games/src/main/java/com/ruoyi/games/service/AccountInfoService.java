@@ -1,6 +1,7 @@
 package com.ruoyi.games.service;
 
 import com.ruoyi.games.domain.AccountInfo;
+import com.ruoyi.games.domain.GameKindItem;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -53,5 +54,21 @@ public interface AccountInfoService {
      * @param userIDs
      */
     int qxTeShu(String userIDs);
+
+    /**
+     * 获取游戏卡线玩家
+     * @param info
+     * @return
+     */
+    List<AccountInfo> getOnlieList(AccountInfo info);
+
+    List<GameKindItem> getGameList();
+
+    /**
+     * 清除卡线
+     * @param userIDs
+     * @return
+     */
+    int unlock(String userIDs);
 
 }

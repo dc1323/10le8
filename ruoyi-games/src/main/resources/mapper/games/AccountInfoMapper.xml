@@ -22,6 +22,17 @@
         <result property="orderAmount" column="OrderAmount"/>
         <result property="money" column="Money"/>
         <result property="totalCommission" column="TotalCommission"/>
+
+        <result property="kindID" column="KindID"/>
+        <result property="kindName" column="KindName"/>
+        <result property="serverID" column="ServerID"/>
+        <result property="collectDate" column="CollectDate"/>
+        <result property="totalScore" column="TotalScore"/>
+        <result property="isAndroid" column="IsAndroid"/>
+        <result property="agentName" column="AgentName"/>
+        <result property="advertiser" column="Advertiser"/>
+        <result property="advertPlat" column="AdvertPlat"/>
+        <result property="lastLogonIPAddress" column="LastLogonIPAddress"/>
     </resultMap>
 
     <select id="selectAccountPage" parameterType="java.util.Map" resultMap="AccountInfoResult" statementType="CALLABLE">
@@ -85,5 +96,37 @@
             #{item}
         </foreach>
     </update>
+    
+    <select id="getOnlieList" parameterType="com.ruoyi.games.domain.AccountInfo" resultMap="AccountInfoResult">
+        SELECT * FROM RYAccountsDB.dbo.View_Online
+        WHERE 1=1
+        <if test="kindID != null and kindID >= 0">
+            AND KindID = #{kindID}
+        </if>
+        <if test="kindID != null and kindID == -2">
+            AND KindID > 0
+        </if>
+        <if test="gameID != null" >
+            AND GameID = #{gameID}
+        </if>
+        <if test="accounts != null">
+            AND Accounts = #{accounts}
+        </if>
+        <if test="keyWord != null">
+            AND (GameID = #{keyWord} OR Accounts = #{keyWord} )
+        </if>
+        ${params.dataScope}
+    </select>
+    
+    <delete id="deleteGameScoreLocker">
+        delete from  RYTreasureDB.dbo.GameScoreLocker where KindID = 9999
+    </delete>
+
+    <delete id="deleteGameScoreLockerByUsers">
+        delete from  RYTreasureDB.dbo.GameScoreLocker WHERE UserID in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
 
 </mapper> 

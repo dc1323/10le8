@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('卡线管理')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>普通查询：</label>
+                                <input type="text" name="keyWord" placeholder="请输入玩家ID或玩家账号"/>
+                            </li>
+                            <li>
+                                <label>所在游戏：</label>
+                                <select name="kindID">
+                                    <option th:each="data,dataStat : ${gameKindItemList}" th:value="${data.kindID}" th:text="${data.kindName}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary multiple disabled" onclick="clearOnline()"
+                   shiro:hasPermission="games:account:unlock">
+                    <i class="glyphicon glyphicon-ok-circle icon-white"></i> 清除卡线
+                </a>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('games_account_stats')}]];
+    var prefix = ctx + "games/account";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/onlinelist",
+            sortName: "TotalScore",
+            sortOrder: "desc",
+            modalName: "卡线管理",
+            columns: [
+                {
+                    checkbox: true
+                 },
+                {
+                    field: 'gameID',
+                    title: '玩家ID'
+                },
+                {
+                    field: 'accounts',
+                    title: '玩家账号'
+                },
+                {
+                    field: 'score',
+                    title: '携带金币'
+                },
+                {
+                    field: 'insureScore',
+                    title: '银行金币'
+                },
+                {
+                    field: 'totalScore',
+                    title: '总输赢'
+                },
+                {
+                    field: 'kindName',
+                    title: '所在游戏',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == null || value == '') {
+                            return "大厅";
+                        } else {
+                            return value;
+                        }
+                    }
+                },
+                {
+                    field: 'serverName',
+                    title: '所在房间',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == null || value == '') {
+                            return "大厅";
+                        } else {
+                            return value;
+                        }
+                    }
+                },
+                {
+                    field: 'lastLogonDate',
+                    title: '最后登录时间'
+                },
+                {
+                    field: 'playTimeCount',
+                    title: '游戏时长',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return ConverTimeToDHMS(value);
+                    }
+                },
+                {
+                    field: 'nullity',
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+    function ConverTimeToDHMS (seconds) {
+        if (seconds <= 0)
+            return "0秒";
+        var str = "";
+        var day = parseInt(seconds / 0x15180);
+        var hour = parseInt((seconds % 0x15180) / 0xe10);
+        var minute = parseInt((seconds % 0xe10) / 60);
+        var second = parseInt(seconds % 60);
+        if (day > 0)
+            str += day + "天";
+        if (hour > 0)
+            str += hour + "小时";
+        else
+            str += "0小时";
+        if (minute > 0)
+            str += minute + "分";
+        else
+            str += "0分";
+        if (second > 0)
+            str += second + "秒";
+        else
+            str += "0秒";
+        return str;
+    }
+
+    function clearOnline(){
+        table.set();
+        var rows = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要清除选中的" + rows.length + "条数据卡线吗?", function () {
+            var url = prefix+"/unlock";
+            var data = {"userIDs": rows.join()};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+</script>
+</body>
+</html>

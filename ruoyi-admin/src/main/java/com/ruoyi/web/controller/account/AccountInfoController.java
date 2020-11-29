@@ -8,6 +8,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.games.domain.AccountInfo;
+import com.ruoyi.games.domain.GameKindItem;
+import com.ruoyi.games.domain.GameRoomInfo;
 import com.ruoyi.games.domain.ScoreInfo;
 import com.ruoyi.games.service.AccountInfoService;
 import com.ruoyi.games.service.ScoreInfoService;
@@ -243,6 +245,45 @@ public class AccountInfoController extends BaseController {
     public AjaxResult qxTeShu(String userIDs) {
         try {
             return toAjax(accountInfoService.qxTeShu(userIDs));
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
+    }
+
+    /**
+     * 跳转到卡线玩家管理
+     * @param mmap
+     * @return
+     */
+    @RequiresPermissions("games:account:onlineview")
+    @GetMapping("/online")
+    public String online(ModelMap mmap){
+        List<GameKindItem> gameKindItemList = accountInfoService.getGameList();
+        mmap.put("gameKindItemList",gameKindItemList);
+        return prefix + "/online";
+    }
+
+    @RequiresPermissions("games:account:onlinelist")
+    @PostMapping("/onlinelist")
+    @ResponseBody
+    public TableDataInfo onlineList(AccountInfo info) {
+        startPage();
+        List<AccountInfo> list = accountInfoService.getOnlieList(info);
+        return getDataTable(list);
+    }
+
+    /**
+     * 清除卡线
+     * @param userIDs
+     * @return
+     */
+    @RequiresPermissions("games:account:unlock")
+    @Log(title = "设置特殊账号", businessType = BusinessType.UPDATE)
+    @PostMapping("/unlock")
+    @ResponseBody
+    public AjaxResult unlock(String userIDs) {
+        try {
+            return toAjax(accountInfoService.unlock(userIDs));
         } catch (Exception e) {
             return error(e.getMessage());
         }

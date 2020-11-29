@@ -26,6 +26,8 @@ public class GameKindItem {
 
     private String nullity;
 
+    private int webTypeID;
+
     public Integer getKindID() {
         return kindID;
     }
@@ -120,5 +122,13 @@ public class GameKindItem {
 
     public void setNullity(String nullity) {
         this.nullity = nullity;
+    }
+
+    public int getWebTypeID() {
+        return webTypeID;
+    }
+
+    public void setWebTypeID(int webTypeID) {
+        this.webTypeID = webTypeID;
     }
 }
