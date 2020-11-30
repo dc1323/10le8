@@ -4,15 +4,14 @@
     <th:block th:include="include :: header('功能设置')"/>
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: ztree-css"/>
+    <th:block th:include="include :: summernote-css"/>
 </head>
 <body class="gray-bg">
 <div class="ui-layout-center">
     <div class="container-div">
         <div class="col-sm-12 search-collapse">
-
             <div class="row">
                 <div class="col-sm-12">
-
                         <div class="ibox-title">
                         <ul class="nav nav-tabs">
                             <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">BIAPI接口</a></li>
@@ -26,41 +25,265 @@
                         </ul>
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane active">
-                                <div class="panel-body">
-                                    <strong>HTML5 文档类型</strong>
-                                    <p>Bootstrap 使用到的某些 HTML 元素和 CSS 属性需要将页面设置为 HTML5 文档类型。在你项目中的每个页面都要参照下面的格式进行设置。</p>
+                                <div class="main-content">
+                                    <form id="form-bi-api" class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label is-required">站点Code：</label>
+
+                                                <div class="col-sm-8">
+                                                    <input name="SiteCode" id="SiteCode" th:value="${myMap['SiteCode']}" class="form-control" type="text" maxlength="30">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">站点密钥：</label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input name="SiteSecret" id="SiteSecret" type="text" th:value="${myMap['SiteSecret']}" class="form-control">
+                                                        <span class="input-group-addon"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">默认密码：</label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="DefaultPassword" name="DefaultPassword" th:value="${myMap['DefaultPassword']}" class="form-control" type="text">
+                                                        <span class="input-group-addon"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label">接口URL：</label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="ApiURL" name="ApiURL" class="form-control" th:value="${myMap['ApiURL']}" type="text">
+                                                        <span class="input-group-addon"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">新用户注册赠送：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input id="RegisterGive" name="RegisterGive" class="form-control email"
+                                                                   type="text" maxlength="10" th:value="${myMap['RegisterGive']}">
+                                                            <span class="input-group-addon">元</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                       <div class="row">
+                                            <div class="col-sm-offset-5 col-sm-10">
+                                                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler('form-bi-api')">
+                                                    <i class="fa fa-check"></i> 保 存
+                                                </button>
+                                            </div>
+                                       </div>
+                                    </form>
                                 </div>
                             </div>
+
                             <div id="tab-2" class="tab-pane">
-                                <div class="panel-body">
-                                    <strong>移动设备优先</strong>
-                                    <p>在 Bootstrap 2 中，我们对框架中的某些关键部分增加了对移动设备友好的样式。而在 Bootstrap 3
-                                        中，我们重写了整个框架，使其一开始就是对移动设备友好的。这次不是简单的增加一些可选的针对移动设备的样式，而是直接融合进了框架的内核中。也就是说，Bootstrap
-                                        是移动设备优先的。针对移动设备的样式融合进了框架的每个角落，而不是增加一个额外的文件。</p>
+                                <div class="main-content">
+                                    <form id="form-tksz-api" class="form-horizontal">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label is-required">充值消费达：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input name="DistillsPercent" id="DistillsPercent" type="text"
+                                                                   onkeyup="value=zhzs(this.value)"
+                                                                   th:value="${myMap['DistillsPercent']}" class="form-control">
+                                                            <span class="input-group-addon">%可申请提现</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">提款处理时间：</label>
+                                                    <input type="hidden" id="DistillsTime" name="DistillsTime" th:value="${myMap['DistillsTime']}">
+                                                    <div class="col-sm-8">
+                                                        <div class="select-time">
+                                                            <input name="startTime" id="startTime" style="width: 100px" type="text" th:value="${myMap['DistillsTime0']}" class="time-input">
+                                                            <span>-</span>
+                                                            <input name="endTime" id="endTime" style="width: 100px" type="text" th:value="${myMap['DistillsTime1']}" class="time-input">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">单笔最低提款：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input id="DistillsLow" name="DistillsLow" onkeyup="value=zhzs(this.value)"
+                                                                   th:value="${myMap['DistillsLow']}"
+                                                                   class="form-control" type="text">
+                                                            <span class="input-group-addon"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label">单笔最高提款：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input id="DistillsHight" name="DistillsHight" class="form-control"
+                                                                   onkeyup="value=zhzs(this.value)"
+                                                                   th:value="${myMap['DistillsHight']}" type="text">
+                                                            <span class="input-group-addon"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label"> 每日提款次数：</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <input id="DistillsCount" name="DistillsCount" class="form-control email"
+                                                                   onkeyup="value=zhzs(this.value)"
+                                                                   type="text" maxlength="10" th:value="${myMap['DistillsCount']}">
+                                                            <span class="input-group-addon">次</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-offset-5 col-sm-10">
+                                                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler('form-tksz-api')">
+                                                    <i class="fa fa-check"></i> 保 存
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                             <div id="tab-3" class="tab-pane">
-                                <div class="panel-body">
-                                   3
+                                <div class="main-content">
+                                    <form id="form-tab3-api" class="form-horizontal">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="col-sm-4 control-label is-required">连接代码：</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea name="ThirdService" rows="4" cols="30" id="ThirdService" th:text="${myMap['ThirdService']}" class="form-control">
+
+                                                        </textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-offset-5 col-sm-10">
+                                                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler('form-tab3-api')">
+                                                    <i class="fa fa-check"></i> 保 存
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
 
                             <div id="tab-4" class="tab-pane">
-                                <div class="panel-body">
-                                    4
-                                </div>
+                                <form id="form-tab4-api" class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label is-required">公告：</label>
+                                                <div class="col-sm-8">
+                                                        <input id="Notice" name="Notice" th:value="${myMap['Notice']}" type="hidden">
+                                                        <div id="editorNotice" class="summernote"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-offset-5 col-sm-10">
+                                            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler('form-tab4-api')">
+                                                <i class="fa fa-check"></i> 保 存
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
 
                             <div id="tab-5" class="tab-pane">
-                                <div class="panel-body">
-                                    5
-                                </div>
+                                <form id="form-tab5-api" class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label is-required">活动：</label>
+                                                <div class="col-sm-8">
+                                                    <input id="Active" name="Active" th:value="${myMap['Active']}" type="hidden">
+                                                    <div id="editorActive" class="summernote"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-offset-5 col-sm-10">
+                                            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler('form-tab5-api')">
+                                                <i class="fa fa-check"></i> 保 存
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
 
                             <div id="tab-6" class="tab-pane">
-                                <div class="panel-body">
-                                    6
-                                </div>
+                                <form id="form-tab6-api" class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="col-sm-4 control-label is-required">玩法：</label>
+                                                <div class="col-sm-8">
+                                                    <input id="GameRules" name="GameRules" th:value="${myMap['GameRules']}" type="hidden">
+                                                    <div id="editorGameRules" class="summernote"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-offset-5 col-sm-10">
+                                            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler('form-tab6-api')">
+                                                <i class="fa fa-check"></i> 保 存
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
 
                             <div id="tab-7" class="tab-pane">
@@ -83,5 +306,123 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-table-export-js"/>
+<th:block th:include="include :: summernote-js"/>
+<script>
+    var prefix = ctx + "games/game";
+
+    $(function () {
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '#startTime',
+                type: 'time',
+                theme: 'molv',
+                trigger: 'click',
+                done: function (value, data) {
+                    var txtStatusValue = $("#DistillsTime").val();
+                    var arry = txtStatusValue.split("-");
+                    arry[0] = value;
+                    $("#DistillsTime").val(arry[0] + "-" + arry[1]);
+                }
+            });
+
+            laydate.render({
+                elem: '#endTime',
+                type: 'time',
+                theme: 'molv',
+                trigger: 'click',
+                done: function (value, data) {
+                    var txtStatusValue = $("#DistillsTime").val();
+                    var arry = txtStatusValue.split("-");
+                    arry[1] = value;
+                    $("#DistillsTime").val(arry[0] + "-" + arry[1]);
+                }
+            });
+        });
+
+        $('#editorNotice').summernote({
+            placeholder: '请输入公告内容',
+            height: 192,
+            width:800,
+            tabsize: 2,
+            direction: 'rtl',
+            lang: 'zh-CN',
+            followingToolbar: false,
+            callbacks: {
+                onImageUpload: function (files) {
+                    sendFile(files[0], this);
+                }
+            }
+        });
+
+        var content = $("#Notice").val();
+        $('#editorNotice').summernote('code', content);
+
+        $('#editorActive').summernote({
+            placeholder: '请输入活动内容',
+            height: 192,
+            width:800,
+            tabsize: 2,
+            direction: 'rtl',
+            lang: 'zh-CN',
+            followingToolbar: false,
+            callbacks: {
+                onImageUpload: function (files) {
+                    sendFile(files[0], this);
+                }
+            }
+        });
+
+        var activeContent = $("#Active").val();
+        $('#editorActive').summernote('code', activeContent);
+
+        $('#editorGameRules').summernote({
+            placeholder: '请输入玩法内容',
+            height: 192,
+            width:800,
+            tabsize: 2,
+            direction: 'rtl',
+            lang: 'zh-CN',
+            followingToolbar: false,
+            callbacks: {
+                onImageUpload: function (files) {
+                    sendFile(files[0], this);
+                }
+            }
+        });
+
+        var gameRulesContent = $("#GameRules").val();
+        $('#editorGameRules').summernote('code', gameRulesContent);
+    });
+
+    function zhzs(value) {
+        value = value.replace(/[^\d]/g,'');
+        if ('' != value) {
+            value = parseInt(value)
+        }
+        return value;
+    }
+
+    function submitHandler(formId) {
+        if (formId == 'form-tab4-api') {
+            var sHTML = $('#editorNotice').summernote('code');
+            $("#Notice").val(sHTML);
+        } else if (formId == 'form-tab5-api') {
+            var sHTML = $('#editorActive').summernote('code');
+            $("#Active").val(sHTML);
+        } else if (formId == 'form-tab6-api') {
+            var sHTML = $('#editorGameRules').summernote('code');
+            $("#GameRules").val(sHTML);
+        }
+
+        var data = $("#" + formId).serializeArray();
+        $.operate.saveTab(prefix + "/edit", JSON.stringify(data), function () {
+            $.modal.loading("更新成功!");
+            setTimeout(function () {
+                $.modal.closeLoading();
+            }, 1000);
+        });
+    }
+</script>
 </body>
 </html>

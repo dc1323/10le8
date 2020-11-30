@@ -1104,6 +1104,7 @@ var table = {
                     url: url,
                     type: "post",
                     dataType: "json",
+                    contentType:"application/json;charset=utf-8",
                     data: data,
                     beforeSend: function () {
                         $.modal.loading("正在处理中，请稍后...");
@@ -1150,6 +1151,7 @@ var table = {
                     url: url,
                     type: "post",
                     dataType: "json",
+                    contentType:"application/json;charset=utf-8",
                     data: data,
                     beforeSend: function () {
                         $.modal.loading("正在处理中，请稍后...");
