@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('充值记录')"/>
+    <th:block th:include="include :: header('提现申请')"/>
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: ztree-css"/>
 </head>
@@ -12,8 +12,7 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="user-form">
-                    <input type="hidden" id="deptId" name="deptId">
-                    <input type="hidden" id="parentId" name="parentId">
+                    <input type="hidden" id="result" name="result" value="0">
                     <div class="select-list">
                         <ul>
                             <li class="select-time">
@@ -38,7 +37,7 @@
                                        name="keyWord"/>
                             </li>
                             <li>
-                                <label>订单查询： </label>
+                                <label>订单号： </label>
                                 <input type="text" class="form-control" id="orderID" placeholder="输入订单号"
                                        name="orderID"/>
                             </li>
@@ -104,86 +103,74 @@
 
     function queryDataList() {
         var options = {
-            url: prefix + "/shareinfolist",
-            sortName: "ApplyDate",
+            url: prefix + "/userdistillslist",
+            sortName: "HandleDateTime",
             sortOrder: "desc",
-            modalName: "充值记录",
+            modalName: "提现申请",
             showFooter: true,
             showToggle: false,
             footerStyle: footerStyle,
             columns: [
                 {
+                    field: 'id',
+                    title: '单号'
+                },
+                {
                     field: 'userID',
-                    title: '用户标识'
+                    title: '用户ID'
                 },
                 {
-                    field: 'nickName',
-                    title: '昵称',
+                    field: 'accounts',
+                    title: '用户名',
                 },
                 {
-                    field: 'compellation',
-                    title: '真实姓名'
+                    field: 'bankUserName',
+                    title: '姓名',
                 },
                 {
-                    field: 'registerMobile',
-                    title: '手机号码',
-                    align: 'center',
+                    field: 'bankCardNumber',
+                    title: '银行账号'
+                },
+                {
+                    field: 'money',
+                    title: '金额',
+                    footerFormatter: function (value) {
+                        var sumBalance = 0;
+                        var count = 0;
+                        for (var i in value) {
+                            sumBalance = value[i].payAmount;
+                            count = value[i].payAmountCount;
+                        }
+                        return "申请金额：" + sumBalance + "   申请笔数：" + count;
+                    }
+                },
+                {
+                    field: 'beforeGold',
+                    title: '变更前金额'
+                },
+                {
+                    field: 'afterGold',
+                    title: '变更后金额'
+                },
+                {
+                    field: 'handleDateTime',
+                    title: '时间',
                     formatter: function (value, row, index) {
-                        if(value == 'undefined'){
-                            return "";
-                        }else{
+                        if (value == null) {
+                            return row.dateTime;
+                        } else {
                             return value;
                         }
                     }
                 },
                 {
-                    field: 'orderID',
-                    title: '单号'
-                },
-                {
-                    field: 'shareID',
-                    title: '存款方式',
-                    formatter: function (value, row, index){
-                        if(value == 99998){
-                            return "线下充值";
-                        }else{
-                            return "线上充值";
-                        }
-                    }
-                },
-                {
-                    field: 'beforeGold',
-                    title: '充值前'
-                },
-                {
-                    field: 'payAmount',
-                    title: '充值金额',
-                    footerFormatter: function (value) {
-                        var sumBalance = 0;
-                        for (var i in value) {
-                            sumBalance = value[i].totalPayAmount;
-                        }
-                        return "总金额：" + sumBalance;
-                    }
-                },
-                {
-                    field: 'afterGold',
-                    title: '充值后'
-                },
-                {
-                    field: 'applyDate',
-                    title: '时间'
-                },
-                {
-                    field: 'orderStatus',
-                    title: '状态',
+                    title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        if(value == 2){
-                            return "成功";
-                        }else{
-                            return "未完成";
-                        }
+                        var actions = [];
+                        actions.push('<a class="btn btn-danger btn-xs" href="#" onclick="noAccept(\'' + row.id + '\',\'' + row.userID + '\')"><i class="fa fa-remove"></i>提款拒绝</a>');
+                        actions.push('<a class="btn btn-success btn-xs" href="#" onclick="accept(\'' + row.id + '\',\'' + row.userID + '\')"><i class="fa fa-edit"></i>审核通过</a> ');
+                        return actions.join('');
                     }
                 }]
         };
@@ -204,10 +191,26 @@
 
     function footerStyle(column) {
         return {
-            payAmount: {
+            money: {
                 css: {color: 'red', 'font-weight': 'normal'}
             }
         }[column.field]
+    }
+
+    function noAccept(id, userID) {
+        var url = prefix + "/accept";
+        layer.prompt({title: '输入拒绝原因', formType: 2}, function (pass, index) {
+            layer.close(index);
+            var data = {"userID": userID, "id": id, "reason": pass, "operaType": 0};
+            $.operate.submit(url, "post", "json", data);
+            queryDataList();
+        });
+    }
+
+    function accept(id, userID) {
+        var url = prefix + "/accept";
+        var data = {"userID": userID, "id": id, "reason": "已接受提款，正等待付款", "operaType": 1};
+        $.operate.submit(url, "post", "json", data);
     }
 
 </script>

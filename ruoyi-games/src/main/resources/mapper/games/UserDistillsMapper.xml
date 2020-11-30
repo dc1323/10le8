@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.UserDistillsMapper">
+
+    <resultMap type="com.ruoyi.games.domain.UserDistills" id="UserDistillsResult">
+        <id property="id" column="ID"/>
+        <result property="userID" column="UserID"/>
+        <result property="accounts" column="Accounts"/>
+        <result property="nickName" column="NickName"/>
+        <result property="bankUserName" column="BankUserName"/>
+        <result property="bankCardNumber" column="BankCardNumber"/>
+        <result property="money" column="Money"/>
+        <result property="handleDateTime" column="HandleDateTime"/>
+        <result property="result" column="Result"/>
+        <result property="beforeGold" column="BeforeGold"/>
+        <result property="memo" column="Memo"/>
+        <result property="dateTime" column="DateTime"/>
+
+
+        <result property="payAmount" column="PayAmount"/>
+        <result property="payAmountCount" column="PayAmountCount"/>
+    </resultMap>
+
+    <select id="getUserDistills" parameterType="com.ruoyi.games.domain.UserDistills"
+            resultMap="UserDistillsResult">
+        select * from RYTreasureDB.dbo.V_GetUserDistill0629
+        WHERE 1 = 1
+        <if test="result != null and result != ''">
+            and Result = #{result}
+        </if>
+        <if test="keyWord != null and keyWord != ''">
+            and (UserID like '%'+#{keyWord}+'%' OR Accounts LIKE '%'+#{keyWord}+'%')
+        </if>
+        <if test="orderID != null and orderID != ''">
+            and ID like '%'+#{orderID}+'%'
+        </if>
+        <if test="minMoney != null and minMoney != ''">
+            and Money &gt;= #{minMoney}
+        </if>
+        <if test="maxMoney != null and maxMoney != ''">
+            and Money &lt;= #{maxMoney}
+        </if>
+        <if test="startDate != null">
+            and DateTime &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and DateTime &lt;= #{endDate}
+        </if>
+        <if test="startHandleDate != null">
+            and HandleDateTime &gt;= #{startHandleDate}
+        </if>
+        <if test="endHandleDate != null">
+            and HandleDateTime &lt;= #{endHandleDate}
+        </if>
+        ${params.dataScope}
+    </select>
+
+    <select id="getUserDistillsSum" parameterType="com.ruoyi.games.domain.UserDistills"
+            resultMap="UserDistillsResult">
+        select isnull(Sum(Money), 0) AS PayAmount, isnull(count(1), 0) as PayAmountCount
+        from RYTreasureDB.dbo.V_GetUserDistill0629
+        WHERE 1 = 1
+        <if test="result != null and result != ''">
+          and Result = #{result}
+        </if>
+        <if test="keyWord != null and keyWord != ''">
+            and (UserID like '%'+#{keyWord}+'%' OR Accounts LIKE '%'+#{keyWord}+'%')
+        </if>
+        <if test="orderID != null and orderID != ''">
+            and ID like '%'+#{orderID}+'%'
+        </if>
+        <if test="minMoney != null and minMoney != ''">
+            and Money &gt;= #{minMoney}
+        </if>
+        <if test="maxMoney != null and maxMoney != ''">
+            and Money &lt;= #{maxMoney}
+        </if>
+        <if test="startDate != null">
+            and DateTime &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and DateTime &lt;= #{endDate}
+        </if>
+        <if test="startHandleDate != null">
+            and HandleDateTime &gt;= #{startHandleDate}
+        </if>
+        <if test="endHandleDate != null">
+            and HandleDateTime &lt;= #{endHandleDate}
+        </if>
+    </select>
+
+    <select id="accept" parameterType="java.util.Map" resultType="java.lang.Integer" statementType="CALLABLE">
+        {call RYAccountsDB.dbo.JSON_DistillAccept(
+                #{userID,mode=IN,jdbcType=INTEGER},
+                #{distillID,mode=IN,jdbcType=INTEGER},
+                #{memo,mode=IN,jdbcType=VARCHAR},
+                #{operatUserId,mode=IN,jdbcType=INTEGER},
+                #{strErrorDescribe,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+
+    <select id="noAccept" parameterType="java.util.Map" resultType="java.lang.Integer" statementType="CALLABLE">
+        {call RYAccountsDB.dbo.JSON_DistillNoAccept(
+                #{userID,mode=IN,jdbcType=INTEGER},
+                #{distillID,mode=IN,jdbcType=INTEGER},
+                #{memo,mode=IN,jdbcType=VARCHAR},
+                #{operatUserId,mode=IN,jdbcType=INTEGER},
+                #{strErrorDescribe,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+
+    <select id="distillPay" parameterType="java.util.Map" resultType="java.lang.Integer" statementType="CALLABLE">
+        {call RYAccountsDB.dbo.JSON_DistillPaySuccess(
+                #{userID,mode=IN,jdbcType=INTEGER},
+                #{distillID,mode=IN,jdbcType=INTEGER},
+                #{memo,mode=IN,jdbcType=VARCHAR},
+                #{operatUserId,mode=IN,jdbcType=INTEGER},
+                #{strErrorDescribe,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+
+</mapper> 
