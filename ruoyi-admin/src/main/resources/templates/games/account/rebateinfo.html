@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('抽水返利')"/>
+    <th:block th:include="include :: datetimepicker-css"/>
+</head>
+<body class="gray-bg">
+<div class="main-content">
+    <form id="form-add" class="form-horizontal" th:object="${rebateInfo.info}">
+        <input name="info.statusName" type="hidden" id="info.statusName" th:field="*{statusName}"/>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-12 select-table table-striped">
+                    <table id="bootstrap-table"></table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-12 select-table table-striped">
+                    <textarea name="info.statusValue" class="form-control" rows="10"
+                              th:field="*{statusValue}"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存
+        </button>&nbsp;
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:src="@{/js/jquery.tmpl.js}"></script>
+<script th:inline="javascript">
+    $(function () {
+        var options = {
+            data: [[${rebateInfo.infos}]],
+            pagination: false,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            sidePagination: "client",
+            columns: [
+                {
+                    field: 'id',
+                    align: 'center',
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        var columnIndex = $.common.sprintf("<input type='text' name='infos[%s].id' value='%s' readonly>", index, value);
+                        return columnIndex;
+                    }
+                },
+                {
+                    field: 'scaleLevel',
+                    align: 'center',
+                    title: '等级',
+                    formatter: function (value, row, index) {
+                        var html = $.common.sprintf("<input type='hidden' name='infos[%s].scaleLevel' value='%s'><input type='text' value='%s' readonly>", index, value, value == 1 ? '直推' : '间推');
+                        return html;
+                    }
+                },
+                {
+                    field: 'rebateScale',
+                    align: 'center',
+                    title: '返回比例(%)',
+                    formatter: function (value, row, index) {
+                        var temp = value * 100;
+                        var html = $.common.sprintf("<input class='form-control' type='text' name='infos[%s].rebateScale' value='%s'>", index, number_format(temp, 2, ".", ","));
+                        return html;
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* 主子表-提交 */
+    function submitHandler(index, layero) {
+        var data = $("#form-add").serializeArray();
+        $.operate.saveModal("/games/account/rebatescale", data);
+    }
+
+    function number_format(number, decimals, dec_point, thousands_sep) {
+        /*
+        * 参数说明：
+        * number：要格式化的数字
+        * decimals：保留几位小数
+        * dec_point：小数点符号
+        * thousands_sep：千分位符号
+        * */
+        number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+        var n = !isFinite(+number) ? 0 : +number,
+            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+            s = '',
+            toFixedFix = function (n, prec) {
+                var k = Math.pow(10, prec);
+                return '' + Math.floor(n * k) / k;
+            };
+        s = (prec ? toFixedFix(n, prec) : '' + Math.floor(n)).split('.');
+        var re = /(-?\d+)(\d{3})/;
+        console.log(s)
+        while (re.test(s[0])) {
+            s[0] = s[0].replace(re, "$1" + sep + "$2");
+        }
+        if ((s[1] || '').length < prec) {
+            s[1] = s[1] || '';
+            s[1] += new Array(prec - s[1].length + 1).join('0');
+        }
+        return s.join(dec);
+    }
+
+</script>
+</body>
+</html>
+
+<!-- 商品类型 -->
+<script id="goodsTypeTpl" type="text/x-jquery-tmpl">
+<div>
+<select class='form-control' name='goods[${index}].type'>
+    <option value="">所有</option>
+    <option value="0" {{if type==="0"}}selected{{/if}}>寒性</option>
+    <option value="1" {{if type==="1"}}selected{{/if}}>热性</option>
+</select>
+</div>
+
+
+
+</script>

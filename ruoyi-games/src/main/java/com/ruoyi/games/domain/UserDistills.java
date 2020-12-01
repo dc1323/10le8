@@ -183,7 +183,12 @@ public class UserDistills {
         }
         BigDecimal temp1 = new BigDecimal(beforeGold);
         BigDecimal temp2 = new BigDecimal(money);
-        BigDecimal temp = temp1.subtract(temp2);
+        BigDecimal temp = new BigDecimal("0");
+        if(result == 1){
+            temp = temp1.add(temp2);
+        }else{
+            temp = temp1.subtract(temp2);
+        }
         temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
         return temp.toString();
     }

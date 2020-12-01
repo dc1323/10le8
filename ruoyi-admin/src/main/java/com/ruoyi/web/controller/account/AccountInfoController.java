@@ -7,9 +7,7 @@ import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.games.domain.AccountInfo;
-import com.ruoyi.games.domain.GameKindItem;
-import com.ruoyi.games.domain.ScoreInfo;
+import com.ruoyi.games.domain.*;
 import com.ruoyi.games.service.AccountInfoService;
 import com.ruoyi.games.service.ScoreInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -101,6 +99,7 @@ public class AccountInfoController extends BaseController {
         mmap.put("accountInfo", accountInfo);
         return prefix + "/next";
     }
+
     @PostMapping("/nextlist")
     @ResponseBody
     public TableDataInfo nextlist(AccountInfo info) {
@@ -119,6 +118,7 @@ public class AccountInfoController extends BaseController {
 
     /**
      * 冻结
+     *
      * @param userIDs
      * @return
      */
@@ -128,7 +128,7 @@ public class AccountInfoController extends BaseController {
     @ResponseBody
     public AjaxResult freeze(String userIDs) {
         try {
-            return toAjax(accountInfoService.freezeAccount(userIDs,0));
+            return toAjax(accountInfoService.freezeAccount(userIDs, 0));
         } catch (Exception e) {
             return error(e.getMessage());
         }
@@ -136,6 +136,7 @@ public class AccountInfoController extends BaseController {
 
     /**
      * 解冻
+     *
      * @param userIDs
      * @return
      */
@@ -145,7 +146,7 @@ public class AccountInfoController extends BaseController {
     @ResponseBody
     public AjaxResult unfreeze(String userIDs) {
         try {
-            return toAjax(accountInfoService.freezeAccount(userIDs,1));
+            return toAjax(accountInfoService.freezeAccount(userIDs, 1));
         } catch (Exception e) {
             return error(e.getMessage());
         }
@@ -153,6 +154,7 @@ public class AccountInfoController extends BaseController {
 
     /**
      * 跳转到游戏充值界面
+     *
      * @param userId
      * @param mmap
      * @return
@@ -178,26 +180,29 @@ public class AccountInfoController extends BaseController {
 
     /**
      * 胜负查看
+     *
      * @return
      */
     @RequiresPermissions("games:score:view")
     @GetMapping("/score/winvsloss")
-    public String winVsLoss(){
+    public String winVsLoss() {
         return prefix + "/winvsloss";
     }
 
     /**
      * 玩家异常
+     *
      * @return
      */
     @RequiresPermissions("games:score:list")
     @GetMapping("/score/specialuser")
-    public String specialUser(){
+    public String specialUser() {
         return prefix + "/specialuser";
     }
 
     /**
      * 胜负查看数据
+     *
      * @param info
      * @return
      */
@@ -217,6 +222,7 @@ public class AccountInfoController extends BaseController {
 
     /**
      * 设置特殊账号
+     *
      * @param userIDs
      * @return
      */
@@ -234,6 +240,7 @@ public class AccountInfoController extends BaseController {
 
     /**
      * 取消特殊账号
+     *
      * @param userIDs
      * @return
      */
@@ -251,14 +258,15 @@ public class AccountInfoController extends BaseController {
 
     /**
      * 跳转到卡线玩家管理
+     *
      * @param mmap
      * @return
      */
     @RequiresPermissions("games:account:onlineview")
     @GetMapping("/online")
-    public String online(ModelMap mmap){
+    public String online(ModelMap mmap) {
         List<GameKindItem> gameKindItemList = accountInfoService.getGameList();
-        mmap.put("gameKindItemList",gameKindItemList);
+        mmap.put("gameKindItemList", gameKindItemList);
         return prefix + "/online";
     }
 
@@ -273,6 +281,7 @@ public class AccountInfoController extends BaseController {
 
     /**
      * 清除卡线
+     *
      * @param userIDs
      * @return
      */
@@ -283,6 +292,35 @@ public class AccountInfoController extends BaseController {
     public AjaxResult unlock(String userIDs) {
         try {
             return toAjax(accountInfoService.unlock(userIDs));
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
+    }
+
+    /**
+     * @description: 跳转到抽水返利界面
+     * @author liuyang
+     * @date 2020/12/1 16:59
+     */
+    @RequiresPermissions("games:account:rebateinfo")
+    @GetMapping("/rebateinfo")
+    public String rebateInfo(ModelMap mmap) {
+        List<RebateScaleInfo> dataList = accountInfoService.getRebateScaleInfo();
+        SystemFunctionStatusInfo info = accountInfoService.getInfoByStatusName("RevenueRemark");
+        RebateInfo rebateInfo = new RebateInfo();
+        rebateInfo.setInfo(info);
+        rebateInfo.setInfos(dataList);
+        mmap.put("rebateInfo", rebateInfo);
+        return prefix + "/rebateinfo";
+    }
+
+    @RequiresPermissions("games:account:rebatescale")
+    @Log(title = "设置返利", businessType = BusinessType.UPDATE)
+    @PostMapping("/rebatescale")
+    @ResponseBody
+    public AjaxResult rebateScale(RebateInfo rebateInfo) {
+        try {
+            return accountInfoService.rebateScaleInfo(rebateInfo);
         } catch (Exception e) {
             return error(e.getMessage());
         }

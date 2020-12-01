@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.SystemFunctionStatusInfoMapper">
+
+    <resultMap type="com.ruoyi.games.domain.SystemFunctionStatusInfo" id="SystemFunctionStatusInfoResult">
+        <result property="sortID" column="SortID"/>
+        <result property="statusName" column="StatusName"/>
+        <result property="statusValue" column="StatusValue"/>
+        <result property="statusString" column="StatusString"/>
+        <result property="statusTip" column="StatusTip"/>
+        <result property="statusDescription" column="StatusDescription"/>
+        <result property="isShow" column="IsShow"/>
+    </resultMap>
+
+    <select id="getFunctionStatusInfoList" resultMap="SystemFunctionStatusInfoResult"
+            parameterType="com.ruoyi.games.domain.SystemFunctionStatusInfo">
+        SELECT  SortID, StatusName,  StatusValue,
+            StatusString, StatusTip, StatusDescription,  IsShow
+        FROM RYAccountsDB.dbo.SystemFunctionStatusInfo
+        WHERE 1= 1
+        <if test="statusName != null and statusName != ''">
+            AND StatusName = #{statusName}
+        </if>
+    </select>
+
+    <update id="update" parameterType="com.ruoyi.games.domain.SystemFunctionStatusInfo">
+        update RYAccountsDB.dbo.SystemFunctionStatusInfo
+        set StatusValue = #{statusValue}
+        where StatusName = #{statusName}
+    </update>
+
+</mapper> 

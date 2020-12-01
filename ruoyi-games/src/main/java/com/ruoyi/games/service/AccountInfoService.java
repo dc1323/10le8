@@ -1,9 +1,8 @@
 package com.ruoyi.games.service;
 
-import com.ruoyi.games.domain.AccountInfo;
-import com.ruoyi.games.domain.GameKindItem;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.games.domain.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -70,5 +69,11 @@ public interface AccountInfoService {
      * @return
      */
     int unlock(String userIDs);
+
+    SystemFunctionStatusInfo getInfoByStatusName(String statusName);
+
+    List<RebateScaleInfo> getRebateScaleInfo();
+
+    AjaxResult rebateScaleInfo(RebateInfo rebateInfo);
 
 }

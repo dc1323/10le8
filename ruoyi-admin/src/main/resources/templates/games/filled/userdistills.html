@@ -136,17 +136,22 @@
                     title: '金额',
                     footerFormatter: function (value) {
                         var sumBalance = 0;
-                        var count = 0;
                         for (var i in value) {
                             sumBalance = value[i].payAmount;
-                            count = value[i].payAmountCount;
                         }
-                        return "申请金额：" + sumBalance + "   申请笔数：" + count;
+                        return "申请金额：" + sumBalance;
                     }
                 },
                 {
                     field: 'beforeGold',
-                    title: '变更前金额'
+                    title: '变更前金额',
+                    footerFormatter: function (value) {
+                        var count = 0;
+                        for (var i in value) {
+                            count = value[i].payAmountCount;
+                        }
+                        return "申请笔数：" + count;
+                    }
                 },
                 {
                     field: 'afterGold',
@@ -192,6 +197,9 @@
     function footerStyle(column) {
         return {
             money: {
+                css: {color: 'red', 'font-weight': 'normal'}
+            },
+            beforeGold: {
                 css: {color: 'red', 'font-weight': 'normal'}
             }
         }[column.field]

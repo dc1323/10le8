@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改客服信息')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body>
+<div class="main-content">
+    <form class="form-horizontal" id="form-user-edit" th:object="${customer}">
+        <input name="id" type="hidden" th:field="*{id}"/>
+        <input name="nullity" type="hidden" th:field="*{nullity}"/>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">客服类型：</label>
+                    <div class="col-sm-8">
+                        <select name="typeID" class="form-control m-b">
+                            <option th:each="data:${typeList}" th:value="${data.typeID}" th:text="${data.typeName}"
+                                    th:field="*{typeID}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">客服账号：</label>
+                    <div class="col-sm-8">
+                        <input name="customerValue" placeholder="请输入客服账号" class="form-control" type="text"
+                               th:field="*{customerValue}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "games/filled/customer";
+
+    function edit() {
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: prefix + "/edit",
+            data: $("#form-user-edit").serializeArray(),
+            async: false,
+            error: function (request) {
+                $.modal.alertError("系统错误");
+            },
+            success: function (data) {
+                $.operate.successCallback(data);
+            }
+        });
+    }
+
+    function submitHandler() {
+        edit();
+    }
+</script>
+</body>
+</html>

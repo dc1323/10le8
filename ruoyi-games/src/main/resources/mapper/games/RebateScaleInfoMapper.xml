@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.RebateScaleInfoMapper">
+
+    <resultMap type="com.ruoyi.games.domain.RebateScaleInfo" id="RebateScaleInfoResult">
+        <result property="id" column="ID"/>
+        <result property="rebateScale" column="RebateScale"/>
+        <result property="scaleLevel" column="ScaleLevel"/>
+    </resultMap>
+
+    <insert id="insertBatch" parameterType="list" keyProperty="id" useGeneratedKeys="true">
+        insert into RYTreasureDB.dbo.RebateScaleInfo (RebateScale, ScaleLevel)
+        values
+        <foreach collection="list" separator="," item="item" index="index">
+            (#{item.rebateScale,jdbcType=DECIMAL},
+             #{item.scaleLevel,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+    
+    <select id="getRebateScaleInfo" resultMap="RebateScaleInfoResult">
+        select ID,RebateScale,ScaleLevel from RYTreasureDB.dbo.RebateScaleInfo
+    </select>
+
+    <update id="update" parameterType="com.ruoyi.games.domain.RebateScaleInfo">
+        update RYTreasureDB.dbo.RebateScaleInfo
+        set RebateScale = #{rebateScale},
+            ScaleLevel = #{scaleLevel}
+        where ID = #{id}
+    </update>
+
+</mapper> 

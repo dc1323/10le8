@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.CustomerMapper">
+
+    <resultMap type="com.ruoyi.games.domain.Customer" id="CustomerResult">
+        <result property="id" column="ID"/>
+        <result property="customerValue" column="CustomerValue"/>
+        <result property="typeID" column="TypeID"/>
+        <result property="typeName" column="TypeName"/>
+        <result property="nullity" column="Nullity"/>
+    </resultMap>
+
+    <select id="getCustomerList" resultMap="CustomerResult"
+            parameterType="com.ruoyi.games.domain.Customer">
+        SELECT * FROM RYTreasureDB.dbo.V_GetCustomerList
+        WHERE 1= 1
+        <if test="typeID != null and typeID != ''">
+            AND TypeID = #{typeID}
+        </if>
+        ${params.dataScope}
+    </select>
+
+    <select id="getCustomerType" resultMap="CustomerResult">
+        select TypeID, TypeName from RYTreasureDB.dbo.CustomerType
+    </select>
+
+    <select id="getCustomerInfoById" resultMap="CustomerResult">
+        SELECT * FROM RYTreasureDB.dbo.V_GetCustomerList
+        WHERE ID = #{id}
+    </select>
+
+    <update id="updateCustomer" parameterType="com.ruoyi.games.domain.Customer">
+        update RYTreasureDB.dbo.CustomerInfo
+        set TypeID = #{typeID},
+            CustomerValue = #{customerValue}
+        where ID = #{id}
+    </update>
+
+</mapper> 

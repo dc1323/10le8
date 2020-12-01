@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('提现处理')"/>
+    <th:block th:include="include :: header('提现记录')"/>
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: ztree-css"/>
 </head>
@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="user-form">
-                    <input type="hidden" id="result" name="result" value="10">
+                    <input type="hidden" id="result" name="result" value="1">
                     <div class="select-list">
                         <ul>
                             <li class="select-time">
@@ -139,7 +139,7 @@
                         for (var i in value) {
                             sumBalance = value[i].payAmount;
                         }
-                        return "待处理金额：" + sumBalance;
+                        return "已处理金额：" + sumBalance;
                     }
                 },
                 {
@@ -150,7 +150,7 @@
                         for (var i in value) {
                             count = value[i].payAmountCount;
                         }
-                        return "待处理笔数：" + count;
+                        return "已处理笔数：" + count;
                     }
                 },
                 {
@@ -169,13 +169,20 @@
                     }
                 },
                 {
-                    title: '操作',
+                    field: 'result',
+                    title: '状态',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="#" onclick="dealWith(\'' + row.id + '\',\'' + row.userID + '\',\'' + row.money + '\')"><i class="fa fa-edit"></i>处理提现</a> ');
-                        return actions.join('');
+                        if(value == 1){
+                            return "成功";
+                        }else{
+                            return "未成功";
+                        }
                     }
+                },
+                {
+                    field: 'memo',
+                    title: '备注'
                 }]
         };
         $.table.init(options);
@@ -202,16 +209,6 @@
                 css: {color: 'red', 'font-weight': 'normal'}
             }
         }[column.field]
-    }
-
-    function dealWith(id, userID, money) {
-        var url = prefix + "/distillpay";
-        layer.prompt({title: '备注', formType: 2}, function (pass, index) {
-            layer.close(index);
-            var data = {"userID": userID, "id": id, "reason": pass, "money": money};
-            $.operate.submit(url, "post", "json", data);
-            queryDataList();
-        });
     }
 
 </script>

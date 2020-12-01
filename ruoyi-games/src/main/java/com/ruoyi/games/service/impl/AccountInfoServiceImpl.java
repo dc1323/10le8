@@ -1,24 +1,23 @@
 package com.ruoyi.games.service.impl;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.games.domain.AccountInfo;
-import com.ruoyi.games.domain.GameKindItem;
-import com.ruoyi.games.domain.SystemSecurity;
-import com.ruoyi.games.mapper.AccountInfoMapper;
-import com.ruoyi.games.mapper.GameKindItemMapper;
-import com.ruoyi.games.mapper.SystemSecurityMapper;
+import com.ruoyi.games.domain.*;
+import com.ruoyi.games.mapper.*;
 import com.ruoyi.games.service.AccountInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 @Service
+@Transactional
 public class AccountInfoServiceImpl implements AccountInfoService {
     private static final Logger log = LoggerFactory.getLogger(AccountInfoServiceImpl.class);
 
@@ -30,6 +29,12 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     @Autowired
     private GameKindItemMapper gameKindItemMapper;
+
+    @Autowired
+    private SystemFunctionStatusInfoMapper systemFunctionStatusInfoMapper;
+
+    @Autowired
+    private RebateScaleInfoMapper rebateScaleInfoMapper;
 
     @Override
     public Map<String, Object> selectAccountPage(String strWhere, int pageSize, int pageIndex) {
@@ -194,5 +199,38 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                 return 0;
             }
         }
+    }
+
+    @Override
+    public SystemFunctionStatusInfo getInfoByStatusName(String statusName) {
+        SystemFunctionStatusInfo info = new SystemFunctionStatusInfo();
+        info.setStatusName(statusName);
+        List<SystemFunctionStatusInfo> list = systemFunctionStatusInfoMapper.getFunctionStatusInfoList(info);
+        if (null != list && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<RebateScaleInfo> getRebateScaleInfo() {
+        return rebateScaleInfoMapper.getRebateScaleInfo();
+    }
+
+    @Override
+    public AjaxResult rebateScaleInfo(RebateInfo rebateInfo) {
+        if(null == rebateInfo){
+            return AjaxResult.error("参数不能为空!");
+        }
+        List<RebateScaleInfo> infos = rebateInfo.getInfos();
+        if(null != infos && infos.size()>0){
+            for(RebateScaleInfo info : infos){
+                BigDecimal temp = info.getRebateScale();
+                info.setRebateScale(temp.divide(new BigDecimal(100),4,BigDecimal.ROUND_HALF_UP));
+                rebateScaleInfoMapper.update(info);
+            }
+        }
+        systemFunctionStatusInfoMapper.update(rebateInfo.getInfo());
+        return AjaxResult.success();
     }
 }

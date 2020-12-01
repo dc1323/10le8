@@ -6,10 +6,12 @@ import com.ruoyi.games.mapper.RecordAchievementMapper;
 import com.ruoyi.games.service.RecordAchievementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class RecordAchievementServiceImpl implements RecordAchievementService {
 
     @Autowired
