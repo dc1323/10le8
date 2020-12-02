@@ -12,7 +12,6 @@ import com.ruoyi.games.service.AccountInfoService;
 import com.ruoyi.games.service.GameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -88,7 +87,6 @@ public class GameController extends BaseController {
             int roundCount = getRoundByExpect(cpList, lotteryManage.getCode(), lotteryManage.getExpect(),
                     lotteryManage.getGroupId());
             lotteryManage.setRoundCount("第" + roundCount + "场");
-
             if (lotteryManage.getOpenCode().length() == 0) {
                 lotteryManage.setStatus("未开奖");
             } else {
@@ -168,5 +166,28 @@ public class GameController extends BaseController {
         }
         nRoundCount = (nRoundCount - 1) * cpCount + SortID;
         return nRoundCount;
+    }
+
+    @RequiresPermissions("games:lotteryTime:list")
+    @GetMapping("/lotteryTime")
+    public String lotteryTime(ModelMap mmap) {
+        List<GameKindItem> gameKindItemList = accountInfoService.getGameKindList();
+        mmap.put("gameKindItemList",gameKindItemList);
+        return prefix + "/lottery_time";
+    }
+
+    @RequiresPermissions("games:lotteryTime:list")
+    @PostMapping("/lotteryTime/list")
+    @ResponseBody
+    public TableDataInfo lotteryTimeList(LotteryManage manage) {
+        startPage();
+        List<LotteryManage> list = gameService.queryLotteryManage(manage);
+        List<CaiPiaoDiZhi> cpList = gameService.getCaiPiaoDiZhi();
+        for (LotteryManage lotteryManage : list) {
+            int roundCount = getRoundByExpect(cpList, lotteryManage.getCode(), lotteryManage.getExpect(),
+                    lotteryManage.getGroupId());
+            lotteryManage.setRoundCount("第" + roundCount + "场");
+        }
+        return getDataTable(list);
     }
 }

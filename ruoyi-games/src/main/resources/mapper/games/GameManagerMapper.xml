@@ -33,7 +33,10 @@
         <result property="expect" column="Expect"/>
         <result property="openCode" column="OpenCode"/>
         <result property="openTime" column="OpenTime"/>
+        <result property="fOpenTime" column="fOpenTime"/>
         <result property="groupId" column="GroupID"/>
+        <result property="startTime" column="StartTime"/>
+        <result property="endTime" column="EndTime"/>
         <result property="id" column="ID"/>
         <result property="code" column="Code"/>
     </resultMap>
@@ -68,7 +71,7 @@
     </select>
 
     <update id="updateCaiPiaoJieGuo">
-        Update RYTreasureDB.dbo.CaiPiaoJieGuo Set OpenCode = #{openCode} where ID = #{id}
+        update RYTreasureDB.dbo.CaiPiaoJieGuo set OpenCode = #{openCode} where ID = #{id}
     </update>
 
     <select id="getRecordDrawInfoByCodeAndExpect" parameterType="java.util.Map" resultType="java.util.Map"

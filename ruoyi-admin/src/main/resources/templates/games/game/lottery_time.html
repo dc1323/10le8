@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('彩票时间表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-selectpicker">
+                                <label>彩种： </label>
+                                <select class="form-control input-sm" id="kindId" name="kindId">
+                                    <option th:each="data,dataStat : ${gameKindItemList}"
+                                            th:value="${data.kindID}" th:text="${data.kindName}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                            </li>
+                            <li>
+                                <label>官方五分钟开始时间：</label>
+                                <input type="text"
+                                       name="startDate" placeholder="请输入开始时间" readonly/>
+                            </li>
+                            <li>
+                                <button type="button" id="btnModify" class="btn btn-primary btn-sm">确定</button>
+                            </li>
+                            <li>
+                                <label>官方五分钟截止时间：</label>
+                                <input type="text" name="txtcbEndTime123" id="txtcbEndTime123"
+                                       onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                       placeholder="请输入截止时间"/>
+                                秒
+                            </li>
+                            <li>
+                                <button type="button" id="btnSure123" class="btn btn-primary btn-sm">确定</button>
+                            </li>
+                            <li>
+                                <label>极速一分钟截止时间：</label>
+                                <input type="text" id="txtcbEndTime124" name="txtcbEndTime124"
+                                       onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请输入截止时间"/>
+                                秒
+                            </li>
+                            <li>
+                                <button type="button" id="btnSure124" class="btn btn-primary btn-sm">确定</button>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "games/game";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+        queryLotteryTimeList();
+    });
+
+    function queryLotteryTimeList() {
+        var options = {
+            url: prefix + "/lotteryTime/list",
+            sortOrder: "desc",
+            modalName: "游戏管理",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'name',
+                    title: '彩种'
+                },
+                {
+                    field: 'roundCount',
+                    title: '场次'
+                },
+                {
+                    field: 'expect',
+                    title: '期数',
+                },
+                {
+                    field: 'startTime',
+                    title: '开始时间'
+                },
+                {
+                    field: 'endTime',
+                    title: '截止时间'
+                },
+                {
+                    field: 'fOpenTime',
+                    title: '开奖时间'
+                }]
+        };
+        $.table.init(options);
+    }
+</script>
+</body>
+</html>
