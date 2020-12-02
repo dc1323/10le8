@@ -136,3 +136,5 @@ xss:
 swagger:
   # 是否开启swagger
   enabled: true
+
+ServerUrl: http://47.103.18.103:8650

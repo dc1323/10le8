@@ -1,6 +1,7 @@
 package com.ruoyi.games.mapper;
 
 import com.ruoyi.games.domain.AccountInfo;
+import com.ruoyi.games.domain.OrderInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface AccountInfoMapper {
 
     void unFreezeAccount(List<String> userIDs);
 
-    Integer grantTreasure(Map<String, Object> param);
+    List<OrderInfo> grantTreasure(Map<String, Object> param);
 
     void setTeShu(List<String> userIDs);
 
