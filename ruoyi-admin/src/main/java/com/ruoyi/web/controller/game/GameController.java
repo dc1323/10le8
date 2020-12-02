@@ -6,6 +6,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.games.domain.*;
 import com.ruoyi.games.service.AccountInfoService;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -82,7 +85,7 @@ public class GameController extends BaseController {
     public TableDataInfo lotteryManageList(LotteryManage manage) {
         startPage();
         List<LotteryManage> list = gameService.queryLotteryManage(manage);
-        List<CaiPiaoDiZhi> cpList = gameService.getCaiPiaoDiZhi();
+        List<CaiPiaoDiZhi> cpList = gameService.getCaiPiaoDiZhi(-1);
         for (LotteryManage lotteryManage : list) {
             int roundCount = getRoundByExpect(cpList, lotteryManage.getCode(), lotteryManage.getExpect(),
                     lotteryManage.getGroupId());
@@ -170,10 +173,48 @@ public class GameController extends BaseController {
 
     @RequiresPermissions("games:lotteryTime:list")
     @GetMapping("/lotteryTime")
-    public String lotteryTime(ModelMap mmap) {
-        List<GameKindItem> gameKindItemList = accountInfoService.getGameKindList();
-        mmap.put("gameKindItemList",gameKindItemList);
+    public String lotteryTime(ModelMap map) {
+        List<GameKindItem> list = accountInfoService.getGameKindList();
+        map.put("gameKindItemList", list);
+
+        String startTime = "08:00:00";
+        List<CaiPiaoDiZhi> caiPiaoDiZhiList = gameService.getCaiPiaoDiZhi(123);
+        if (CollectionUtils.isNotEmpty(caiPiaoDiZhiList)) {
+            startTime = caiPiaoDiZhiList.get(0).getStartTime();
+        }
+
+       startTime = getTime(startTime);
+
+        int cbEndTime123 = 0;
+        int cbEndTime124 = 0;
+        List<Game2CaiPiaoParam> piaoParamList = gameService.getGame2CaiPiaoParamList(-1);
+        for (Game2CaiPiaoParam param : piaoParamList) {
+            if (param.kindID == 123) {
+                cbEndTime123 = param.totalEndTime;
+                break;
+            }
+        }
+
+        for (Game2CaiPiaoParam param : piaoParamList) {
+            if (param.kindID == 124) {
+                cbEndTime124 = param.totalEndTime;
+                break;
+            }
+        }
+
+        map.put("startTime", startTime);
+        map.put("cbEndTime123", cbEndTime123);
+        map.put("cbEndTime124", cbEndTime124);
         return prefix + "/lottery_time";
+    }
+
+    public String getTime(String startTime) {
+        Date d = DateUtils.dateTime("HH:mm:ss", startTime);
+        Calendar nowTime = Calendar.getInstance();
+        nowTime.setTime(d);
+        nowTime.add(Calendar.MINUTE, 5);
+        startTime = DateUtils.parseDateToStr("HH:mm:ss", nowTime.getTime());
+        return startTime;
     }
 
     @RequiresPermissions("games:lotteryTime:list")
@@ -182,12 +223,64 @@ public class GameController extends BaseController {
     public TableDataInfo lotteryTimeList(LotteryManage manage) {
         startPage();
         List<LotteryManage> list = gameService.queryLotteryManage(manage);
-        List<CaiPiaoDiZhi> cpList = gameService.getCaiPiaoDiZhi();
+        List<CaiPiaoDiZhi> cpList = gameService.getCaiPiaoDiZhi(-1);
         for (LotteryManage lotteryManage : list) {
             int roundCount = getRoundByExpect(cpList, lotteryManage.getCode(), lotteryManage.getExpect(),
                     lotteryManage.getGroupId());
             lotteryManage.setRoundCount("第" + roundCount + "场");
         }
         return getDataTable(list);
+    }
+
+    @RequiresPermissions("games:lotteryTime:caiPiaoTime")
+    @Log(title = "彩票时间表", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    @PostMapping(value="/setCaiPiaoTimeByKindID")
+    public AjaxResult setCaiPiaoTimeByKindID(@RequestBody Map<String, String> map) {
+        try {
+            int kindId = Integer.parseInt(StringUtils.defaultString(map.get("kindId"), "-1"));
+            String startTime = map.get("startTime");
+            List<CaiPiaoDiZhi> caiPiaoDiZhiList = gameService.getCaiPiaoDiZhi(kindId);
+            if (CollectionUtils.isNotEmpty(caiPiaoDiZhiList)) {
+                for (CaiPiaoDiZhi diZhi : caiPiaoDiZhiList) {
+                    gameService.updateCaiPiaoDiZhi(startTime, diZhi.getId());
+                    startTime = getTime(startTime);
+                }
+            }
+
+            Map<String, String> param = Maps.newHashMap();
+            param.put("strErrorDescribe", "");
+            gameService.getInitFalseCaiPiaoJieGuo(param);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return error("操作失败!");
+        }
+        return error("操作成功!");
+    }
+
+    @RequiresPermissions("games:lotteryTime:endTimeTime")
+    @Log(title = "彩票时间表", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    @PostMapping(value="/setEndTimeTime123")
+    public AjaxResult setEndTimeTime123(@RequestBody Map<String, String> map) {
+        try {
+            int kindId = Integer.parseInt(StringUtils.defaultString(map.get("kindId"), "-1"));
+            String startTime = map.get("startTime");
+            List<CaiPiaoDiZhi> caiPiaoDiZhiList = gameService.getCaiPiaoDiZhi(kindId);
+            if (CollectionUtils.isNotEmpty(caiPiaoDiZhiList)) {
+                for (CaiPiaoDiZhi diZhi : caiPiaoDiZhiList) {
+                    gameService.updateCaiPiaoDiZhi(startTime, diZhi.getId());
+                    startTime = getTime(startTime);
+                }
+            }
+
+            Map<String, String> param = Maps.newHashMap();
+            param.put("strErrorDescribe", "");
+            gameService.getInitFalseCaiPiaoJieGuo(param);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return error("操作失败!");
+        }
+        return error("操作成功!");
     }
 }

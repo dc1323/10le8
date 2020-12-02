@@ -2,6 +2,7 @@ package com.ruoyi.games.service.impl;
 
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.games.domain.CaiPiaoDiZhi;
+import com.ruoyi.games.domain.Game2CaiPiaoParam;
 import com.ruoyi.games.domain.GameFunctionSet;
 import com.ruoyi.games.domain.LotteryManage;
 import com.ruoyi.games.mapper.GameMapper;
@@ -32,8 +33,8 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<CaiPiaoDiZhi> getCaiPiaoDiZhi() {
-        return gameMapper.getCaiPiaoDiZhi();
+    public List<CaiPiaoDiZhi> getCaiPiaoDiZhi(int kindId) {
+        return gameMapper.getCaiPiaoDiZhi(kindId);
     }
 
     @Override
@@ -47,6 +48,11 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public int updateCaiPiaoDiZhi(String startTime, int id) {
+        return gameMapper.updateCaiPiaoDiZhi(startTime, id);
+    }
+
+    @Override
     public Map<String, String> getRecordDrawInfoByCodeAndExpect(String code, String expect) {
         Map<String, String> param = new HashMap<String, String>();
         if (StringUtils.isEmpty(code) || StringUtils.isEmpty(expect)) {
@@ -56,5 +62,15 @@ public class GameServiceImpl implements GameService {
         param.put("code", code);
         param.put("expect", expect);
         return gameMapper.getRecordDrawInfoByCodeAndExpect(param);
+    }
+
+    @Override
+    public Map<String, String> getInitFalseCaiPiaoJieGuo(Map<String, String> param) {
+        return gameMapper.getInitFalseCaiPiaoJieGuo(param);
+    }
+
+    @Override
+    public List<Game2CaiPiaoParam> getGame2CaiPiaoParamList(int kindId) {
+        return gameMapper.getGame2CaiPiaoParamList(kindId);
     }
 }

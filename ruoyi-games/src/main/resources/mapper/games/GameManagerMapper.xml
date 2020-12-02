@@ -67,17 +67,38 @@
     </select>
 
     <select id="getCaiPiaoDiZhi" resultMap="CaiPiaoDiZhiResult">
-        SELECT * FROM RYTreasureDB.dbo.CaiPiaoDiZhi
+        SELECT * FROM RYTreasureDB.dbo.CaiPiaoDiZhi where 1=1
+        <if test="kindId > 0">
+            and GroupID = #{kindId}
+        </if>
+         order by ID asc
     </select>
 
     <update id="updateCaiPiaoJieGuo">
         update RYTreasureDB.dbo.CaiPiaoJieGuo set OpenCode = #{openCode} where ID = #{id}
     </update>
 
+    <update id="updateCaiPiaoDiZhi">
+        Update RYTreasureDB.dbo.CaiPiaoDiZhi set StartTime = #{startTime} where ID = #{id}
+    </update>
+
+    <select id="getGame2CaiPiaoParamList" resultType="com.ruoyi.games.domain.Game2CaiPiaoParam">
+        SELECT * FROM RYTreasureDB.dbo.Game2CaiPiaoParam(NOLOCK) WHERE 1=1
+        <if test="kindId > 0">
+            and KindID = #{kindId}
+        </if>
+    </select>
+
     <select id="getRecordDrawInfoByCodeAndExpect" parameterType="java.util.Map" resultType="java.util.Map"
-            statementType="CALLABLE">
+                     statementType="CALLABLE">
         {call RYTreasureDB.dbo.JSON_GetRecordDrawInfoByCodeAndExpect(
             #{cpCode,mode=IN,jdbcType=VARCHAR},
             #{cpExpect,mode=IN,jdbcType=VARCHAR})}
+    </select>
+
+    <select id="getInitFalseCaiPiaoJieGuo" parameterType="java.util.Map" resultType="java.util.Map"
+            statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_InitFalseCaiPiaoJieGuo(
+            #{strErrorDescribe,mode=IN,jdbcType=VARCHAR})}
     </select>
 </mapper> 

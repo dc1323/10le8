@@ -2,16 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="364b86f6-063c-4ce2-b174-78b4fe1eaf58" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/templates/games/game/lottery_manage.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/templates/games/game/lottery_manage_detail.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/templates/games/abnormal/abnormal.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/templates/games/abnormal/scoredetail.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/templates/games/account/grant.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/templates/games/account/specialuser.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/templates/games/account/winvsloss.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/domain/CaiPiaoDiZhi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/domain/LotteryManage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ruoyi-games/src/main/resources/mapper/games/GameManagerMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/domain/Game2CaiPiaoParam.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ruoyi-games/target/classes/META-INF/ruoyi-games.kotlin_module" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ruoyi-games/target/classes/mapper/games/GameKindItemMapper.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/ruoyi-games/target/classes/mapper/games/GameRoomInfoMapper.xml" afterDir="false" />
@@ -19,18 +15,15 @@
       <change afterPath="$PROJECT_DIR$/ruoyi-games/target/classes/mapper/games/SystemSecurityMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/java/com/ruoyi/web/controller/game/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/static/ruoyi/js/ry-ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/static/ruoyi/js/ry-ui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-admin/target/classes/com/ruoyi/WebApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/com/ruoyi/WebApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/templates/games/game/lottery_time.html" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/src/main/resources/templates/games/game/lottery_time.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/target/classes/static/ruoyi/js/ry-ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/static/ruoyi/js/ry-ui.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/target/classes/templates/games/account/infos.html" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/templates/games/account/infos.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-admin/target/classes/templates/games/game/function_set.html" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-admin/target/classes/templates/games/game/function_set.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-common/target/classes/com/ruoyi/common/utils/DateUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-common/target/classes/com/ruoyi/common/utils/DateUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/mapper/GameFunctionSetMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/mapper/GameMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/AccountInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/AccountInfoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/GameFunctionSetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/GameService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/impl/AccountInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/impl/AccountInfoServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/impl/GameFunctionSetServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/impl/GameServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/resources/mapper/games/GameFunctionSetMapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/mapper/GameMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/mapper/GameMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/GameService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/impl/GameServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/src/main/java/com/ruoyi/games/service/impl/GameServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ruoyi-games/src/main/resources/mapper/games/GameManagerMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/src/main/resources/mapper/games/GameManagerMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ruoyi-games/target/classes/mapper/games/AccountInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ruoyi-games/target/classes/mapper/games/AccountInfoMapper.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -43,6 +36,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="HTML File" />
         <option value="Class" />
       </list>
     </option>
@@ -53,6 +47,7 @@
   <component name="ProjectId" id="1kYmW22klgmT7Nk73cDaw7xsd8A" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
@@ -149,7 +144,8 @@
       <workItem from="1606703349904" duration="244000" />
       <workItem from="1606703648634" duration="54000" />
       <workItem from="1606703725835" duration="1791000" />
-      <workItem from="1606784550027" duration="21153000" />
+      <workItem from="1606784550027" duration="21964000" />
+      <workItem from="1606878883196" duration="10629000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <created>1605930466770</created>
@@ -165,7 +161,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606704391198</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="update#开奖管理">
+      <created>1606874047095</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606874047095</updated>
+    </task>
+    <task id="LOCAL-00004" summary="update#彩票时间表">
+      <created>1606917251403</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1606917251403</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,6 +207,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="第一次提交" />
     <MESSAGE value="update#游戏配置" />
-    <option name="LAST_COMMIT_MESSAGE" value="update#游戏配置" />
+    <MESSAGE value="update#开奖管理" />
+    <MESSAGE value="update#彩票时间表" />
+    <option name="LAST_COMMIT_MESSAGE" value="update#彩票时间表" />
   </component>
 </project>
