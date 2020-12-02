@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.GameMapper">
+
+    <resultMap type="com.ruoyi.games.domain.GameFunctionSet" id="functionSetResult">
+        <result property="statusName" column="StatusName"/>
+        <result property="statusValue" column="StatusValue"/>
+        <result property="statusString" column="StatusString"/>
+        <result property="statusTip" column="StatusTip"/>
+        <result property="statusDescription" column="StatusDescription"/>
+        <result property="sortID" column="SortID"/>
+        <result property="isShow" column="IsShow"/>
+    </resultMap>
+
+    <resultMap type="com.ruoyi.games.domain.CaiPiaoDiZhi" id="CaiPiaoDiZhiResult">
+        <result property="id" column="ID"/>
+        <result property="code" column="Code"/>
+        <result property="name" column="Name"/>
+        <result property="url" column="Url"/>
+        <result property="startTime" column="StartTime"/>
+        <result property="endTime" column="EndTime"/>
+        <result property="groupId" column="GroupID"/>
+        <result property="interval" column="Interval"/>
+        <result property="httpInterval" column="HttpInterval"/>
+        <result property="nullity" column="Nullity"/>
+        <result property="sortId" column="SortID"/>
+    </resultMap>
+
+    <resultMap type="com.ruoyi.games.domain.LotteryManage" id="LotteryManageResult">
+        <result property="name" column="KindName"/>
+        <result property="expect" column="Expect"/>
+        <result property="openCode" column="OpenCode"/>
+        <result property="openTime" column="OpenTime"/>
+        <result property="groupId" column="GroupID"/>
+        <result property="id" column="ID"/>
+        <result property="code" column="Code"/>
+    </resultMap>
+
+    <select id="queryFunctionSet" resultMap="functionSetResult">
+        SELECT * FROM RYAccountsDB.dbo.SystemFunctionStatusInfo
+    </select>
+
+    <update id="updateFunctionSet" parameterType="com.ruoyi.games.domain.GameFunctionSet">
+        UPDATE RYAccountsDB.dbo.SystemFunctionStatusInfo SET StatusValue = #{statusValue}
+             WHERE StatusName = #{statusName}
+    </update>
+
+    <select id="queryLotteryManage" resultMap="LotteryManageResult"
+            parameterType="com.ruoyi.games.domain.LotteryManage">
+        SELECT * FROM RYTreasureDB.dbo.V_GetLotteryTime20200805 WHERE 1=1
+            <!--and StartTime >= convert(nvarchar(10),getdate(),120)-->
+        <if test="openStatus == 1 or openStatus == '1'">
+            and OpenCode <![CDATA[ <> ]]> ''
+        </if>
+        <if test="openStatus == 2 or openStatus == '2'">
+            and OpenCode = ''
+        </if>
+        <if test="kindId > 0">
+            and GroupID = #{kindId}
+        </if>
+        order by StartTime desc
+    </select>
+
+    <select id="getCaiPiaoDiZhi" resultMap="CaiPiaoDiZhiResult">
+        SELECT * FROM RYTreasureDB.dbo.CaiPiaoDiZhi
+    </select>
+
+    <update id="updateCaiPiaoJieGuo">
+        Update RYTreasureDB.dbo.CaiPiaoJieGuo Set OpenCode = #{openCode} where ID = #{id}
+    </update>
+
+    <select id="getRecordDrawInfoByCodeAndExpect" parameterType="java.util.Map" resultType="java.util.Map"
+            statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_GetRecordDrawInfoByCodeAndExpect(
+            #{cpCode,mode=IN,jdbcType=VARCHAR},
+            #{cpExpect,mode=IN,jdbcType=VARCHAR})}
+    </select>
+</mapper> 

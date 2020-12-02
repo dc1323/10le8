@@ -179,6 +179,16 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     }
 
     @Override
+    public List<GameKindItem> getGameKindList() {
+        List<GameKindItem> list = gameKindItemMapper.getGameList();
+        GameKindItem temp1 = new GameKindItem();
+        temp1.setKindID(0);
+        temp1.setKindName("请选择游戏类型");
+        list.add(0, temp1);
+        return list;
+    }
+
+    @Override
     public int unlock(String userIDs) {
         accountInfoMapper.deleteGameScoreLocker();
         if (StringUtils.isEmpty(userIDs)) {

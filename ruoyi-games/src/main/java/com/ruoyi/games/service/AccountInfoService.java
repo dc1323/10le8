@@ -64,6 +64,8 @@ public interface AccountInfoService {
 
     List<GameKindItem> getGameList();
 
+    List<GameKindItem> getGameKindList();
+
     /**
      * 清除卡线
      * @param userIDs
