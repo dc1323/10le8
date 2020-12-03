@@ -1,6 +1,9 @@
 package com.ruoyi.games.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameRoomInfo {
 
@@ -9,6 +12,7 @@ public class GameRoomInfo {
     private String serverName;
 
     private Integer kindID;
+    private String kindName;
 
     private int nodeID;
 
@@ -30,7 +34,7 @@ public class GameRoomInfo {
 
     private String dataBaseAddr;
 
-    private long cellScore;
+    private String cellScore;
 
     private int revenueRatio;
 
@@ -84,6 +88,25 @@ public class GameRoomInfo {
 
     private String attachFiled;
 
+    private int userCount;
+    private int addCounts;
+    private int androidCount;
+    //游戏抽水
+    private BigDecimal gameRevenue;
+    //代理抽水
+    private BigDecimal agentRevenue;
+    private BigDecimal platformRevenue;
+
+    private int kindName123;
+    private int KindName124;
+    //是否在线
+    private int isOnline;
+
+    /**
+     * 请求参数
+     */
+    private Map<String, Object> params;
+
     public Integer getServerID() {
         return serverID;
     }
@@ -106,6 +129,14 @@ public class GameRoomInfo {
 
     public void setKindID(Integer kindID) {
         this.kindID = kindID;
+    }
+
+    public String getKindName() {
+        return kindName;
+    }
+
+    public void setKindName(String kindName) {
+        this.kindName = kindName;
     }
 
     public int getNodeID() {
@@ -188,11 +219,11 @@ public class GameRoomInfo {
         this.dataBaseAddr = dataBaseAddr;
     }
 
-    public long getCellScore() {
+    public String getCellScore() {
         return cellScore;
     }
 
-    public void setCellScore(long cellScore) {
+    public void setCellScore(String cellScore) {
         this.cellScore = cellScore;
     }
 
@@ -402,5 +433,94 @@ public class GameRoomInfo {
 
     public void setAttachFiled(String attachFiled) {
         this.attachFiled = attachFiled;
+    }
+
+    public int getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(int userCount) {
+        this.userCount = userCount;
+    }
+
+    public int getAddCounts() {
+        return addCounts;
+    }
+
+    public void setAddCounts(int addCounts) {
+        this.addCounts = addCounts;
+    }
+
+    public int getAndroidCount() {
+        return androidCount;
+    }
+
+    public void setAndroidCount(int androidCount) {
+        this.androidCount = androidCount;
+    }
+
+    public BigDecimal getGameRevenue() {
+        return gameRevenue;
+    }
+
+    public void setGameRevenue(BigDecimal gameRevenue) {
+        this.gameRevenue = gameRevenue;
+    }
+
+    public BigDecimal getAgentRevenue() {
+        return agentRevenue;
+    }
+
+    public void setAgentRevenue(BigDecimal agentRevenue) {
+        this.agentRevenue = agentRevenue;
+    }
+
+    public BigDecimal getPlatformRevenue() {
+        if (null == gameRevenue) {
+            gameRevenue = new BigDecimal(0);
+        }
+        if (null == agentRevenue) {
+            agentRevenue = new BigDecimal(0);
+        }
+        return gameRevenue.subtract(agentRevenue);
+    }
+
+    public void setPlatformRevenue(BigDecimal platformRevenue) {
+        this.platformRevenue = platformRevenue;
+    }
+
+    public int getKindName123() {
+        return kindName123;
+    }
+
+    public void setKindName123(int kindName123) {
+        this.kindName123 = kindName123;
+    }
+
+    public int getKindName124() {
+        return KindName124;
+    }
+
+    public void setKindName124(int kindName124) {
+        KindName124 = kindName124;
+    }
+
+    public int getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(int isOnline) {
+        this.isOnline = isOnline;
+    }
+
+    public Map<String, Object> getParams() {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }
