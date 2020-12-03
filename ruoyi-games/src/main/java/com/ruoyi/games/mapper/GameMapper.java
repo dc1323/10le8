@@ -27,4 +27,6 @@ public interface GameMapper {
     Map<String, String> getInitFalseCaiPiaoJieGuo(Map<String, String> param);
 
     List<Game2CaiPiaoParam> getGame2CaiPiaoParamList(@Param("kindId") int kindId);
+
+    int updateGame2CaiPiaoParam(Game2CaiPiaoParam param);
 }

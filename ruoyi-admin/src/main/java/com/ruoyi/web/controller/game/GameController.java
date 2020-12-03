@@ -87,7 +87,7 @@ public class GameController extends BaseController {
         List<LotteryManage> list = gameService.queryLotteryManage(manage);
         List<CaiPiaoDiZhi> cpList = gameService.getCaiPiaoDiZhi(-1);
         for (LotteryManage lotteryManage : list) {
-            int roundCount = getRoundByExpect(cpList, lotteryManage.getCode(), lotteryManage.getExpect(),
+            int roundCount = gameService.getRoundByExpect(cpList, lotteryManage.getCode(), lotteryManage.getExpect(),
                     lotteryManage.getGroupId());
             lotteryManage.setRoundCount("第" + roundCount + "场");
             if (lotteryManage.getOpenCode().length() == 0) {
@@ -135,40 +135,6 @@ public class GameController extends BaseController {
         Map<String, String> map = gameService.getRecordDrawInfoByCodeAndExpect(code, expect);
         mmap.put("map", map);
         return prefix + "/lottery_manage_detail";
-    }
-
-    public int getRoundByExpect(List<CaiPiaoDiZhi> cpList, String code, String expect, int groupID) {
-        int nRoundCount = 0;
-        String strRoundCount = expect.substring(expect.length() - 3, expect.length());
-        //判断百位是否为0
-        if (strRoundCount.substring(0, 1).equals("0")) {
-            //判断十位是否为0
-            if (strRoundCount.substring(1, strRoundCount.length() - 1).equals("0")) {
-                //取最后一位
-                nRoundCount = Integer.parseInt(strRoundCount.substring(strRoundCount.length() - 1, strRoundCount.length()));
-            } else {
-                nRoundCount = Integer.parseInt(strRoundCount.substring(strRoundCount.length() - 2, strRoundCount.length()));
-            }
-        } else {
-            nRoundCount = Integer.parseInt(strRoundCount);
-        }
-
-        int cpCount = 0;
-        for (CaiPiaoDiZhi diZhi : cpList) {
-            if (diZhi.getGroupId() == groupID) {
-                cpCount++;
-            }
-        }
-
-        int SortID = 0;
-        for (CaiPiaoDiZhi diZhi : cpList) {
-            if (diZhi.getCode().equals(code)) {
-                SortID = diZhi.getSortId();
-                break;
-            }
-        }
-        nRoundCount = (nRoundCount - 1) * cpCount + SortID;
-        return nRoundCount;
     }
 
     @RequiresPermissions("games:lotteryTime:list")
@@ -225,7 +191,7 @@ public class GameController extends BaseController {
         List<LotteryManage> list = gameService.queryLotteryManage(manage);
         List<CaiPiaoDiZhi> cpList = gameService.getCaiPiaoDiZhi(-1);
         for (LotteryManage lotteryManage : list) {
-            int roundCount = getRoundByExpect(cpList, lotteryManage.getCode(), lotteryManage.getExpect(),
+            int roundCount = gameService.getRoundByExpect(cpList, lotteryManage.getCode(), lotteryManage.getExpect(),
                     lotteryManage.getGroupId());
             lotteryManage.setRoundCount("第" + roundCount + "场");
         }
@@ -258,25 +224,108 @@ public class GameController extends BaseController {
         return error("操作成功!");
     }
 
-    @RequiresPermissions("games:lotteryTime:endTimeTime")
+    @RequiresPermissions("games:lotteryTime:endTimeTime123")
     @Log(title = "彩票时间表", businessType = BusinessType.UPDATE)
     @ResponseBody
     @PostMapping(value="/setEndTimeTime123")
     public AjaxResult setEndTimeTime123(@RequestBody Map<String, String> map) {
         try {
             int kindId = Integer.parseInt(StringUtils.defaultString(map.get("kindId"), "-1"));
-            String startTime = map.get("startTime");
-            List<CaiPiaoDiZhi> caiPiaoDiZhiList = gameService.getCaiPiaoDiZhi(kindId);
-            if (CollectionUtils.isNotEmpty(caiPiaoDiZhiList)) {
-                for (CaiPiaoDiZhi diZhi : caiPiaoDiZhiList) {
-                    gameService.updateCaiPiaoDiZhi(startTime, diZhi.getId());
-                    startTime = getTime(startTime);
-                }
+            int totalEndTime = Integer.parseInt(StringUtils.defaultString(map.get("totalEndTime"), "0"));
+
+            if (totalEndTime == 0) {
+                return error("设置截止时间失败");
             }
 
-            Map<String, String> param = Maps.newHashMap();
-            param.put("strErrorDescribe", "");
-            gameService.getInitFalseCaiPiaoJieGuo(param);
+            int totalTime = 0;
+            int cbFreeTime = 0;
+            List<Game2CaiPiaoParam> caiPiaoDiZhiList = gameService.getGame2CaiPiaoParamList(kindId);
+            if (CollectionUtils.isNotEmpty(caiPiaoDiZhiList)) {
+                Game2CaiPiaoParam param = caiPiaoDiZhiList.get(0);
+                totalTime = param.totalTime;
+                cbFreeTime = param.cbFreeTime;
+            }
+
+            int cbEndTime = totalTime - totalEndTime;
+
+            if (cbEndTime <= 0) {
+                return error("设置截止时间失败,截止时间不能大于总时间:" + totalTime + "秒");
+            }
+
+            if ((cbEndTime + totalEndTime) > totalTime) {
+                return error("设置截止时间失败,官方五分钟时间设定超过规定的300秒");
+            }
+
+            int cbBetTime = totalEndTime - cbFreeTime;
+            if (cbBetTime <= 0) {
+                return error("设置截止时间失败,截止时间不能大于总时间:" + cbFreeTime + "秒");
+            }
+
+            Game2CaiPiaoParam param = new Game2CaiPiaoParam();
+            param.setKindID(kindId);
+            param.setTotalEndTime(totalEndTime);
+            param.setCbBetTime(cbBetTime);
+            param.setCbEndTime(cbEndTime);
+            int count = gameService.updateGame2CaiPiaoParam(param);
+            if (count > 0 && gameService.updateGameRoomCBEndTime(kindId)) {
+                Map<String, String> paramMap = Maps.newHashMap();
+                paramMap.put("strErrorDescribe", "");
+                gameService.getInitFalseCaiPiaoJieGuo(paramMap);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return error("操作失败!");
+        }
+        return error("操作成功!");
+    }
+
+    @RequiresPermissions("games:lotteryTime:endTimeTime124")
+    @Log(title = "彩票时间表", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    @PostMapping(value="/setEndTimeTime124")
+    public AjaxResult setEndTimeTime124(@RequestBody Map<String, String> map) {
+        try {
+            int kindId = Integer.parseInt(StringUtils.defaultString(map.get("kindId"), "-1"));
+            int totalEndTime = Integer.parseInt(StringUtils.defaultString(map.get("totalEndTime"), "0"));
+
+            if (totalEndTime == 0) {
+                return error("设置截止时间失败");
+            }
+
+            int totalTime = 0;
+            int cbFreeTime = 0;
+            List<Game2CaiPiaoParam> caiPiaoDiZhiList = gameService.getGame2CaiPiaoParamList(kindId);
+            if (CollectionUtils.isNotEmpty(caiPiaoDiZhiList)) {
+                Game2CaiPiaoParam param = caiPiaoDiZhiList.get(0);
+                totalTime = param.totalTime;
+                cbFreeTime = param.cbFreeTime;
+            }
+
+            int cbEndTime = totalTime - totalEndTime;
+            if (cbEndTime <= 0) {
+                return error("设置截止时间失败,截止时间不能大于总时间:" + totalTime + "秒");
+            }
+
+            if ((cbEndTime + totalEndTime) > totalTime) {
+                return error("设置截止时间失败,官方五分钟时间设定超过规定的300秒");
+            }
+
+            int cbBetTime = totalEndTime - cbFreeTime;
+            if (cbBetTime <= 0) {
+                return error("设置截止时间失败,截止时间不能小于离场时间:" + cbFreeTime + "秒");
+            }
+
+            Game2CaiPiaoParam param = new Game2CaiPiaoParam();
+            param.setKindID(kindId);
+            param.setTotalEndTime(totalEndTime);
+            param.setCbBetTime(cbBetTime);
+            param.setCbEndTime(cbEndTime);
+            int count = gameService.updateGame2CaiPiaoParam(param);
+            if (count > 0 && gameService.updateGameRoomCBEndTime(kindId)) {
+                Map<String, String> paramMap = Maps.newHashMap();
+                paramMap.put("strErrorDescribe", "");
+                gameService.getInitFalseCaiPiaoJieGuo(paramMap);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
             return error("操作失败!");

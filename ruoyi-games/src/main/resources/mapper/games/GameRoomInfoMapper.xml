@@ -52,6 +52,10 @@
         FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK) WHERE ServerID=#{serverID}
     </select>
 
+    <select id="getGameRoomInfoByKindId" parameterType="java.lang.Integer" resultMap="GameRoomInfoResult">
+        SELECT * FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK) WHERE Kindid=#{kindId}
+    </select>
+
     <select id="getGameRoomInfoByUserID" parameterType="java.lang.Integer" resultMap="GameRoomInfoResult">
         SELECT gri.*
         FROM RYPlatformDB.dbo.GameRoomInfo ( NOLOCK ) gri
@@ -59,4 +63,7 @@
         WHERE gsl.UserID= #{userID}
     </select>
 
+    <update id="updateCustomRuleByKindId">
+        UPDATE GameRoomInfo set CustomRule = #{customRule} where KindID = #{kindId}
+    </update>
 </mapper> 

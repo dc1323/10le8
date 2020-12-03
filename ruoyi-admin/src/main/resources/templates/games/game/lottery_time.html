@@ -151,9 +151,15 @@
     })
 
     $("#btnSure124").click(function (e) {
-        postData.TotalEndTime = $("#txtcbEndTime124").val();
-        //加载数据
-        AjaxSubmit("/App/SetEndTimeTime124", postData, callback, "none");
+        postData.totalEndTime = $("#txtcbEndTime124").val();
+        postData.kindId = $("#kindId").val();
+        $.operate.saveTab(prefix + "/setEndTimeTime124", JSON.stringify(postData), function (result) {
+            $.modal.loading("更新成功!");
+            setTimeout(function () {
+                $.modal.closeLoading();
+                $.form.reset()
+            }, 1000);
+        });
     })
 </script>
 </body>

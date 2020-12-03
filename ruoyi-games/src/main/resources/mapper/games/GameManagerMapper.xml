@@ -82,6 +82,11 @@
         Update RYTreasureDB.dbo.CaiPiaoDiZhi set StartTime = #{startTime} where ID = #{id}
     </update>
 
+    <update id="updateGame2CaiPiaoParam" parameterType="com.ruoyi.games.domain.Game2CaiPiaoParam">
+        update RYTreasureDB.dbo.Game2CaiPiaoParam set TotalEndTime = #{totalEndTime}, cbBetTime = #{cbBetTime}, cbEndTime = #{cbEndTime}
+           where KindID = #{kindID}
+    </update>
+
     <select id="getGame2CaiPiaoParamList" resultType="com.ruoyi.games.domain.Game2CaiPiaoParam">
         SELECT * FROM RYTreasureDB.dbo.Game2CaiPiaoParam(NOLOCK) WHERE 1=1
         <if test="kindId > 0">

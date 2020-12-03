@@ -1,9 +1,6 @@
 package com.ruoyi.games.service;
 
-import com.ruoyi.games.domain.CaiPiaoDiZhi;
-import com.ruoyi.games.domain.Game2CaiPiaoParam;
-import com.ruoyi.games.domain.GameFunctionSet;
-import com.ruoyi.games.domain.LotteryManage;
+import com.ruoyi.games.domain.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,4 +25,14 @@ public interface GameService {
     Map<String, String> getInitFalseCaiPiaoJieGuo(Map<String, String> param);
 
     List<Game2CaiPiaoParam> getGame2CaiPiaoParamList(int kindId);
+
+    int updateGame2CaiPiaoParam(Game2CaiPiaoParam param);
+
+    List<GameRoomInfo> getGameRoomInfoByKindId(Integer kindId);
+
+    int updateCustomRuleByKindId(String customRule, int kindId);
+
+    boolean updateGameRoomCBEndTime(int kindId);
+
+    int getRoundByExpect(List<CaiPiaoDiZhi> cpList, String code, String expect, int groupID);
 }

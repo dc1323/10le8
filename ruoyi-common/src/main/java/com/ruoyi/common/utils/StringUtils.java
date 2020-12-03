@@ -291,6 +291,24 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return false;
     }
 
+    public static String intTohex(int n) {
+        StringBuffer s = new StringBuffer();
+        String a;
+        char[] b = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        while (n != 0) {
+            s = s.append(b[n % 16]);
+            n = n / 16;
+        }
+        a = s.reverse().toString();
+        if ("".equals(a)) {
+            a = "00";
+        }
+        if (a.length() == 1) {
+            a = "0" + a;
+        }
+        return a;
+    }
+
     /**
      * 将下划线大写方式命名的字符串转换为驼峰式。如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。 例如：HELLO_WORLD->HelloWorld
      *
