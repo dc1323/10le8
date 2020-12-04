@@ -87,11 +87,6 @@
            where KindID = #{kindID}
     </update>
 
-    <update id="updateGame2CaiPiaoParam" parameterType="com.ruoyi.games.domain.Game2CaiPiaoParam">
-        update RYTreasureDB.dbo.Game2CaiPiaoParam set TotalEndTime = #{totalEndTime}, cbBetTime = #{cbBetTime}, cbEndTime = #{cbEndTime}
-           where KindID = #{kindID}
-    </update>
-
     <update id="updateParamTime" parameterType="com.ruoyi.games.domain.Game2CaiPiaoParam">
         update RYTreasureDB.dbo.Game2CaiPiaoParam set cbFreeTime = #{cbFreeTime}, cbBetTime = #{cbBetTime} where KindID = #{kindID}
     </update>
