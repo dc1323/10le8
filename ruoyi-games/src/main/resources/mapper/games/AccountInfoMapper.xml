@@ -35,6 +35,12 @@
         <result property="lastLogonIPAddress" column="LastLogonIPAddress"/>
     </resultMap>
 
+    <resultMap id="OrderInfoResult" type="com.ruoyi.games.domain.OrderInfo">
+        <result property="orderid" column="orderid"/>
+        <result property="userid" column="userid"/>
+        <result property="payamount" column="payamount"/>
+    </resultMap>
+
     <select id="selectAccountPage" parameterType="java.util.Map" resultMap="AccountInfoResult" statementType="CALLABLE">
         {call RYTreasureDB.dbo.JSON_GetAccountsList(
             #{strWhere,mode=IN,jdbcType=VARCHAR},
@@ -72,14 +78,15 @@
         </foreach>
     </update>
     
-    <select id="grantTreasure" parameterType="java.util.Map" resultType="java.lang.Integer" statementType="CALLABLE">
+    <select id="grantTreasure" parameterType="java.util.Map" resultMap="OrderInfoResult" statementType="CALLABLE">
         {call RYTreasureDB.dbo.NET_PM_GrantTreasure(
                 #{dwTypeId,mode=IN},
                 #{strUserIDList,mode=IN},
                 #{dwAddGold,mode=IN},
                 #{dwMasterID,mode=IN},
                 #{strReason,mode=IN},
-                #{strClientIP,mode=IN}
+                #{strClientIP,mode=IN},
+                #{typeID,mode=IN}
             )}
     </select>
 

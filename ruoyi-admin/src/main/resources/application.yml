@@ -136,3 +136,6 @@ xss:
 swagger:
   # 是否开启swagger
   enabled: true
+
+ServerUrl: http://47.103.18.103:8650
+GameServerUrl: http://61.174.243.35:8650

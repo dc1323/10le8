@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('在线房间')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>所在游戏：</label>
+                                <select name="kindID">
+                                    <option th:each="data,dataStat : ${gameKindItemList}" th:value="${data.kindID}"
+                                            th:text="${data.kindName}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>游戏模式：</label>
+                                <select name="serverLevel">
+                                    <option value="-1">请选择游戏模式</option>
+                                    <option value="10">随机匹配</option>
+                                    <option value="11">自定义模式</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>底注：</label>
+                                <input type="text" name="cellScore">元
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-primary multiple disabled" onclick="clearOnline()"
+                   shiro:hasPermission="games:account:unlock">
+                    <i class="glyphicon glyphicon-ok-circle icon-white"></i> 清除卡线
+                </a>-->
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('games_account_stats')}]];
+    var prefix = ctx + "games/app";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/onlineroomlist",
+            sortName: "ServerID",
+            sortOrder: "desc",
+            modalName: "在线房间",
+            showFooter: true,
+            showToggle: false,
+            footerStyle: footerStyle,
+            columns: [
+                {
+                    field: 'serverID',
+                    title: '房间ID'
+                },
+                {
+                    field: 'kindName',
+                    title: '游戏类型',
+                    footerFormatter: function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            sumBalance = value[i].kindName123;
+                        }
+                        return "官方桌数：" + sumBalance;
+                    }
+                },
+                {
+                    field: 'serverLevel',
+                    title: '游戏模式',
+                    formatter:function (value,row,index){
+                        if(value >= 10){
+                            return "自定义房间";
+                        }else{
+                            return "随机匹配房间";
+                        }
+                    },
+                    footerFormatter: function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            sumBalance = value[i].kindName124;
+                        }
+                        return "极速桌数：" + sumBalance;
+                    }
+                },
+                {
+                    field: 'cellScore',
+                    title: '游戏底注',
+                    footerFormatter: function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            if (value[i].serverLevel < 10) {
+                                sumBalance++;
+                            }
+                        }
+                        return "随机匹配：" + sumBalance;
+                    }
+                },
+                {
+                    field: 'userCount',
+                    title: '真实人数',
+                    footerFormatter: function (value) {
+                        var sumBalance = 0;
+                        for (var i in value) {
+                            if (value[i].serverLevel >= 10) {
+                                sumBalance++;
+                            }
+                        }
+                        return "自定义匹配：" + sumBalance;
+                    }
+                },
+                {
+                    field: 'androidCount',
+                    title: '机器人数'
+                },
+                {
+                    field: 'gameRevenue',
+                    title: '游戏抽水'
+                },
+                {
+                    field: 'agentRevenue',
+                    title: '代理抽水'
+                },
+                {
+                    field: 'platformRevenue',
+                    title: '平台收入'
+                },
+                {
+                    field: 'isOnline',
+                    title: '在线状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return "在线";
+                        } else {
+                            return "离线";
+                        }
+                    }
+                },
+                {
+                    field: 'nullity',
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return "停止";
+                        } else {
+                            return "开放";
+                        }
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+    function footerStyle(column) {
+        return {
+            kindName: {
+                css: {color: 'red', 'font-weight': 'normal'}
+            },
+            serverLevel: {
+                css: {color: 'red', 'font-weight': 'normal'}
+            },
+            cellScore: {
+                css: {color: 'red', 'font-weight': 'normal'}
+            },
+            userCount: {
+                css: {color: 'red', 'font-weight': 'normal'}
+            }
+        }[column.field]
+    }
+
+</script>
+</body>
+</html>

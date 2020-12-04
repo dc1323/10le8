@@ -8,6 +8,7 @@
         <id property="serverID" column="ServerID"/>
         <result property="serverName" column="ServerName"/>
         <result property="kindID" column="KindID"/>
+        <result property="kindName" column="KindName"/>
         <result property="nodeID" column="NodeID"/>
         <result property="sortID" column="SortID"/>
         <result property="gameID" column="GameID"/>
@@ -45,11 +46,25 @@
         <result property="enterPassword" column="EnterPassword"/>
         <result property="serverLevel" column="ServerLevel"/>
         <result property="attachFiled" column="AttachFiled"/>
+
+        <result property="userCount" column="UserCount"/>
+        <result property="addCounts" column="AddCounts"/>
+        <result property="androidCount" column="AndroidCount"/>
+        <result property="gameRevenue" column="GameRevenue"/>
+        <result property="agentRevenue" column="AgentRevenue"/>
+        <result property="isOnline" column="IsOnline"/>
+    </resultMap>
+
+    <resultMap id="GameRoomCommissionResult" type="com.ruoyi.games.domain.GameRoomCommission">
+        <id property="serverID" column="ServerID"/>
+        <result property="gameRevenue" column="GameRevenue"/>
+        <result property="agentRevenue" column="AgentRevenue"/>
     </resultMap>
 
     <select id="getGameRoomInfo" parameterType="java.lang.Integer" resultMap="GameRoomInfoResult">
         SELECT *
-        FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK) WHERE ServerID=#{serverID}
+        FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK)
+        WHERE ServerID = #{serverID}
     </select>
 
     <select id="getGameRoomInfoByKindId" parameterType="java.lang.Integer" resultMap="GameRoomInfoResult">
@@ -58,9 +73,31 @@
 
     <select id="getGameRoomInfoByUserID" parameterType="java.lang.Integer" resultMap="GameRoomInfoResult">
         SELECT gri.*
-        FROM RYPlatformDB.dbo.GameRoomInfo ( NOLOCK ) gri
-        JOIN RYTreasureDB.dbo.GameScoreLocker ( NOLOCK ) gsl ON gri.ServerID = gsl.ServerID
-        WHERE gsl.UserID= #{userID}
+        FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK) gri
+                 JOIN RYTreasureDB.dbo.GameScoreLocker(NOLOCK) gsl ON gri.ServerID = gsl.ServerID
+        WHERE gsl.UserID = #{userID}
+    </select>
+    
+    <select id="getOnlineRoomsList" parameterType="com.ruoyi.games.domain.GameRoomInfo" resultMap="GameRoomInfoResult">
+        select * from RYTreasureDB.dbo.V_GetGameRoomsList
+        where 1=1
+        <if test="serverLevel != null and serverLevel == 10">
+            and ServerLevel 	&lt; 10
+        </if>
+        <if test="serverLevel != null and serverLevel == 11">
+            and ServerLevel 	&gt;= 10
+        </if>
+        <if test="kindID != null and kindID > 0">
+            and KindID = #{kindID}
+        </if>
+        <if test="cellScore != null and cellScore != ''">
+            and CellScore = #{cellScore}
+        </if>
+        ${params.dataScope}
+    </select>
+
+    <select id="getCommissionByServerForAll" resultMap="GameRoomCommissionResult" statementType="CALLABLE">
+        { call RYTreasureDB.dbo.JSON_GetCommissionByServerIDForAll() }
     </select>
 
     <update id="updateCustomRuleByKindId">

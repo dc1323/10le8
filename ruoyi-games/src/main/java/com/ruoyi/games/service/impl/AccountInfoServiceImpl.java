@@ -1,26 +1,30 @@
 package com.ruoyi.games.service.impl;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.games.domain.AccountInfo;
-import com.ruoyi.games.domain.GameKindItem;
-import com.ruoyi.games.domain.SystemSecurity;
-import com.ruoyi.games.mapper.AccountInfoMapper;
-import com.ruoyi.games.mapper.GameKindItemMapper;
-import com.ruoyi.games.mapper.SystemSecurityMapper;
+import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.games.domain.*;
+import com.ruoyi.games.mapper.*;
 import com.ruoyi.games.service.AccountInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 @Service
+@Transactional
 public class AccountInfoServiceImpl implements AccountInfoService {
     private static final Logger log = LoggerFactory.getLogger(AccountInfoServiceImpl.class);
+
+    @Value("${ServerUrl}")
+    private String serverUrl;
 
     @Autowired
     private AccountInfoMapper accountInfoMapper;
@@ -30,6 +34,12 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     @Autowired
     private GameKindItemMapper gameKindItemMapper;
+
+    @Autowired
+    private SystemFunctionStatusInfoMapper systemFunctionStatusInfoMapper;
+
+    @Autowired
+    private RebateScaleInfoMapper rebateScaleInfoMapper;
 
     @Override
     public Map<String, Object> selectAccountPage(String strWhere, int pageSize, int pageIndex) {
@@ -97,28 +107,38 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         String operatingIP = ShiroUtils.getIp();
         Map<String, Object> map = new HashMap<>();
         map.put("dwTypeId", 1);
-        map.put("strUserIDList", userID);
+        map.put("strUserIDList", userID.toString());
         map.put("dwAddGold", num);
-        map.put("dwMasterID", 18);
+        map.put("dwMasterID", user.getUserId());
         map.put("strReason", "后台赠送");
         map.put("strClientIP", operatingIP);
-        int result = accountInfoMapper.grantTreasure(map);
-        if (result == 0) {
-            AccountInfo accountInfo = accountInfoMapper.selectAccountByUserID(userID);
-            String operatingName = "充值";
-            String operatingAccounts = user.getUserName();
-            String remark = user.getLoginName() + "给" + accountInfo.getAccounts() + "充值" + num.toString() + "元";
-            String objectAccounts = accountInfo.getAccounts();
-            SystemSecurity systemSecurity = new SystemSecurity();
-            systemSecurity.setObjectAccounts(objectAccounts);
-            systemSecurity.setOperatingAccounts(operatingAccounts);
-            systemSecurity.setOperatingIP(operatingIP);
-            systemSecurity.setOperatingName(operatingName);
-            systemSecurity.setRemark(remark);
-            systemSecurityMapper.insert(systemSecurity);
-            return 1;
+        map.put("typeID", 0);
+        try {
+            List<OrderInfo> orderInfos = accountInfoMapper.grantTreasure(map);
+            if (null != orderInfos && orderInfos.size() > 0) {
+                OrderInfo orderInfo = orderInfos.get(0);
+                String param = "{\"userid\":" + orderInfo.getUserid() + ", \"payamount\":" + orderInfo.getPayamount() + "}";
+                HttpUtils.sendPost(serverUrl, param);
+                AccountInfo accountInfo = accountInfoMapper.selectAccountByUserID(userID);
+                String operatingName = "充值";
+                String operatingAccounts = user.getUserName();
+                String remark = user.getLoginName() + "给" + accountInfo.getAccounts() + "充值" + num.toString() + "元";
+                String objectAccounts = accountInfo.getAccounts();
+                SystemSecurity systemSecurity = new SystemSecurity();
+                systemSecurity.setObjectAccounts(objectAccounts);
+                systemSecurity.setOperatingAccounts(operatingAccounts);
+                systemSecurity.setOperatingIP(operatingIP);
+                systemSecurity.setOperatingName(operatingName);
+                systemSecurity.setRemark(remark);
+                systemSecurityMapper.insert(systemSecurity);
+                return 1;
+            } else {
+                return 0;
+            }
+        } catch (Exception e) {
+            log.error("充值存储过程出错，错误为：", e);
+            return 0;
         }
-        return 0;
     }
 
     @Override
@@ -204,5 +224,38 @@ public class AccountInfoServiceImpl implements AccountInfoService {
                 return 0;
             }
         }
+    }
+
+    @Override
+    public SystemFunctionStatusInfo getInfoByStatusName(String statusName) {
+        SystemFunctionStatusInfo info = new SystemFunctionStatusInfo();
+        info.setStatusName(statusName);
+        List<SystemFunctionStatusInfo> list = systemFunctionStatusInfoMapper.getFunctionStatusInfoList(info);
+        if (null != list && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<RebateScaleInfo> getRebateScaleInfo() {
+        return rebateScaleInfoMapper.getRebateScaleInfo();
+    }
+
+    @Override
+    public AjaxResult rebateScaleInfo(RebateInfo rebateInfo) {
+        if (null == rebateInfo) {
+            return AjaxResult.error("参数不能为空!");
+        }
+        List<RebateScaleInfo> infos = rebateInfo.getInfos();
+        if (null != infos && infos.size() > 0) {
+            for (RebateScaleInfo info : infos) {
+                BigDecimal temp = info.getRebateScale();
+                info.setRebateScale(temp.divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP));
+                rebateScaleInfoMapper.update(info);
+            }
+        }
+        systemFunctionStatusInfoMapper.update(rebateInfo.getInfo());
+        return AjaxResult.success();
     }
 }
