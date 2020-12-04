@@ -2,6 +2,7 @@ package com.ruoyi.games.service;
 
 import com.ruoyi.games.domain.GameKindItem;
 import com.ruoyi.games.domain.GameRoomInfo;
+import com.ruoyi.games.domain.RoomRecord;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public interface AppService {
     List<GameRoomInfo> getGameOnlineRooms(GameRoomInfo info);
 
     List<GameKindItem> getGameList();
+
+    List<RoomRecord> getRoomsRecordList(RoomRecord roomRecord);
 
 
 }

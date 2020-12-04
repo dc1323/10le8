@@ -7,8 +7,10 @@ import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.games.domain.GameKindItem;
 import com.ruoyi.games.domain.GameRoomCommission;
 import com.ruoyi.games.domain.GameRoomInfo;
+import com.ruoyi.games.domain.RoomRecord;
 import com.ruoyi.games.mapper.GameKindItemMapper;
 import com.ruoyi.games.mapper.GameRoomInfoMapper;
+import com.ruoyi.games.mapper.RoomRecordMapper;
 import com.ruoyi.games.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +34,9 @@ public class AppServiceImpl implements AppService {
     @Autowired
     private GameKindItemMapper gameKindItemMapper;
 
+    @Autowired
+    private RoomRecordMapper roomRecordMapper;
+
     @Value("${GameServerUrl}")
     private String gameServerUrl;
 
@@ -49,10 +54,10 @@ public class AppServiceImpl implements AppService {
                 for (int i = 0; i < onlineRooms.size(); i++) {
                     JSONObject jsonObject = onlineRooms.getJSONObject(i);
                     Integer kindID = jsonObject.getInteger("KindID");
-                    if(Objects.equals(kindID,123)){
+                    if (Objects.equals(kindID, 123)) {
                         kindName123++;
                     }
-                    if(Objects.equals(kindID,124)){
+                    if (Objects.equals(kindID, 124)) {
                         kindName124++;
                     }
                 }
@@ -119,5 +124,10 @@ public class AppServiceImpl implements AppService {
         temp3.setKindName("选择游戏类型");
         list.add(0, temp3);
         return list;
+    }
+
+    @Override
+    public List<RoomRecord> getRoomsRecordList(RoomRecord roomRecord) {
+        return roomRecordMapper.getRoomsRecordList(roomRecord);
     }
 }
