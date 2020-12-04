@@ -36,6 +36,8 @@ public interface GameService {
 
     boolean updateGameRoomCBEndTime(int kindId, boolean needRestart);
 
+    List<GameRoomInfo> getRoomsList();
+
     int updateParamTime(Game2CaiPiaoParam param);
 
     int getRoundByExpect(List<CaiPiaoDiZhi> cpList, String code, String expect, int groupID);

@@ -36,7 +36,7 @@ public class GameRoomInfo {
 
     private String cellScore;
 
-    private int revenueRatio;
+    private float revenueRatio;
 
     private long serviceScore;
 
@@ -76,6 +76,8 @@ public class GameRoomInfo {
 
     private String nullity;
 
+    private String nullityStatus;
+
     private String serverNote;
 
     private Date createDateTime;
@@ -101,6 +103,14 @@ public class GameRoomInfo {
     private int KindName124;
     //是否在线
     private int isOnline;
+
+    public String getNullityStatus() {
+        return nullityStatus;
+    }
+
+    public void setNullityStatus(String nullityStatus) {
+        this.nullityStatus = nullityStatus;
+    }
 
     /**
      * 请求参数
@@ -227,11 +237,11 @@ public class GameRoomInfo {
         this.cellScore = cellScore;
     }
 
-    public int getRevenueRatio() {
+    public float getRevenueRatio() {
         return revenueRatio;
     }
 
-    public void setRevenueRatio(int revenueRatio) {
+    public void setRevenueRatio(float revenueRatio) {
         this.revenueRatio = revenueRatio;
     }
 

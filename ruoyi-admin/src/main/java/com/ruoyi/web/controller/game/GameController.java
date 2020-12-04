@@ -400,4 +400,24 @@ public class GameController extends BaseController {
         }
         return success("操作失败!");
     }
+
+    @RequiresPermissions("games:gameCreate:page")
+    @GetMapping("/gameCreate")
+    public String gameCreate() {
+        return prefix + "/game_create";
+    }
+
+    @RequiresPermissions("games:gameCreate:list")
+    @PostMapping("/gameCreate/list")
+    @ResponseBody
+    public TableDataInfo gameCreateList() {
+        startPage();
+        List<GameRoomInfo> roomInfoList = gameService.getRoomsList();
+        for (GameRoomInfo info : roomInfoList) {
+            info.setRevenueRatio(info.getRevenueRatio()/10);
+            info.setServerLevel(Integer.parseInt(info.getServerLevel()) >= 10 ? "自定义房间" : "随机匹配房间");
+            info.setNullityStatus(Integer.parseInt(info.getNullity()) == 1? "已停止" : "已启动");
+        }
+        return getDataTable(roomInfoList);
+    }
 }

@@ -96,6 +96,11 @@
         ${params.dataScope}
     </select>
 
+    <select id="getRoomsList" resultMap="GameRoomInfoResult">
+        select * from RYTreasureDB.dbo.V_GetGameRoomsList
+        where 1=1 order by ServerID desc
+    </select>
+
     <select id="getCommissionByServerForAll" resultMap="GameRoomCommissionResult" statementType="CALLABLE">
         { call RYTreasureDB.dbo.JSON_GetCommissionByServerIDForAll() }
     </select>

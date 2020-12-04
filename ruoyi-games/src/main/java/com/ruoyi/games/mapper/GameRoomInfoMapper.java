@@ -31,4 +31,6 @@ public interface GameRoomInfoMapper {
     List<GameRoomInfo> getGameRoomInfoByKindId(Integer kindId);
 
     int updateCustomRuleByKindId(@Param("customRule") String customRule, @Param("kindId") int kindId);
+
+    List<GameRoomInfo> getRoomsList();
 }

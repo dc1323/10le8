@@ -9,6 +9,7 @@ import com.ruoyi.games.service.GameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.omg.IOP.Encoding;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -21,6 +22,9 @@ public class GameServiceImpl implements GameService {
     private GameMapper gameMapper;
     @Autowired
     private GameRoomInfoMapper gameRoomInfoMapper;
+
+    @Value("${GameServerUrl}")
+    private String gameServerUrl;
 
     @Override
     public List<GameFunctionSet> queryFunctionSet() {
@@ -98,6 +102,11 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public List<GameRoomInfo> getRoomsList() {
+        return gameRoomInfoMapper.getRoomsList();
+    }
+
+    @Override
     public boolean updateGameRoomCBEndTime(int kindId, boolean needRestart ){
         List<GameRoomInfo> roomInfos = getGameRoomInfoByKindId(kindId);
         if (CollectionUtils.isEmpty(roomInfos)) {
@@ -134,9 +143,8 @@ public class GameServiceImpl implements GameService {
     }
 
     private void startGameService(int serverId) {
-        String url = "GameServerUrl";
         String postdata = "{\"msgid\":10, \"content\":{\"ServerID\": " + serverId + "}}";
-        HttpUtils.sendPost(url, postdata);
+        HttpUtils.sendPost(gameServerUrl, postdata);
     }
 
     public Map<String, Integer> getRules(String customRule) {
