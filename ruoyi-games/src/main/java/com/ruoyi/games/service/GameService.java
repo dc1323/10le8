@@ -30,9 +30,13 @@ public interface GameService {
 
     List<GameRoomInfo> getGameRoomInfoByKindId(Integer kindId);
 
+    List<Game2CaiPiaoParam> queryGame2CaiPiaoParamList(Game2CaiPiaoParam param);
+
     int updateCustomRuleByKindId(String customRule, int kindId);
 
-    boolean updateGameRoomCBEndTime(int kindId);
+    boolean updateGameRoomCBEndTime(int kindId, boolean needRestart);
+
+    int updateParamTime(Game2CaiPiaoParam param);
 
     int getRoundByExpect(List<CaiPiaoDiZhi> cpList, String code, String expect, int groupID);
 }

@@ -64,6 +64,6 @@
     </select>
 
     <update id="updateCustomRuleByKindId">
-        UPDATE GameRoomInfo set CustomRule = #{customRule} where KindID = #{kindId}
+        UPDATE RYPlatformDB.dbo.GameRoomInfo set CustomRule = #{customRule} where KindID = #{kindId}
     </update>
 </mapper> 

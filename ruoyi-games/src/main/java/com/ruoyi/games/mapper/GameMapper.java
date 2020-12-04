@@ -28,5 +28,9 @@ public interface GameMapper {
 
     List<Game2CaiPiaoParam> getGame2CaiPiaoParamList(@Param("kindId") int kindId);
 
+    List<Game2CaiPiaoParam> queryGame2CaiPiaoParamList(Game2CaiPiaoParam param);
+
     int updateGame2CaiPiaoParam(Game2CaiPiaoParam param);
+
+    int updateParamTime(Game2CaiPiaoParam param);
 }

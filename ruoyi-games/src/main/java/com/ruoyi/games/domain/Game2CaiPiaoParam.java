@@ -1,5 +1,7 @@
 package com.ruoyi.games.domain;
 
+import java.util.Map;
+
 public class Game2CaiPiaoParam implements java.io.Serializable {
     public int id;
     public int kindID;

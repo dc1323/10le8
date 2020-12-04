@@ -87,11 +87,34 @@
            where KindID = #{kindID}
     </update>
 
+    <update id="updateGame2CaiPiaoParam" parameterType="com.ruoyi.games.domain.Game2CaiPiaoParam">
+        update RYTreasureDB.dbo.Game2CaiPiaoParam set TotalEndTime = #{totalEndTime}, cbBetTime = #{cbBetTime}, cbEndTime = #{cbEndTime}
+           where KindID = #{kindID}
+    </update>
+
+    <update id="updateParamTime" parameterType="com.ruoyi.games.domain.Game2CaiPiaoParam">
+        update RYTreasureDB.dbo.Game2CaiPiaoParam set cbFreeTime = #{cbFreeTime}, cbBetTime = #{cbBetTime} where KindID = #{kindID}
+    </update>
+
     <select id="getGame2CaiPiaoParamList" resultType="com.ruoyi.games.domain.Game2CaiPiaoParam">
-        SELECT * FROM RYTreasureDB.dbo.Game2CaiPiaoParam(NOLOCK) WHERE 1=1
+        SELECT * FROM RYTreasureDB.dbo.Game2CaiPiaoParam WHERE 1=1
         <if test="kindId > 0">
             and KindID = #{kindId}
         </if>
+        order by id
+    </select>
+
+    <select id="queryGame2CaiPiaoParamList" parameterType="com.ruoyi.games.domain.Game2CaiPiaoParam"
+            resultType="com.ruoyi.games.domain.Game2CaiPiaoParam">
+        SELECT * FROM RYTreasureDB.dbo.Game2CaiPiaoParam WHERE 1=1
+        <if test="kindID > 0">
+            and KindID = #{kindID}
+        </if>
+
+        <if test="id > 0">
+            and ID = #{id}
+        </if>
+        order by id
     </select>
 
     <select id="getRecordDrawInfoByCodeAndExpect" parameterType="java.util.Map" resultType="java.util.Map"

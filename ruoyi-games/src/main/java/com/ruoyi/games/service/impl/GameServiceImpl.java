@@ -1,11 +1,13 @@
 package com.ruoyi.games.service.impl;
 
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.games.domain.*;
 import com.ruoyi.games.mapper.GameMapper;
 import com.ruoyi.games.mapper.GameRoomInfoMapper;
 import com.ruoyi.games.service.GameService;
 import org.apache.commons.collections.CollectionUtils;
+import org.omg.IOP.Encoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,11 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<LotteryManage> queryLotteryManage(LotteryManage manager) {
         return gameMapper.queryLotteryManage(manager);
+    }
+
+    @Override
+    public int updateParamTime(Game2CaiPiaoParam param) {
+        return gameMapper.updateParamTime(param);
     }
 
     @Override
@@ -91,7 +98,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public boolean updateGameRoomCBEndTime(int kindId){
+    public boolean updateGameRoomCBEndTime(int kindId, boolean needRestart ){
         List<GameRoomInfo> roomInfos = getGameRoomInfoByKindId(kindId);
         if (CollectionUtils.isEmpty(roomInfos)) {
             return false;
@@ -116,9 +123,20 @@ public class GameServiceImpl implements GameService {
         String customRule = appendString(dic, surplusStr);
         int count = updateCustomRuleByKindId(customRule, kindId);
         if (count > 0) {
+            if (needRestart) {
+                for (int i = 0; i < roomInfos.size(); i++){
+                    startGameService(roomInfos.get(i).getServerID());
+                }
+            }
             return true;
         }
         return false;
+    }
+
+    private void startGameService(int serverId) {
+        String url = "GameServerUrl";
+        String postdata = "{\"msgid\":10, \"content\":{\"ServerID\": " + serverId + "}}";
+        HttpUtils.sendPost(url, postdata);
     }
 
     public Map<String, Integer> getRules(String customRule) {
@@ -188,5 +206,10 @@ public class GameServiceImpl implements GameService {
         }
         nRoundCount = (nRoundCount - 1) * cpCount + SortID;
         return nRoundCount;
+    }
+
+    @Override
+    public List<Game2CaiPiaoParam> queryGame2CaiPiaoParamList(Game2CaiPiaoParam param) {
+        return gameMapper.queryGame2CaiPiaoParamList(param);
     }
 }

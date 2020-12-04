@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('游戏参数')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "games/game";
+    var editFlag = [[${@permission.hasPermi('games:gameParams:edit')}]];
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+
+        queryGameParamsList();
+    });
+
+    function queryGameParamsList() {
+        var options = {
+            url: prefix + "/gameParams/list",
+            sortOrder: "desc",
+            modalName: "游戏参数",
+            columns: [{
+                checkbox: true
+            },{
+                field: 'id',
+                visible: false,
+            },{
+                field: 'kindID',
+                visible: false,
+            },
+                {
+                    field: 'kindName',
+                    title: '游戏名称'
+                },
+                {
+                    field: 'cbFreeTime',
+                    title: '离场时间',
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return '<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="openDetail(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a>';
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function openDetail(id) {
+        var url = prefix + '/gameParams/' + id;
+        $.modal.open("编辑", url, '800', '300',function (index, layero) {
+            var paramId = layero.find("iframe")[0].contentWindow.$("#paramId").val();
+            var cbFreeTime = layero.find("iframe")[0].contentWindow.$("#cbFreeTime").val();
+            if (cbFreeTime == '') {
+                $.modal.alertError(result.msg);
+                return;
+            }
+            
+            $.modal.loading("数据提交中，请稍等！");
+            save();
+            $.modal.close(index);
+        });
+    }
+    
+    function save(paramId, cbFreeTime) {
+        var postData = {}
+        postData.id = paramId;
+        postData.cbFreeTime = cbFreeTime;
+        $.operate.save(prefix + "/updateParam", JSON.stringify(postData), function (result) {
+            $.modal.loading("更新成功!");
+            setTimeout(function () {
+                $.modal.closeLoading();
+
+                $("#txtID").val("-1");
+                $("#txtOpenNumber").val("");
+                $('#myModal').modal('hide');
+                $.form.reset()
+            }, 1000);
+        });
+    }
+</script>
+</body>
+</html>
