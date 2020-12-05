@@ -18,17 +18,211 @@
         <div class="col-sm-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <span class="label label-success pull-right">月</span>
-                    <h5>收入</h5>
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>今日充值额</h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">40 886,200</h1>
+                    <h1 class="no-margins">[[${platformInfo.todayChargeMoney}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
                     <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
                     </div>
-                    <small>总收入</small>
+                    <small>总收入</small>-->
                 </div>
             </div>
         </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>今日提款额</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.todayDistlls}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>用户总余额</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.userTotalMoney}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>当前在线人数</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.onlineUsers}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>今日新增玩家人数</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.todayReg}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>注册玩家总数</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.regTotal}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>系统抽水总量</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.systemRevenue}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>代理抽水总量</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.agentRevenue}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>机器人总数</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.robotTotal}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>在线机器人总数</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.onilneRobotTotal}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>机器人总余额</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.robotTotalBalance}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>总盈亏</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.totalProfitAndLoss}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <!--<span class="label label-success pull-right">月</span>-->
+                    <h5>总充值</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">[[${platformInfo.totalCharge}]]</h1>
+                    <!--<h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>-->
+                </div>
+            </div>
+        </div>
+        <!--
         <div class="col-sm-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -71,8 +265,9 @@
                 </div>
             </div>
         </div>
+        -->
     </div>
-
+    <!--
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
@@ -210,6 +405,7 @@
             </div>
         </div>
     </div>
+    -->
 </div>
 </div>
 <script th:src="@{/js/jquery.min.js}"></script>
