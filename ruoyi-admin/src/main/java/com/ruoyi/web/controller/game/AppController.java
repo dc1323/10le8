@@ -6,6 +6,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.games.domain.GameKindItem;
 import com.ruoyi.games.domain.GameRoomInfo;
 import com.ruoyi.games.domain.RecordAchievement;
+import com.ruoyi.games.domain.RoomRecord;
 import com.ruoyi.games.service.AppService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,25 @@ public class AppController extends BaseController {
     public TableDataInfo onlineRoomList(GameRoomInfo info) {
         startPage();
         List<GameRoomInfo> list = appService.getGameOnlineRooms(info);
+        return getDataTable(list);
+    }
+
+    @RequiresPermissions("games:app:roomsrecord")
+    @GetMapping("/roomsrecord")
+    public String roomsRecord(ModelMap mmap) {
+        List<GameKindItem> gameKindItemList = appService.getGameList();
+        mmap.put("startDate", DateUtils.getMonthFirstDay());
+        mmap.put("endDate", DateUtils.getMonthLastDay());
+        mmap.put("gameKindItemList", gameKindItemList);
+        return prefix + "/roomsrecord";
+    }
+
+    @RequiresPermissions("games:app:roomsrecordlist")
+    @PostMapping("/roomsrecordlist")
+    @ResponseBody
+    public TableDataInfo roomsRecordList(RoomRecord info) {
+        startPage();
+        List<RoomRecord> list = appService.getRoomsRecordList(info);
         return getDataTable(list);
     }
 

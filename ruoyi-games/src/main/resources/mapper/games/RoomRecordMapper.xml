@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.RoomRecordMapper">
+
+    <resultMap type="com.ruoyi.games.domain.RoomRecord" id="RoomRecordResult">
+        <result property="drawID" column="DrawID"/>
+        <result property="serverID" column="ServerID"/>
+        <result property="serverName" column="ServerName"/>
+        <result property="kindID" column="KindID"/>
+        <result property="kindName" column="KindName"/>
+        <result property="cellScore" column="CellScore"/>
+        <result property="waste" column="Waste"/>
+        <result property="revenue" column="Revenue"/>
+        <result property="insertTime" column="InsertTime"/>
+        <result property="roomNumber" column="RoomNumber"/>
+        <result property="roundCount" column="RoundCount"/>
+        <result property="code" column="Code"/>
+        <result property="expect" column="Expect"/>
+        <result property="userID" column="UserID"/>
+        <result property="robotsRevenue" column="RobotsRevenue"/>
+        <result property="userCount" column="UserCount"/>
+        <result property="androidCount" column="AndroidCount"/>
+        <result property="agentRevenue" column="AgentRevenue"/>
+    </resultMap>
+
+    <select id="getRoomsRecordList" parameterType="com.ruoyi.games.domain.RoomRecord" resultMap="RoomRecordResult">
+        select * from RYTreasureDB.dbo.V_GetRoomsRecordList20200719
+        where 1=1
+        <if test="endDate != null">
+            and InsertTime 	&lt;= #{endDate}
+        </if>
+        <if test="startDate != null">
+            and InsertTime 	&gt;= #{startDate}
+        </if>
+        <if test="kindID != null and kindID > 0">
+            and KindID = #{kindID}
+        </if>
+        <if test="androidCount != null and androidCount != ''">
+            and AndroidCount &gt; #{androidCount}
+        </if>
+        ${params.dataScope}
+    </select>
+
+</mapper> 

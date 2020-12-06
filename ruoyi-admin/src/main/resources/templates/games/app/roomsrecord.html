@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('房间记录')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <label>日期查询： </label>
+                                <input type="text" id="startDate" placeholder="开始时间"
+                                       name="startDate" th:value="${startDate}" readonly/>
+                                <span>-</span>
+                                <input type="text" id="endDate" placeholder="结束时间"
+                                       name="endDate" th:value="${endDate}" readonly/>
+                            </li>
+                            <li>
+                                <label>游戏类型：</label>
+                                <select name="kindID">
+                                    <option th:each="data,dataStat : ${gameKindItemList}" th:value="${data.kindID}"
+                                            th:text="${data.kindName}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <!--<a class="btn btn-primary multiple disabled" onclick="clearOnline()"
+                   shiro:hasPermission="games:account:unlock">
+                    <i class="glyphicon glyphicon-ok-circle icon-white"></i> 清除卡线
+                </a>-->
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('games_account_stats')}]];
+    var prefix = ctx + "games/app";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            laydate.render({
+                elem: '#startDate',
+                type: 'datetime',
+                trigger: 'click'
+            });
+
+            laydate.render({
+                elem: '#endDate',
+                type: 'datetime',
+                trigger: 'click'
+            });
+
+        });
+
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/roomsrecordlist",
+            sortName: "InsertTime",
+            sortOrder: "desc",
+            modalName: "房间记录",
+            columns: [
+                {
+                    field: 'drawID',
+                    title: '序号'
+                },
+                {
+                    field: 'kindName',
+                    title: '游戏类型'
+                },
+                {
+                    field: 'roomNumber',
+                    title: '游戏模式',
+                    formatter:function (value,row,index){
+                        if(value === 0){
+                            return "自由匹配";
+                        }else{
+                            return "房主创建";
+                        }
+                    }
+                },
+                {
+                    field: 'cellScore',
+                    title: '游戏底注'
+                },
+                {
+                    field: 'userCount',
+                    title: '真实人数'
+                },
+                {
+                    field: 'androidCount',
+                    title: '机器人数'
+                },
+                {
+                    field: 'robotsRevenue',
+                    title: '机器人盈亏'
+                },
+                {
+                    field: 'roundCount',
+                    title: '游戏局数'
+                },
+                {
+                    field: 'revenue',
+                    title: '游戏抽水'
+                },
+                {
+                    field: 'agentRevenue',
+                    title: '代理抽水'
+                },
+                {
+                    field: 'platformRevenue',
+                    title: '平台收入'
+                },
+                {
+                    field: 'insertTime',
+                    title: '日期时间'
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+</script>
+</body>
+</html>
