@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('清理数据')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary" onclick="oneKeySubmitFor('three')"
+                   shiro:hasPermission="games:tabledata:clear">
+                    <i class="glyphicon glyphicon-upload icon-white"></i> 前三个月
+                </a>
+                <a class="btn btn-primary" onclick="oneKeySubmitFor('halfyear')"
+                   shiro:hasPermission="games:tabledata:clear">
+                    <i class="glyphicon glyphicon-download icon-white"></i> 半年
+                </a>
+                <a class="btn btn-primary" onclick="oneKeySubmitFor('year')"
+                   shiro:hasPermission="games:tabledata:clear">
+                    <i class="glyphicon glyphicon-ban-circle icon-white"></i> 一年
+                </a>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var datas = [[${@dict.getType('games_account_stats')}]];
+    var prefix = ctx + "games/tabledata";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/list",
+            sortName: "ApplyDate",
+            sortOrder: "desc",
+            modalName: "清理数据",
+            pagination: false,
+            columns: [
+                {
+                    field: 'tabName',
+                    title: '数据表名称'
+                },
+                {
+                    field: 'counts',
+                    title: '记录总数'
+                },
+                {
+                    field: 'minTime',
+                    title: '记录最小时间'
+                },
+                {
+                    field: 'maxTime',
+                    title: '记录最大时间'
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+    function oneKeySubmitFor(op) {
+        $.modal.confirm("确定要删除码?请注意,此操作不可逆", function () {
+            var url = prefix + "/cleartabledate";
+            var data = {"operaType": op};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+
+</script>
+</body>
+</html>
