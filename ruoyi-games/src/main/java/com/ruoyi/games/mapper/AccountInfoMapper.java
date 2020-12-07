@@ -2,6 +2,7 @@ package com.ruoyi.games.mapper;
 
 import com.ruoyi.games.domain.AccountInfo;
 import com.ruoyi.games.domain.OrderInfo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,4 +36,12 @@ public interface AccountInfoMapper {
 
     void deleteGameScoreLockerByUsers(List<String> userIDs);
 
+    void bindPlayingGame(Map<String, Object> param);
+
+    void userDistillAli(Map<String, Object> param);
+
+    void bindBank(Map<String, Object> param);
+
+    void updateAccountCompellation(@Param("compellation") String compellation,
+                                   @Param("userId") Integer userId);
 }
