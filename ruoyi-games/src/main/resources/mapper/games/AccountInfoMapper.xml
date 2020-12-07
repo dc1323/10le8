@@ -43,11 +43,11 @@
 
     <select id="selectAccountPage" parameterType="java.util.Map" resultMap="AccountInfoResult" statementType="CALLABLE">
         {call RYTreasureDB.dbo.JSON_GetAccountsList(
-            #{strWhere,mode=IN,jdbcType=VARCHAR},
-            #{pageSize,mode=IN,jdbcType=INTEGER},
-            #{pageIndex,mode=IN,jdbcType=INTEGER},
-            #{pageCount,mode=OUT,jdbcType=INTEGER},
-            #{recordCount,mode=OUT,jdbcType=INTEGER})}
+                #{strWhere,mode=IN,jdbcType=VARCHAR},
+                #{pageSize,mode=IN,jdbcType=INTEGER},
+                #{pageIndex,mode=IN,jdbcType=INTEGER},
+                #{pageCount,mode=OUT,jdbcType=INTEGER},
+                #{recordCount,mode=OUT,jdbcType=INTEGER})}
     </select>
 
     <select id="getCanCachOut" parameterType="java.util.Map" resultType="java.lang.String" statementType="CALLABLE">
@@ -57,13 +57,24 @@
     </select>
 
     <select id="selectAccountByUserID" resultMap="AccountInfoResult">
-        SELECT  UserID, GameID, Accounts, NickName, IsAgent, RegisterMobile, Compellation, UserType,
-                PlayTimeCount, PlayingGame, RegisterDate, LastLogonIp, LastLogonDate, Nullity
-        FROM
-            RYAccountsDB.dbo.AccountsInfo
+        SELECT UserID,
+               GameID,
+               Accounts,
+               NickName,
+               IsAgent,
+               RegisterMobile,
+               Compellation,
+               UserType,
+               PlayTimeCount,
+               PlayingGame,
+               RegisterDate,
+               LastLogonIp,
+               LastLogonDate,
+               Nullity
+        FROM RYAccountsDB.dbo.AccountsInfo
         WHERE UserID = #{userID,jdbcType=INTEGER}
     </select>
-    
+
     <update id="freezeAccount">
         UPDATE RYAccountsDB.dbo.AccountsInfo SET Nullity=1 where UserID in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
@@ -77,7 +88,7 @@
             #{item}
         </foreach>
     </update>
-    
+
     <select id="grantTreasure" parameterType="java.util.Map" resultMap="OrderInfoResult" statementType="CALLABLE">
         {call RYTreasureDB.dbo.NET_PM_GrantTreasure(
                 #{dwTypeId,mode=IN},
@@ -103,7 +114,7 @@
             #{item}
         </foreach>
     </update>
-    
+
     <select id="getOnlieList" parameterType="com.ruoyi.games.domain.AccountInfo" resultMap="AccountInfoResult">
         SELECT * FROM RYAccountsDB.dbo.View_Online
         WHERE 1=1
@@ -113,7 +124,7 @@
         <if test="kindID != null and kindID == -2">
             AND KindID > 0
         </if>
-        <if test="gameID != null" >
+        <if test="gameID != null">
             AND GameID = #{gameID}
         </if>
         <if test="accounts != null">
@@ -124,16 +135,58 @@
         </if>
         ${params.dataScope}
     </select>
-    
+
     <delete id="deleteGameScoreLocker">
-        delete from  RYTreasureDB.dbo.GameScoreLocker where KindID = 9999
+        delete
+        from RYTreasureDB.dbo.GameScoreLocker
+        where KindID = 9999
     </delete>
 
     <delete id="deleteGameScoreLockerByUsers">
-        delete from  RYTreasureDB.dbo.GameScoreLocker WHERE UserID in
+        delete from RYTreasureDB.dbo.GameScoreLocker WHERE UserID in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
     </delete>
 
-</mapper> 
+    <select id="bindPlayingGame" parameterType="java.util.Map" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_BindPlayingGame(
+                #{userID,mode=IN},
+                #{gameID,mode=IN},
+                #{playingGame,mode=IN},
+                #{strErr,mode=OUT,jdbcType=VARCHAR}
+            )}
+    </select>
+
+    <select id="userDistillAli" parameterType="java.util.Map" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_UserDistillAli(
+                #{gameID,mode=IN},
+                #{userID,mode=IN},
+                #{distillType,mode=IN},
+                #{money,mode=IN},
+                #{bankUserName,mode=IN},
+                #{bankCardNumber,mode=IN},
+                #{memo,mode=IN},
+                #{strClientIP,mode=IN},
+                #{strErr,mode=OUT,jdbcType=VARCHAR}
+            )}
+    </select>
+
+    <select id="bindBank" parameterType="java.util.Map" statementType="CALLABLE">
+        {call RYAccountsDB.dbo.JSON_BindBank(
+                #{gameID,mode=IN},
+                #{bankName,mode=IN},
+                #{bankCardNumber,mode=IN},
+                #{bankUserName,mode=IN},
+                #{bankTypeName,mode=IN},
+                #{strErr,mode=OUT,jdbcType=VARCHAR}
+            )}
+    </select>
+
+    <update id="updateAccountCompellation">
+        UPDATE RYAccountsDB.dbo.AccountsInfo
+        SET Compellation=#{compellation}
+        WHERE UserID = #{userId}
+    </update>
+
+</mapper>

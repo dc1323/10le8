@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.AccountsInfoBankMapper">
+
+    <resultMap type="com.ruoyi.games.domain.AccountsInfoBank" id="AccountsInfoBankResult">
+        <id property="gameId" column="Gameid"/>
+        <result property="bankName" column="BankName"/>
+        <result property="bankCardNumber" column="BankCardNumber"/>
+        <result property="bankUserName" column="BankUserName"/>
+        <result property="bankTypeName" column="BankTypeName"/>
+        <result property="time" column="time"/>
+    </resultMap>
+
+    <select id="getUserBank" resultMap="AccountsInfoBankResult" parameterType="com.ruoyi.games.domain.AccountsInfoBank">
+        SELECT * FROM RYAccountsDB.dbo.AccountsInfoBank(NOLOCK)
+        <where>
+            <if test="gameId != null and gameId != 0">
+                and Gameid = #{gameId}
+            </if>
+            <if test="bankCardNumber != null">
+                and BankCardNumber = #{bankCardNumber}
+            </if>
+            <if test="bankUserName != null">
+                and BankUserName = #{bankUserName}
+            </if>
+        </where>
+    </select>
+
+</mapper> 

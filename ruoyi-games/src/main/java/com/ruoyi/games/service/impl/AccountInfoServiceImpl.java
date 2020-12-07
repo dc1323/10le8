@@ -2,6 +2,7 @@ package com.ruoyi.games.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
@@ -40,6 +41,12 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     @Autowired
     private RebateScaleInfoMapper rebateScaleInfoMapper;
+
+    @Autowired
+    private PhoneSmsMapper phoneSmsMapper;
+
+    @Autowired
+    private AccountsInfoBankMapper accountsInfoBankMapper;
 
     @Override
     public Map<String, Object> selectAccountPage(String strWhere, int pageSize, int pageIndex) {
@@ -257,5 +264,73 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         }
         systemFunctionStatusInfoMapper.update(rebateInfo.getInfo());
         return AjaxResult.success();
+    }
+
+    @Override
+    public AjaxResult bindPlayingGame(Integer userID, Integer gameID, Integer playingGame) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("userID", userID);
+        param.put("gameID", gameID);
+        param.put("playingGame", playingGame);
+        accountInfoMapper.bindPlayingGame(param);
+        String result = (String) param.get("strErr");
+        if (StringUtils.isEmpty(result)) {
+            return AjaxResult.error(result);
+        }
+        return AjaxResult.success();
+    }
+
+    @Override
+    public AjaxResult userDistillAli(Integer userID, Integer gameID, Double distillMoney, String bankCardNumber) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("userID", userID);
+        param.put("gameID", gameID);
+        param.put("distillType", 1);
+        param.put("money", new BigDecimal(distillMoney));
+        param.put("bankCardNumber", bankCardNumber);
+        param.put("memo", "支付宝提款申请中");
+        param.put("strClientIP", ShiroUtils.getIp());
+        accountInfoMapper.userDistillAli(param);
+        String result = (String) param.get("strErr");
+        if ("申请成功".equals(result)) {
+            return AjaxResult.success(result);
+        }
+        return AjaxResult.error(result);
+    }
+
+    @Override
+    public AjaxResult bindBank(Integer userID, Integer gameID, String bankName,
+                               String bankCardNumber, String bankUserName,
+                               String bankTypeName, String phoneNumber, String phoneCode) {
+        PhoneSms phoneSms = phoneSmsMapper.getPhoneSms(userID, phoneNumber, phoneCode, (short) 2);
+        if (null == phoneSms || Objects.equals(0, phoneSms.getId())) {
+            return AjaxResult.error("验证码有误");
+        }
+        Date endDate = new Date();
+        Date startDate = phoneSms.getInsertTime();
+        long diffDate = endDate.getTime() - startDate.getTime();
+        if (diffDate > 300 * 1000) {
+            return AjaxResult.error("验证码有效期为5分钟,请重新发送手机验证码");
+        }
+        AccountsInfoBank info = new AccountsInfoBank();
+        info.setBankCardNumber(bankCardNumber);
+        info.setBankUserName(bankUserName);
+        List<AccountsInfoBank> banks = accountsInfoBankMapper.getUserBank(info);
+        if (null != banks && banks.size() > 0) {
+            return AjaxResult.error("此银行卡已经被绑定");
+        }
+        Map<String, Object> param = new HashMap<>();
+        param.put("gameID", gameID);
+        param.put("bankName", bankName);
+        param.put("bankCardNumber", bankCardNumber);
+        param.put("bankUserName", bankUserName);
+        param.put("bankTypeName", bankTypeName);
+        accountInfoMapper.bindBank(param);
+        String result = (String) param.get("strErr");
+        if (!result.contains("恭喜您")) {
+            return AjaxResult.error("银行卡绑定失败，请重试!!");
+        }
+        accountInfoMapper.updateAccountCompellation(bankUserName, userID);
+        return AjaxResult.success("银行卡绑定成功!");
     }
 }

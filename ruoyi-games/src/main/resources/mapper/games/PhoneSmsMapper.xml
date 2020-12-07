@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.PhoneSmsMapper">
+
+    <resultMap type="com.ruoyi.games.domain.PhoneSms" id="PhoneSmsResult">
+        <id property="id" column="ID"/>
+        <result property="smsCode" column="SmsCode"/>
+        <result property="userID" column="UserID"/>
+        <result property="typeID" column="TypeID"/>
+        <result property="isUse" column="IsUse"/>
+        <result property="insertTime" column="InsertTime"/>
+        <result property="phoneNumber" column="PhoneNumber"/>
+    </resultMap>
+
+    <select id="getPhoneSms" resultMap="PhoneSmsResult">
+        select top 1 *
+        from RYTreasureDB.dbo.PhoneSMS
+        where UserID = #{userID}
+        and PhoneNumber = #{phoneNumber}
+        and SmsCode = #{smsCode}
+        and TypeID = #{typeID}
+        order by ID desc
+    </select>
+
+</mapper> 
