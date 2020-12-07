@@ -41,4 +41,22 @@ public interface GameService {
     int updateParamTime(Game2CaiPiaoParam param);
 
     int getRoundByExpect(List<CaiPiaoDiZhi> cpList, String code, String expect, int groupID);
+
+    int updateNullityByKindId(int nullity, int kindId);
+
+    int updateAndroidConfigureByKindId(int nullity, int kindId);
+
+    void stopGameService(int serverId);
+
+    void startGameService(int serverId);
+
+    boolean stopGameServiceForBool(int serverID);
+
+    int deleteGameRoomInfo(int serverID);
+
+    int deleteAndroidConfigure(int serverID);
+
+    GameRoomInfo getGameRoomInfo(Integer serverID);
+
+    Map<String, Integer> getRules(String customRule);
 }

@@ -33,4 +33,12 @@ public interface GameRoomInfoMapper {
     int updateCustomRuleByKindId(@Param("customRule") String customRule, @Param("kindId") int kindId);
 
     List<GameRoomInfo> getRoomsList();
+
+    int updateNullityByKindId(@Param("nullity") int nullity, @Param("kindId") int kindId);
+
+    int updateAndroidConfigureByKindId(@Param("nullity") int nullity, @Param("kindId") int kindId);
+
+    int deleteGameRoomInfo(@Param("serverID") int serverID);
+
+    int deleteAndroidConfigure(@Param("serverID") int serverID);
 }

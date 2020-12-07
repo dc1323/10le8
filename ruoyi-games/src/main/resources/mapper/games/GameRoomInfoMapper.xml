@@ -108,4 +108,20 @@
     <update id="updateCustomRuleByKindId">
         UPDATE RYPlatformDB.dbo.GameRoomInfo set CustomRule = #{customRule} where KindID = #{kindId}
     </update>
+
+    <update id="updateNullityByKindId">
+        UPDATE RYPlatformDB.dbo.GameRoomInfo set Nullity = #{nullity} where KindID = #{kindId}
+    </update>
+
+    <update id="updateAndroidConfigureByKindId">
+        UPDATE RYPlatformDB.dbo.AndroidConfigure set Nullity = #{nullity} where KindID = #{kindId}
+    </update>
+
+    <delete id="deleteGameRoomInfo">
+        delete RYPlatformDB.dbo.GameRoomInfo where ServerID = #{serverID}
+    </delete>
+
+    <delete id="deleteAndroidConfigure">
+        delete RYAccountsDB.dbo.AndroidConfigure where ServerID = #{serverID}
+    </delete>
 </mapper> 

@@ -420,4 +420,82 @@ public class GameController extends BaseController {
         }
         return getDataTable(roomInfoList);
     }
+
+    @Log(title = "游戏创建", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    @PostMapping(value="/stopGame")
+    public AjaxResult stopGame(@RequestBody Map<String, String> map) {
+        try {
+            int nullity = Integer.parseInt(StringUtils.defaultString(map.get("nullity"), "-1"));
+            int serverID = Integer.parseInt(StringUtils.defaultString(map.get("serverID"), "-1"));
+            if (nullity == -1) {
+                return error("操作有误!");
+            }
+
+            int count = gameService.updateNullityByKindId(nullity, serverID);
+            count = gameService.updateAndroidConfigureByKindId(nullity, serverID);
+            if (count > 0) {
+                if (nullity == 1) {
+                    gameService.stopGameService(serverID);
+                } else {
+                    gameService.startGameService(serverID);
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return error("操作失败!");
+        }
+        return success("操作成功!");
+    }
+
+    @Log(title = "游戏删除", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    @PostMapping(value="/delGame")
+    public AjaxResult delGame(@RequestBody Map<String, String> map) {
+        try {
+            int serverID = Integer.parseInt(StringUtils.defaultString(map.get("serverID"), "-1"));
+            if (serverID == -1) {
+                return error("数据有误!");
+            }
+
+            if(gameService.stopGameServiceForBool(serverID)) {
+                int count = gameService.deleteGameRoomInfo(serverID);
+                count = gameService.deleteAndroidConfigure(serverID);
+                if (count > 0) {
+                    return success("删除成功!");
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return error("删除失败!");
+        }
+        return success("删除成功!");
+    }
+
+    @GetMapping("/doEditGame/{serverID}")
+    public String doEditGame(@PathVariable("serverID") String serverID, ModelMap map) {
+        GameRoomInfo info = gameService.getGameRoomInfo(Integer.parseInt(serverID));
+        Map<String, Integer> dic = gameService.getRules(info.getCustomRule().substring(0, 32));
+        info.setCbFreeTime(dic.get("cbFreeTime"));
+        info.setCbBetTime(dic.get("cbBetTime"));
+        info.setCbEndTime(dic.get("cbEndTime"));
+        info.setCbDWZWin(dic.get("cbDWZWin"));
+        info.setCbXWZWin(dic.get("cbXWZWin"));
+        info.setCbWZWin(dic.get("cbWZWin"));
+        info.setCbDLLost(dic.get("cbDLLost"));
+        info.setCbXLLost(dic.get("cbXLLost"));
+
+        String attachFiled = info.getAttachFiled();
+        if (attachFiled.indexOf(',') > -1) {
+            String arry[] = attachFiled.split(",");
+            info.setCbDWZWin2Nine(Integer.parseInt(arry[0]));
+            info.setCbWZWin2Eight(Integer.parseInt(arry[1]));
+            info.setCbXLLost2Eigbht(Integer.parseInt(arry[2]));
+        }
+
+        List<GameKindItem> gameKindItemList = accountInfoService.getGameKindList();
+        map.put("gameKindItemList",gameKindItemList);
+        map.put("info", info);
+        return prefix + "/game_info_edit";
+    }
 }

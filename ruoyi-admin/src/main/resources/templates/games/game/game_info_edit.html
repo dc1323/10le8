@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('房间编辑')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body>
+<div class="main-content">
+    <form class="form-horizontal" id="form-game-edit" th:object="${info}">
+        <input name="serverID" id="serverID" type="hidden" th:field="*{serverID}"/>
+        <h4 class="form-header h4">房间编辑</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">游戏类型：</label>
+                    <div class="col-sm-8">
+                        <select class="form-control input-sm" id="kindId" name="kindId">
+                            <option th:each="data,dataStat : ${gameKindItemList}" th:value="${data.kindID}"
+                                    th:text="${data.kindName}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">底注金额：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input name="cellScore" id="cellScore" placeholder="请输入底注金额" class="form-control" type="text"
+                                   maxlength="11" th:field="*{cellScore}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">抽水比例：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input name="revenueRatio" id="revenueRatio" onkeyup="clearNoNum(this)" onblur="clearNoNum(this)"
+                                   placeholder="请输入税收" class="form-control" type="text"
+                                   maxlength="11" th:field="*{revenueRatio}">
+                            <span class="input-group-addon">(百分比)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">桌子数量：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input name="tableCount" id="tableCount" class="form-control email" type="text" maxlength="50"
+                                   placeholder="请输入桌子数量" min="1" max="200" th:field="*{tableCount}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">账户不低于：</label>
+                    <div class="col-sm-8">
+                        <input name="minEnterScore" id="minEnterScore" class="form-control email" type="text" maxlength="50"
+                               placeholder="请输入最低进入金额" min="1" max="200" th:field="*{minEnterScore}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">大王炸赢：</label>
+                    <div class="col-sm-8">
+                        <label class="toggle-switch switch-solid">
+                            <input name="cbDWZWin" id="cbDWZWin" class="form-control email" type="text" maxlength="50"
+                                   placeholder="大王炸赢必须为9的倍数" min="1" max="200" th:field="*{cbDWZWin}">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">九人每位赔：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input name="cbDWZWin2Nine" id="cbDWZWin2Nine" onkeyup="clearNoNum(this)" onblur="clearNoNum(this)"
+                                   placeholder="请输入每位赔的金额" class="form-control" type="text"
+                                   maxlength="11" th:field="*{cbDWZWin2Nine}">
+                            <span class="input-group-addon">元</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">小王炸赢：</label>
+                    <div class="col-sm-8">
+                        <input name="cbXWZWin" id="cbXWZWin" class="form-control email" type="text" maxlength="50"
+                               placeholder="小王炸赢和小炸赢之和必须为8的倍数" min="1" max="200" th:field="*{cbXWZWin}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">小炸赢：</label>
+                    <div class="col-sm-8">
+                        <input name="cbWZWin" id="cbWZWin" class="form-control email" type="text" maxlength="50"
+                               placeholder="大雷输和小雷输之和为8的倍数" min="1" max="200" th:field="*{cbWZWin}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">八人每位赔：</label>
+                    <div class="col-sm-8">
+                        <input name="cbWZWin2Eight" id="cbWZWin2Eight" class="form-control email" type="text" maxlength="50"
+                               placeholder="请输入八人每位赔" min="1" max="200" th:field="*{cbWZWin2Eight}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">大雷赔：</label>
+                    <div class="col-sm-8">
+                        <input name="cbDLLost" id="cbDLLost" class="form-control email" type="text" maxlength="50"
+                               placeholder="请输入大雷赔金额" min="1" max="200" th:field="*{cbDLLost}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">小雷赔：</label>
+                    <div class="col-sm-8">
+                        <input name="cbXLLost" id="cbXLLost" class="form-control email" type="text" maxlength="50"
+                               placeholder="请输入小雷赔金额" min="1" max="200" th:field="*{cbXLLost}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">八人每位赢：</label>
+                    <div class="col-sm-8">
+                        <input name="cbXLLost2Eigbht" id="cbXLLost2Eigbht" class="form-control email" type="text" maxlength="50"
+                               placeholder="请输入八人每位赢" min="1" max="200" th:field="*{cbXLLost2Eigbht}">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存
+        </button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
+        </button>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "games/game";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var data = $("#form-game-edit").serializeArray();
+            var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+            var roleIds = $.form.selectCheckeds("role");
+            var postIds = $.form.selectSelects("post");
+            data.push({"name": "status", "value": status});
+            data.push({"name": "roleIds", "value": roleIds});
+            data.push({"name": "postIds", "value": postIds});
+            $.operate.saveTab(prefix + "/edit", data);
+        }
+    }
+</script>
+</body>
+</html>

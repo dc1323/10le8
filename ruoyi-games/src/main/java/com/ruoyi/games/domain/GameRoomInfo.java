@@ -104,6 +104,117 @@ public class GameRoomInfo {
     //是否在线
     private int isOnline;
 
+    private int cbDWZWin;
+    private int cbXWZWin;
+    private int cbWZWin;
+    private int cbDLLost;
+    private int cbXLLost;
+
+    private int cbFreeTime;
+    private int cbBetTime;
+    private int cbEndTime;
+
+    /// <summary>
+    /// 九位每位赢
+    /// </summary>
+    private int cbDWZWin2Nine;
+    /// <summary>
+    /// 八位每位赢
+    /// </summary>
+    private int cbWZWin2Eight;
+    /// <summary>
+    /// 八位每位输
+    /// </summary>
+    private int cbXLLost2Eigbht;
+
+    public int getCbDWZWin() {
+        return cbDWZWin;
+    }
+
+    public void setCbDWZWin(int cbDWZWin) {
+        this.cbDWZWin = cbDWZWin;
+    }
+
+    public int getCbXWZWin() {
+        return cbXWZWin;
+    }
+
+    public void setCbXWZWin(int cbXWZWin) {
+        this.cbXWZWin = cbXWZWin;
+    }
+
+    public int getCbWZWin() {
+        return cbWZWin;
+    }
+
+    public void setCbWZWin(int cbWZWin) {
+        this.cbWZWin = cbWZWin;
+    }
+
+    public int getCbDLLost() {
+        return cbDLLost;
+    }
+
+    public void setCbDLLost(int cbDLLost) {
+        this.cbDLLost = cbDLLost;
+    }
+
+    public int getCbXLLost() {
+        return cbXLLost;
+    }
+
+    public void setCbXLLost(int cbXLLost) {
+        this.cbXLLost = cbXLLost;
+    }
+
+    public int getCbFreeTime() {
+        return cbFreeTime;
+    }
+
+    public void setCbFreeTime(int cbFreeTime) {
+        this.cbFreeTime = cbFreeTime;
+    }
+
+    public int getCbBetTime() {
+        return cbBetTime;
+    }
+
+    public void setCbBetTime(int cbBetTime) {
+        this.cbBetTime = cbBetTime;
+    }
+
+    public int getCbEndTime() {
+        return cbEndTime;
+    }
+
+    public void setCbEndTime(int cbEndTime) {
+        this.cbEndTime = cbEndTime;
+    }
+
+    public int getCbDWZWin2Nine() {
+        return cbDWZWin2Nine;
+    }
+
+    public void setCbDWZWin2Nine(int cbDWZWin2Nine) {
+        this.cbDWZWin2Nine = cbDWZWin2Nine;
+    }
+
+    public int getCbWZWin2Eight() {
+        return cbWZWin2Eight;
+    }
+
+    public void setCbWZWin2Eight(int cbWZWin2Eight) {
+        this.cbWZWin2Eight = cbWZWin2Eight;
+    }
+
+    public int getCbXLLost2Eigbht() {
+        return cbXLLost2Eigbht;
+    }
+
+    public void setCbXLLost2Eigbht(int cbXLLost2Eigbht) {
+        this.cbXLLost2Eigbht = cbXLLost2Eigbht;
+    }
+
     public String getNullityStatus() {
         return nullityStatus;
     }

@@ -142,11 +142,30 @@ public class GameServiceImpl implements GameService {
         return false;
     }
 
-    private void startGameService(int serverId) {
+    @Override
+    public void startGameService(int serverId) {
         String postdata = "{\"msgid\":10, \"content\":{\"ServerID\": " + serverId + "}}";
         HttpUtils.sendPost(gameServerUrl, postdata);
     }
 
+    @Override
+    public void stopGameService(int serverId) {
+        String postdata = "{\"msgid\":11, \"content\":{\"ServerID\": " + serverId + "}}";
+        HttpUtils.sendPost(gameServerUrl, postdata);
+    }
+
+    @Override
+    public boolean stopGameServiceForBool(int serverID) {
+        boolean flag = false;
+        String postdata = "{\"msgid\":11, \"content\":{\"ServerID\": " + serverID + "}}";
+        String result = HttpUtils.sendPost(gameServerUrl, postdata);
+        if(result.indexOf("ok") > -1) {
+            flag = true;
+        }
+        return flag;
+    }
+
+    @Override
     public Map<String, Integer> getRules(String customRule) {
         Map<String, Integer> map = new HashMap<String, Integer>();
         if (customRule.length() > 32) {
@@ -219,5 +238,30 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<Game2CaiPiaoParam> queryGame2CaiPiaoParamList(Game2CaiPiaoParam param) {
         return gameMapper.queryGame2CaiPiaoParamList(param);
+    }
+
+    @Override
+    public int updateAndroidConfigureByKindId(int nullity, int kindId) {
+        return gameRoomInfoMapper.updateAndroidConfigureByKindId(nullity, kindId);
+    }
+
+    @Override
+    public int updateNullityByKindId(int nullity, int kindId) {
+        return gameRoomInfoMapper.updateNullityByKindId(nullity, kindId);
+    }
+
+    @Override
+    public int deleteGameRoomInfo(int serverID) {
+        return gameRoomInfoMapper.deleteGameRoomInfo(serverID);
+    }
+
+    @Override
+    public int deleteAndroidConfigure(int serverID) {
+        return gameRoomInfoMapper.deleteAndroidConfigure(serverID);
+    }
+
+    @Override
+    public GameRoomInfo getGameRoomInfo(Integer serverID) {
+        return gameRoomInfoMapper.getGameRoomInfo(serverID);
     }
 }
