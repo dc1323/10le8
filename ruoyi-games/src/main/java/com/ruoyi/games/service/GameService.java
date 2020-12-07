@@ -1,7 +1,6 @@
 package com.ruoyi.games.service;
 
 import com.ruoyi.games.domain.*;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
