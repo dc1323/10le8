@@ -37,6 +37,8 @@ public interface GameService {
 
     List<GameRoomInfo> getRoomsList();
 
+    List<GameRoomInfo> queryRoomList();
+
     int updateParamTime(Game2CaiPiaoParam param);
 
     int getRoundByExpect(List<CaiPiaoDiZhi> cpList, String code, String expect, int groupID);
@@ -58,4 +60,14 @@ public interface GameService {
     GameRoomInfo getGameRoomInfo(Integer serverID);
 
     Map<String, Integer> getRules(String customRule);
+
+    String getRule(int kindId);
+
+    int getServerPort();
+
+    String appendString(Map<String, Integer> dic);
+
+    Map<String, String> createRoom(GameRoomInfo info);
+
+    int updateGameRoom(GameRoomInfo info);
 }

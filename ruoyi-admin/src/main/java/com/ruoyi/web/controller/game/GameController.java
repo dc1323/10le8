@@ -1,5 +1,4 @@
 package com.ruoyi.web.controller.game;
-
 import com.google.common.collect.Maps;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -14,14 +13,12 @@ import com.ruoyi.games.service.GameService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 游戏管理
@@ -35,6 +32,12 @@ public class GameController extends BaseController {
     private GameService gameService;
     @Autowired
     private AccountInfoService accountInfoService;
+    @Value("${DataBaseName}")
+    private String dataBaseName;
+    @Value("${DataBaseAddr}")
+    private String dataBaseAddr;
+    @Value("${ServiceMachine}")
+    private String serviceMachine;
 
     @RequiresPermissions("games:game:view")
     @GetMapping("/functionSet")
@@ -58,7 +61,7 @@ public class GameController extends BaseController {
     @RequiresPermissions("games:game:edit")
     @Log(title = "游戏管理", businessType = BusinessType.UPDATE)
     @ResponseBody
-    @PostMapping(value="/edit")
+    @PostMapping(value="/function_set/edit")
     public AjaxResult editSave(@RequestBody List<Map<String, String>> list) {
         if (CollectionUtils.isEmpty(list)) {
             return toAjax(false);
@@ -472,6 +475,15 @@ public class GameController extends BaseController {
         return success("删除成功!");
     }
 
+    @GetMapping("/gameCreate/add")
+    public String gameCreateAdd(ModelMap map) {
+        GameRoomInfo param = new GameRoomInfo();
+        List<GameKindItem> gameKindItemList = accountInfoService.getGameKindList();
+        map.put("gameKindItemList",gameKindItemList);
+        map.put("info", param);
+        return prefix + "/game_info_edit";
+    }
+
     @GetMapping("/doEditGame/{serverID}")
     public String doEditGame(@PathVariable("serverID") String serverID, ModelMap map) {
         GameRoomInfo info = gameService.getGameRoomInfo(Integer.parseInt(serverID));
@@ -497,5 +509,138 @@ public class GameController extends BaseController {
         map.put("gameKindItemList",gameKindItemList);
         map.put("info", info);
         return prefix + "/game_info_edit";
+    }
+
+    @Log(title = "游戏编辑", businessType = BusinessType.UPDATE)
+    @ResponseBody
+    @PostMapping(value="/editOrAdd")
+    public AjaxResult editOrAdd(@RequestBody GameRoomInfo info) {
+        String oper = "修改";
+
+        try {
+            float revenueRatio = info.getRevenueRatio() * 10;
+            if (revenueRatio > 1000 || revenueRatio < 0) {
+                return error("抽水比例不能超过100%且不能小于0!");
+            }
+
+            if (info.getCbDWZWin() != info.getCbDWZWin2Nine() * 9) {
+                return error("大王炸赢金额与九人每人赔的金额总计不相等!");
+            }
+
+            if ((info.getCbXWZWin() + info.getCbDWZWin()) != info.getCbXLLost2Eigbht() * 8) {
+                return error("小王炸赢与小炸加每八人赔总计金额不相等!");
+            }
+
+            if ((info.getCbDLLost() + info.getCbXLLost()) != info.getCbWZWin2Eight() * 8) {
+                return error("大雷赔与小雷赔加每八人赢总计金额不相等!");
+            }
+
+            String cbArry = info.getCbDWZWin2Nine() + "," + info.getCbXLLost2Eigbht() + "," + info.getCbWZWin2Eight();
+            int serverLevel = 5;
+            String cmd = info.getCmd();
+            List<Game2CaiPiaoParam> caiPiaoDiZhiList = gameService.getGame2CaiPiaoParamList(info.getKindID());
+            Game2CaiPiaoParam param = caiPiaoDiZhiList.get(0);
+            String serverName = "";
+            if (cmd.equals("add")) {
+                serverName = param.getKindName() + "_" + info.getCellScore();
+            }
+
+            if (StringUtils.isEmpty(serverName)) {
+                return error("房间名称有误!");
+            }
+
+            int cbFreeTime = param.cbFreeTime;
+            int cbBetTime = param.cbBetTime;
+            int cbEndTime = param.cbEndTime;
+
+            if (cmd.equals("update")) {
+                GameRoomInfo gameRoomInfo1 = gameService.getGameRoomInfo(info.getServerID());
+                serverLevel = Integer.parseInt(gameRoomInfo1.getServerLevel());
+            }
+
+            if (info.getCbDWZWin() < 0 || info.getCbXWZWin() < 0 || info.getCbWZWin() < 0
+                    || info.getCbDLLost() < 0 || info.getCbXLLost() < 0 || info.getRevenueRatio() < 0
+                    || cbFreeTime < 0 || cbBetTime < 0 || cbEndTime < 0) {
+                return error("大王炸赢或小王炸赢或小炸赢或大雷输或小雷输或离场时间或游戏时间或结算时间有误!");
+            }
+
+            if (info.getMinEnterScore() <= 0) {
+                return error("底注有误!");
+            }
+
+            if (Integer.parseInt(StringUtils.defaultString(info.getCellScore(), "0")) <= 0) {
+                return error("底注有误!");
+            }
+
+            if ((info.getCbDWZWin() % 9) != 0) {
+                return error("大王炸炸赢必须为9的倍数!");
+            }
+
+            if (((info.getCbXWZWin() + info.getCbWZWin()) % 8) != 0) {
+                return error("小王炸赢和小炸赢之和必须为8的倍数!");
+            }
+
+            if (((info.getCbDLLost() + info.getCbXLLost()) % 8) != 0) {
+                return error("大雷输和小雷输之和必须为8的倍数!");
+            }
+
+            String rule = gameService.getRule(info.getKindID());
+            if (StringUtils.isEmpty(rule)) {
+                return error("服务规则有误,请联系技术人员!");
+            }
+
+            Map<String, Integer> map = new HashMap<String, Integer>();
+            map.put("cbFreeTime", cbFreeTime);
+            map.put("cbBetTime", cbBetTime);
+            map.put("cbEndTime", cbEndTime);
+            map.put("cbDWZWin", info.getCbDWZWin());
+            map.put("cbXWZWin", info.getCbXWZWin());
+            map.put("cbWZWin", info.getCbWZWin());
+            map.put("cbDLLost", info.getCbDLLost());
+            map.put("cbXLLost", info.getCbXLLost());
+            String strCustom = gameService.appendString(map);
+            strCustom = StringUtils.rightPad(strCustom, 2048);
+
+            info.setServerRule(Integer.parseInt(rule));
+            info.setAttachUserRight(info.getKindID());
+            info.setServerPort(gameService.getServerPort());
+            info.setServerLevel(String.valueOf(serverLevel));
+            info.setDataBaseName(dataBaseName);
+            info.setDataBaseAddr(dataBaseAddr);
+            info.setCustomRule(strCustom);
+            info.setServiceMachine(serviceMachine);
+            info.setAttachFiled(cbArry);
+
+            if (!cmd.equals("add") && !cmd.equals("update")) {
+                return error("操作有误");
+            }
+
+            if (info.getCmd().equals("add")) {
+                oper = "新增";
+            } else {
+                oper = "修改";
+            }
+
+            if (cmd.equals("add")) {
+                Map<String, String> result = gameService.createRoom(info);
+                if(result.size() > 0) {
+                    int serverID = Integer.parseInt(result.get("ServerID"));
+                    if (serverID > 0) {
+                        gameService.startGameService(serverID);
+                    }
+                }
+            } else {
+                int count = gameService.updateGameRoom(info);
+                if (count > 0) {
+                    return success(oper + "成功!");
+                } else {
+                    return error(oper + "失败!");
+                }
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return error(oper + "失败!");
+        }
+        return success(oper + "成功!");
     }
 }

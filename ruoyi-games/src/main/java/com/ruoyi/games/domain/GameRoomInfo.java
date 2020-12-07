@@ -114,6 +114,8 @@ public class GameRoomInfo {
     private int cbBetTime;
     private int cbEndTime;
 
+    private String cmd;
+
     /// <summary>
     /// 九位每位赢
     /// </summary>
@@ -126,6 +128,14 @@ public class GameRoomInfo {
     /// 八位每位输
     /// </summary>
     private int cbXLLost2Eigbht;
+
+    public String getCmd() {
+        return cmd;
+    }
+
+    public void setCmd(String cmd) {
+        this.cmd = cmd;
+    }
 
     public int getCbDWZWin() {
         return cbDWZWin;

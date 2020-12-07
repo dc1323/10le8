@@ -8,7 +8,7 @@
 <div class="main-content">
     <form class="form-horizontal" id="form-game-edit" th:object="${info}">
         <input name="serverID" id="serverID" type="hidden" th:field="*{serverID}"/>
-        <h4 class="form-header h4">房间编辑</h4>
+        <h4 class="form-header h4">游戏创建</h4>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
@@ -16,7 +16,7 @@
                     <div class="col-sm-8">
                         <select class="form-control input-sm" id="kindId" name="kindId">
                             <option th:each="data,dataStat : ${gameKindItemList}" th:value="${data.kindID}"
-                                    th:text="${data.kindName}"></option>
+                                    th:text="${data.kindName}" th:selected="${data.kindID} == ${info.kindID}"></option>
                         </select>
                     </div>
                 </div>
@@ -25,10 +25,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">底注金额：</label>
                     <div class="col-sm-8">
-                        <div class="input-group">
-                            <input name="cellScore" id="cellScore" placeholder="请输入底注金额" class="form-control" type="text"
-                                   maxlength="11" th:field="*{cellScore}">
-                        </div>
+                        <input name="cellScore" id="cellScore" placeholder="请输入底注金额" class="form-control"
+                               type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{cellScore}">
                     </div>
                 </div>
             </div>
@@ -51,10 +49,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">桌子数量：</label>
                     <div class="col-sm-8">
-                        <div class="input-group">
-                            <input name="tableCount" id="tableCount" class="form-control email" type="text" maxlength="50"
+                         <input name="tableCount" id="tableCount" class="form-control email" type="text" maxlength="50"
                                    placeholder="请输入桌子数量" min="1" max="200" th:field="*{tableCount}">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -73,10 +69,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">大王炸赢：</label>
                     <div class="col-sm-8">
-                        <label class="toggle-switch switch-solid">
-                            <input name="cbDWZWin" id="cbDWZWin" class="form-control email" type="text" maxlength="50"
+                         <input name="cbDWZWin" id="cbDWZWin" class="form-control email" type="text" maxlength="50"
                                    placeholder="大王炸赢必须为9的倍数" min="1" max="200" th:field="*{cbDWZWin}">
-                        </label>
                     </div>
                 </div>
             </div>
@@ -99,8 +93,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">小王炸赢：</label>
                     <div class="col-sm-8">
-                        <input name="cbXWZWin" id="cbXWZWin" class="form-control email" type="text" maxlength="50"
-                               placeholder="小王炸赢和小炸赢之和必须为8的倍数" min="1" max="200" th:field="*{cbXWZWin}">
+                          <input name="cbXWZWin" id="cbXWZWin" class="form-control email" type="text" maxlength="50"
+                                   placeholder="小王炸赢和小炸赢之和必须为8的倍数" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{cbXWZWin}">
                     </div>
                 </div>
             </div>
@@ -111,7 +105,7 @@
                     <label class="col-sm-4 control-label is-required">小炸赢：</label>
                     <div class="col-sm-8">
                         <input name="cbWZWin" id="cbWZWin" class="form-control email" type="text" maxlength="50"
-                               placeholder="大雷输和小雷输之和为8的倍数" min="1" max="200" th:field="*{cbWZWin}">
+                               placeholder="大雷输和小雷输之和为8的倍数" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{cbWZWin}">
                     </div>
                 </div>
             </div>
@@ -119,8 +113,10 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">八人每位赔：</label>
                     <div class="col-sm-8">
-                        <input name="cbWZWin2Eight" id="cbWZWin2Eight" class="form-control email" type="text" maxlength="50"
+                        <input name="cbWZWin2Eight" id="cbWZWin2Eight" class="form-control email" type="text"
+                               onkeyup="this.value=this.value.replace(/\D/g,'')"
                                placeholder="请输入八人每位赔" min="1" max="200" th:field="*{cbWZWin2Eight}">
+
                     </div>
                 </div>
             </div>
@@ -131,7 +127,7 @@
                     <label class="col-sm-4 control-label is-required">大雷赔：</label>
                     <div class="col-sm-8">
                         <input name="cbDLLost" id="cbDLLost" class="form-control email" type="text" maxlength="50"
-                               placeholder="请输入大雷赔金额" min="1" max="200" th:field="*{cbDLLost}">
+                               placeholder="请输入大雷赔金额" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{cbDLLost}">
                     </div>
                 </div>
             </div>
@@ -140,7 +136,7 @@
                     <label class="col-sm-4 control-label">小雷赔：</label>
                     <div class="col-sm-8">
                         <input name="cbXLLost" id="cbXLLost" class="form-control email" type="text" maxlength="50"
-                               placeholder="请输入小雷赔金额" min="1" max="200" th:field="*{cbXLLost}">
+                               placeholder="请输入小雷赔金额" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{cbXLLost}">
                     </div>
                 </div>
             </div>
@@ -152,7 +148,7 @@
                     <label class="col-sm-4 control-label is-required">八人每位赢：</label>
                     <div class="col-sm-8">
                         <input name="cbXLLost2Eigbht" id="cbXLLost2Eigbht" class="form-control email" type="text" maxlength="50"
-                               placeholder="请输入八人每位赢" min="1" max="200" th:field="*{cbXLLost2Eigbht}">
+                               placeholder="请输入八人每位赢" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{cbXLLost2Eigbht}">
                     </div>
                 </div>
             </div>
@@ -173,17 +169,154 @@
 <script type="text/javascript">
     var prefix = ctx + "games/game";
 
-    function submitHandler() {
-        if ($.validate.form()) {
-            var data = $("#form-game-edit").serializeArray();
-            var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
-            var roleIds = $.form.selectCheckeds("role");
-            var postIds = $.form.selectSelects("post");
-            data.push({"name": "status", "value": status});
-            data.push({"name": "roleIds", "value": roleIds});
-            data.push({"name": "postIds", "value": postIds});
-            $.operate.saveTab(prefix + "/edit", data);
+    function clearNoNum(obj) {
+        //修复第一个字符是小数点 的情况.
+        if (obj.value != '' && obj.value.substr(0, 1) == '.') {
+            obj.value = "";
         }
+        obj.value = obj.value.replace(/^0*(0\.|[1-9])/, '$1');//解决 粘贴不生效
+        obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d).*$/, '$1$2.$3');//只能输入一个小数
+        if (obj.value.indexOf(".") < 0 && obj.value != "") {//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+            if (obj.value.substr(0, 1) == '0' && obj.value.length == 2) {
+                obj.value = obj.value.substr(1, obj.value.length);
+            }
+        }
+    }
+
+    function isValue(obj) {
+        var num = parseInt(obj);
+        if (typeof obj == "undefined" || obj == null || obj == "" || num < 0) {
+            num = 0;
+        }
+        return num;
+    }
+
+    function checkForm() {
+        var kindID = $("#kindId").val();
+        var revenueRatio = $("#revenueRatio").val();
+        var cellScore = $("#cellScore").val();
+        var minEnterScore = $("#minEnterScore").val();
+        var tableCount = $("#tableCount").val();
+        var cbDWZWin = $("#cbDWZWin").val();
+        var cbXWZWin = $("#cbXWZWin").val();
+        var cbWZWin = $("#cbWZWin").val();
+        var cbDLLost = $("#cbDLLost").val();
+        var cbXLLost = $("#cbXLLost").val();
+
+        var cbFreeTime = $("#cbFreeTime").val();
+        var cbBetTime = $("#cbBetTime").val();
+        var cbEndTime = $("#cbEndTime").val();
+        var serverLevel = $("#serverLevel").val();
+
+        var cbDWZWin2Nine = $("#cbDWZWin2Nine").val();
+        var cbXLLost2Eigbht = $("#cbXLLost2Eigbht").val();
+        var cbWZWin2Eight = $("#cbWZWin2Eight").val();
+
+        if (isValue(kindID) == 0) {
+            $.modal.alertError("请选择游戏类型!");
+            return false;
+        }
+
+        if (isValue(cellScore) == 0) {
+            $.modal.alertError("底注金额有误!");
+            return false;
+        }
+
+        if (isValue(revenueRatio) == 0) {
+            $.modal.alertError("抽水比例有误!");
+            return false;
+        }
+
+        if (isValue(tableCount) == 0) {
+            $.modal.alertError("桌子数量有误");
+            return false;
+        }
+
+        if (isValue(minEnterScore) == 0) {
+            $.modal.alertError("进入游戏账户余额有误");
+            return false;
+        }
+
+        if (isValue(cbDWZWin) == 0) {
+            $.modal.alertError("大王炸赢金额有误");
+            return false;
+        }
+
+        if (isValue(cbDWZWin2Nine) == 0) {
+            $.modal.alertError("九人每位赔金额有误");
+            return false;
+        }
+
+        if (isValue(cbXWZWin) == 0) {
+            $.modal.alertError("小王炸赢金额有误");
+            return false;
+        }
+
+        if (isValue(cbWZWin) == 0) {
+            $.modal.alertError("小炸赢金额有误");
+            return false;
+        }
+
+        if (isValue(cbXLLost2Eigbht) == 0) {
+            $.modal.alertError("八人每位赔金额有误");
+            return false;
+        }
+
+        if (isValue(cbDLLost) == 0) {
+            $.modal.alertError("大雷赔金额有误");
+            return false;
+        }
+
+        if (isValue(cbXLLost) == 0) {
+            $.modal.alertError("小雷赔金额有误");
+            return false;
+        }
+
+        if (isValue(cbWZWin2Eight) == 0) {
+            $.modal.alertError("八人每位赢金额有误");
+            return false;
+        }
+
+        if (parseFloat(cbDWZWin) != parseFloat(cbDWZWin2Nine) * 9) {
+            $.modal.alertError("大王炸赢金额与九人每人赔的金额总计不相等");
+            return false;
+        }
+
+        if ((parseFloat(cbXWZWin) + parseFloat(cbWZWin)) != parseFloat(cbXLLost2Eigbht) * 8) {
+            $.modal.alertError("小王炸赢与小炸加每八人赔总计金额不相等")
+            return false;
+        }
+
+        if ((parseFloat(cbDLLost) + parseFloat(cbXLLost)) != parseFloat(cbWZWin2Eight) * 8) {
+            $.modal.alertError("大雷赔与小雷赔加每八人赢总计金额不相等")
+            return false;
+        }
+        return true;
+    }
+
+    function submitHandler() {
+        var fields = $("#form-game-edit").serializeArray();
+        var serverID = $("#serverID").val();
+
+        var flag = checkForm();
+        if (!flag) {
+            return;
+        }
+
+        var obj = {}; //声明一个对象
+        $.each(fields, function(index, field) {
+            obj[field.name] = field.value;
+        })
+
+        if (parseInt(serverID) > 0) {
+            obj.cmd = "update";
+        } else {
+            obj.cmd = "add";
+        }
+        $.operate.save(prefix + "/editOrAdd", JSON.stringify(obj));
     }
 </script>
 </body>

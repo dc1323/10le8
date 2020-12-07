@@ -101,9 +101,62 @@
         where 1=1 order by ServerID desc
     </select>
 
+    <select id="queryRoomList" resultMap="GameRoomInfoResult">
+        SELECT * FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK) ORDER BY ServerID ASC
+    </select>
+
     <select id="getCommissionByServerForAll" resultMap="GameRoomCommissionResult" statementType="CALLABLE">
         { call RYTreasureDB.dbo.JSON_GetCommissionByServerIDForAll() }
     </select>
+
+    <select id="createRoom" parameterType="java.util.Map" resultType="java.util.Map"
+            statementType="CALLABLE">
+        {call RYPlatformDB.dbo.JSON_GSP_GS_InsertGameRoom(
+            #{wGameID,mode=IN,jdbcType=VARCHAR},
+            #{wKindID,mode=IN,jdbcType=VARCHAR},
+            #{wNodeID,mode=IN,jdbcType=VARCHAR},
+            #{wSortID,mode=IN,jdbcType=VARCHAR},
+            #{lCellScore,mode=IN,jdbcType=VARCHAR},
+            #{wRevenueRatio,mode=IN,jdbcType=VARCHAR},
+            #{lServiceScore,mode=IN,jdbcType=VARCHAR},
+            #{lRestrictScore,mode=IN,jdbcType=VARCHAR},
+            #{lMinTableScore,mode=IN,jdbcType=VARCHAR},
+            #{lMinEnterScore,mode=IN,jdbcType=VARCHAR},
+            #{lMaxEnterScore,mode=IN,jdbcType=VARCHAR},
+            #{cbMinEnterMember,mode=IN,jdbcType=VARCHAR},
+            #{cbMaxEnterMember,mode=IN,jdbcType=VARCHAR},
+            #{dwServerRule,mode=IN,jdbcType=VARCHAR},
+            #{dwAttachUserRight,mode=IN,jdbcType=VARCHAR},
+            #{wMaxPlayer,mode=IN,jdbcType=VARCHAR},
+            #{wTableCount,mode=IN,jdbcType=VARCHAR},
+            #{wServerPort,mode=IN,jdbcType=VARCHAR},
+            #{wServerKind,mode=IN,jdbcType=VARCHAR},
+            #{wServerType,mode=IN,jdbcType=VARCHAR},
+            #{wServerLevel,mode=IN,jdbcType=VARCHAR},
+            #{strServerName,mode=IN,jdbcType=VARCHAR},
+            #{strServerPasswd,mode=IN,jdbcType=VARCHAR},
+            #{cbDistributeRule,mode=IN,jdbcType=VARCHAR},
+            #{wMinDistributeUser,mode=IN,jdbcType=VARCHAR},
+            #{wDistributeTimeSpace,mode=IN,jdbcType=VARCHAR},
+            #{wDistributeDrawCount,mode=IN,jdbcType=VARCHAR},
+            #{wMinPartakeGameUser,mode=IN,jdbcType=VARCHAR},
+            #{wMaxPartakeGameUser,mode=IN,jdbcType=VARCHAR},
+            #{strDataBaseName,mode=IN,jdbcType=VARCHAR},
+            #{strDataBaseAddr,mode=IN,jdbcType=VARCHAR},
+            #{strCustomRule,mode=IN,jdbcType=VARCHAR},
+            #{strServiceMachine,mode=IN,jdbcType=VARCHAR},
+            #{strAttachFiled,mode=IN,jdbcType=VARCHAR},
+            #{strErrorDescribe,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+
+    <update id="updateGameRoom" parameterType="com.ruoyi.games.domain.GameRoomInfo">
+        update RYPlatformDB.dbo.GameRoomInfo set TableCount = #{tableCount},
+             CellScore = #{cellScore},
+             MinEnterScore = #{minEnterScore},
+             CustomRule = #{customRule},
+             AttachFiled = #{attachFiled},
+             RevenueRatio = #{revenueRatio} where ServerID = #{serverID}
+    </update>
 
     <update id="updateCustomRuleByKindId">
         UPDATE RYPlatformDB.dbo.GameRoomInfo set CustomRule = #{customRule} where KindID = #{kindId}
@@ -114,7 +167,7 @@
     </update>
 
     <update id="updateAndroidConfigureByKindId">
-        UPDATE RYPlatformDB.dbo.AndroidConfigure set Nullity = #{nullity} where KindID = #{kindId}
+        UPDATE RYAccountsDB.dbo.AndroidConfigure set Nullity = #{nullity} where ServerID = #{kindId}
     </update>
 
     <delete id="deleteGameRoomInfo">
