@@ -189,4 +189,11 @@
         WHERE UserID = #{userId}
     </update>
 
+    <select id="cachOut" parameterType="java.util.Map" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_CachOut20200719(
+                #{userID,mode=IN,jdbcType=INTEGER},
+                #{gameID,mode=IN,jdbcType=INTEGER},
+                #{strErr,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+
 </mapper>

@@ -44,4 +44,6 @@ public interface AccountInfoMapper {
 
     void updateAccountCompellation(@Param("compellation") String compellation,
                                    @Param("userId") Integer userId);
+
+    void cachOut(Map<String, Object> param);
 }

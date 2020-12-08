@@ -117,5 +117,29 @@
                 #{operatUserId,mode=IN,jdbcType=INTEGER},
                 #{strErrorDescribe,mode=OUT,jdbcType=VARCHAR})}
     </select>
+    
+    <select id="getUserDistillsList" resultMap="UserDistillsResult">
+        SELECT
+            ID AS OrderID,
+            Money AS Amount,
+            Memo,
+            Result,
+            DateTime AS HandleDateTime,
+            BankName,
+            BankCardNumber
+        FROM
+            RYTreasureDB.dbo.UserDistills
+        where 1=1
+          and UserID = #{userID}
+        ORDER BY HandleDateTime DESC
+        offset #{pageNum} row fetch next #{pageSize} row only
+    </select>
+
+    <select id="getUserDistillsCount" resultType="int">
+        SELECT  count(1) from RYTreasureDB.dbo.UserDistills
+        where 1=1
+          and UserID = #{userID}
+        ORDER BY HandleDateTime DESC
+    </select>
 
 </mapper> 

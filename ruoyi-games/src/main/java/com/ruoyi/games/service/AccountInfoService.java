@@ -94,4 +94,5 @@ public interface AccountInfoService {
                         String bankCardNumber, String bankUserName,
                         String bankTypeName, String phoneNumber, String phoneCode);
 
+    AjaxResult cachOut(Integer userID, Integer gameID);
 }

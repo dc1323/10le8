@@ -333,4 +333,18 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         accountInfoMapper.updateAccountCompellation(bankUserName, userID);
         return AjaxResult.success("银行卡绑定成功!");
     }
+
+    @Override
+    public AjaxResult cachOut(Integer userID, Integer gameID) {
+        Map<String,Object> param = new HashMap<>();
+        param.put("userID",userID);
+        param.put("gameID",gameID);
+        accountInfoMapper.cachOut(param);
+        String result = (String)param.get("strErr");
+        if(StringUtils.isNotEmpty(result)){
+            return AjaxResult.error(result);
+        }
+        String data = accountInfoMapper.getCanCachOut(param);
+        return AjaxResult.success("操作成功",data);
+    }
 }

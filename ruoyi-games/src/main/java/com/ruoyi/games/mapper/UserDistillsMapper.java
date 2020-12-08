@@ -3,6 +3,7 @@ package com.ruoyi.games.mapper;
 import com.ruoyi.games.domain.RecordAchievement;
 import com.ruoyi.games.domain.RecordAchievementDetail;
 import com.ruoyi.games.domain.UserDistills;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +21,11 @@ public interface UserDistillsMapper {
     Integer noAccept(Map<String, Object> param);
 
     Integer distillPay(Map<String, Object> param);
+
+    List<UserDistills> getUserDistillsList(@Param("userID") Integer userID,
+                                           @Param("pageNum") Integer pageNum,
+                                           @Param("pageSize") Integer pageSize);
+
+    int getUserDistillsCount(@Param("userID") Integer userID);
+
 }
