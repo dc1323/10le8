@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface GameRoomInfoMapper {
@@ -28,11 +29,17 @@ public interface GameRoomInfoMapper {
      */
     List<GameRoomCommission> getCommissionByServerForAll();
 
+    Map<String, String> createRoom(Map<String, String> map);
+
     List<GameRoomInfo> getGameRoomInfoByKindId(Integer kindId);
 
     int updateCustomRuleByKindId(@Param("customRule") String customRule, @Param("kindId") int kindId);
 
     List<GameRoomInfo> getRoomsList();
+
+    List<GameRoomInfo> queryRoomList();
+
+    int updateGameRoom(GameRoomInfo info);
 
     int updateNullityByKindId(@Param("nullity") int nullity, @Param("kindId") int kindId);
 

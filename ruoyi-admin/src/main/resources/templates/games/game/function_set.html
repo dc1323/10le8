@@ -416,7 +416,7 @@
         }
 
         var data = $("#" + formId).serializeArray();
-        $.operate.saveTab(prefix + "/edit", JSON.stringify(data), function () {
+        $.operate.saveTab(prefix + "/function_set/edit", JSON.stringify(data), function () {
             $.modal.loading("更新成功!");
             setTimeout(function () {
                 $.modal.closeLoading();

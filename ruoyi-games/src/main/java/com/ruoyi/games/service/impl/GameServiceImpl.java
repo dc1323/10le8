@@ -7,14 +7,11 @@ import com.ruoyi.games.mapper.GameMapper;
 import com.ruoyi.games.mapper.GameRoomInfoMapper;
 import com.ruoyi.games.service.GameService;
 import org.apache.commons.collections.CollectionUtils;
-import org.omg.IOP.Encoding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -25,6 +22,8 @@ public class GameServiceImpl implements GameService {
 
     @Value("${GameServerUrl}")
     private String gameServerUrl;
+    @Value("${ServiceRule}")
+    private String serviceRule;
 
     @Override
     public List<GameFunctionSet> queryFunctionSet() {
@@ -193,6 +192,69 @@ public class GameServiceImpl implements GameService {
         return outString;
     }
 
+    @Override
+    public String appendString(Map<String, Integer> dic) {
+        String outString = "";
+        for (String key : dic.keySet()) {
+            Integer value = dic.get(key);
+            outString += getNewSubstring(StringUtils.intTohex(value));
+        }
+        return outString;
+    }
+
+    @Override
+    public Map<String, String> createRoom(GameRoomInfo info) {
+        Map<String, String> map = new HashMap<>();
+        map.put("wGameID", info.getKindID() + "");
+        map.put("wKindID", info.getKindID() + "");
+        map.put("wNodeID", info.getNodeID() + "");
+        map.put("wSortID", info.getSortID() + "");
+
+        map.put("lCellScore", info.getCellScore());
+        map.put("wRevenueRatio", info.getRevenueRatio() + "");
+        map.put("lServiceScore", info.getServiceScore() + "");
+
+        map.put("lRestrictScore", info.getRestrictScore() + "");
+        map.put("lMinTableScore", info.getMinTableScore()  + "");
+        map.put("lMinEnterScore", info.getMinEnterScore() + "");
+        map.put("lMaxEnterScore", info.getMaxEnterScore() + "");
+
+        map.put("cbMinEnterMember", info.getMinEnterMember() + "");
+        map.put("cbMaxEnterMember", info.getMaxEnterMember() + "");
+
+        map.put("dwServerRule", info.getServerRule() + "");
+        map.put("dwAttachUserRight", info.getAttachUserRight() + "");
+
+        map.put("wMaxPlayer", info.getMaxPlayer() + "");
+        map.put("wTableCount", info.getTableCount() + "");
+        map.put("wServerPort", info.getServerPort() + "");
+        map.put("wServerKind", info.getServerKind() + "");
+        map.put("wServerType", info.getServerType() + "");
+        map.put("wServerLevel", info.getServerLevel());
+        map.put("strServerName", info.getServerName());
+        map.put("strServerPasswd", info.getServerPasswd());
+
+        map.put("cbDistributeRule", info.getDistributeRule() + "");
+        map.put("wMinDistributeUser", info.getMinDistributeUser() + "");
+        map.put("wDistributeTimeSpace", info.getDistributeTimeSpace() + "");
+        map.put("wDistributeDrawCount", info.getDistributeDrawCount() + "");
+        map.put("wMinPartakeGameUser", info.getMinPartakeGameUser() + "");
+        map.put("wMaxPartakeGameUser", info.getMaxPartakeGameUser() + "");
+
+        map.put("strDataBaseName", info.getDataBaseName());
+        map.put("strDataBaseAddr", info.getDataBaseAddr());
+        map.put("strCustomRule", info.getCustomRule());
+        map.put("strServiceMachine", info.getServiceMachine());
+        map.put("strAttachFiled", info.getAttachFiled());
+        map.put("strErrorDescribe", "");
+        return gameRoomInfoMapper.createRoom(map);
+    }
+
+    @Override
+    public int updateGameRoom(GameRoomInfo info) {
+        return gameRoomInfoMapper.updateGameRoom(info);
+    }
+
     public String getNewSubstring(String needString){
         String frontStr = needString.substring(0, 2);
         String laterStr = needString.substring(2, needString.length());
@@ -263,5 +325,45 @@ public class GameServiceImpl implements GameService {
     @Override
     public GameRoomInfo getGameRoomInfo(Integer serverID) {
         return gameRoomInfoMapper.getGameRoomInfo(serverID);
+    }
+
+    @Override
+    public List<GameRoomInfo> queryRoomList() {
+        return gameRoomInfoMapper.queryRoomList();
+    }
+
+    @Override
+    public String getRule(int kindId) {
+        String serverRule = "";
+        String serviceRules[] = serviceRule.split(",");
+        for (int i = 0; i < serviceRules.length; i++) {
+            String rule[] = serviceRules[i].split(":");
+            if (Integer.parseInt(rule[0]) == kindId) {
+                serverRule = rule[1];
+                break;
+            }
+        }
+        return serverRule;
+    }
+
+    @Override
+    public int getServerPort() {
+        List<GameRoomInfo> list = queryRoomList();
+        List<Integer> oList = new ArrayList<Integer>();
+        Random rad = new Random();
+        int serverPort = 10086;
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (GameRoomInfo row : list) {
+                oList.add(row.getServerPort());
+            }
+            int lastServerPort = oList.get(oList.size() - 1);
+            serverPort = rad.nextInt() * (65534-lastServerPort+1)+ lastServerPort;
+        } else {
+            serverPort = rad.nextInt() * (50000 - 10000 + 1);
+            oList.add(serverPort);
+        }
+
+        Collections.sort(oList);
+        return serverPort;
     }
 }
