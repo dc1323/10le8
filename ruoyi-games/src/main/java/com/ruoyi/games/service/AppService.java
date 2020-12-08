@@ -1,5 +1,6 @@
 package com.ruoyi.games.service;
 
+import com.ruoyi.games.domain.AndroidConfigInfo;
 import com.ruoyi.games.domain.GameKindItem;
 import com.ruoyi.games.domain.GameRoomInfo;
 import com.ruoyi.games.domain.RoomRecord;
@@ -19,5 +20,8 @@ public interface AppService {
 
     List<RoomRecord> getRoomsRecordList(RoomRecord roomRecord);
 
+    List<AndroidConfigInfo> getAndroidConfigInfoList(AndroidConfigInfo info);
+
+    List<AndroidConfigInfo> getRoomAll();
 
 }

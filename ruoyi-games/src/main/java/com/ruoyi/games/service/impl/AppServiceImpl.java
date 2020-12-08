@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.utils.http.HttpUtils;
-import com.ruoyi.games.domain.GameKindItem;
-import com.ruoyi.games.domain.GameRoomCommission;
-import com.ruoyi.games.domain.GameRoomInfo;
-import com.ruoyi.games.domain.RoomRecord;
+import com.ruoyi.games.domain.*;
+import com.ruoyi.games.mapper.AndroidConfigInfoMapper;
 import com.ruoyi.games.mapper.GameKindItemMapper;
 import com.ruoyi.games.mapper.GameRoomInfoMapper;
 import com.ruoyi.games.mapper.RoomRecordMapper;
@@ -36,6 +34,9 @@ public class AppServiceImpl implements AppService {
 
     @Autowired
     private RoomRecordMapper roomRecordMapper;
+
+    @Autowired
+    private AndroidConfigInfoMapper androidConfigInfoMapper;
 
     @Value("${GameServerUrl}")
     private String gameServerUrl;
@@ -129,5 +130,20 @@ public class AppServiceImpl implements AppService {
     @Override
     public List<RoomRecord> getRoomsRecordList(RoomRecord roomRecord) {
         return roomRecordMapper.getRoomsRecordList(roomRecord);
+    }
+
+    @Override
+    public List<AndroidConfigInfo> getAndroidConfigInfoList(AndroidConfigInfo info) {
+        return androidConfigInfoMapper.getAndroidConfigList(info);
+    }
+
+    @Override
+    public List<AndroidConfigInfo> getRoomAll() {
+        List<AndroidConfigInfo> list = androidConfigInfoMapper.getRoomAll();
+        AndroidConfigInfo info = new AndroidConfigInfo();
+        info.setKindName("全部房间");
+        info.setServerID(0);
+        list.add(0,info);
+        return list;
     }
 }

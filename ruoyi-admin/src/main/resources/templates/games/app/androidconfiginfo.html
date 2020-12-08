@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('房间记录')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>游戏类型：</label>
+                                <select name="kindID">
+                                    <option th:each="data,dataStat : ${gameKindItemList}" th:value="${data.kindID}"
+                                            th:text="${data.kindName}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>盈亏：</label>
+                                <select name="serverID">
+                                    <option th:each="data,dataStat : ${roomList}" th:value="${data.ServerID}"
+                                            th:text="${data.name}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-primary" onclick="create()"
+                   shiro:hasPermission="games:app:create">
+                    <i class="glyphicon glyphicon-ok-circle icon-white"></i> 创建
+                </a>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: datetimepicker-js"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('games:app:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('games:app:start')}]];
+    var datas = [[${@dict.getType('games_account_stats')}]];
+    var prefix = ctx + "games/app";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/androidconfiginfolist",
+            sortName: "BatchID",
+            sortOrder: "asc",
+            modalName: "机器人配置",
+            columns: [
+                {
+                    field: 'batchID',
+                    title: '批次'
+                },
+                {
+                    field: 'kindName',
+                    title: '游戏类型'
+                },
+                {
+                    field: 'cellScore',
+                    title: '游戏底注',
+                    formatter:function (value,row,index){
+                        return value + "元";
+                    }
+                },
+                {
+                    field: 'androidCount',
+                    title: '机器人数'
+                },
+                {
+                    field: 'takeMinScore',
+                    title: '携带总分数'
+                },
+                {
+                    title: '机器人补桌',
+                    formatter:function (value,row,index){
+                        return row.enterMinInterval + "-" + row.enterMaxInterval + "秒";
+                    }
+                },
+                {
+                    title: '机器人离场',
+                    formatter:function (value,row,index){
+                        return row.leaveMinInterval + "-" + row.leaveMaxInterval + "秒";
+                    }
+                },
+                {
+                    field: 'score',
+                    title: '赢亏'
+                },
+                {
+                    field: 'nullity',
+                    title: '状态',
+                    formatter:function (value,row,index){
+                        if(value === 0){
+                            return "已开启";
+                        }else{
+                            return "已关闭";
+                        }
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick=""><i class="fa fa-edit"></i>编辑</a> ');
+                        if(row.nullity == 0){
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick=""><i class="fa fa-remove"></i>关闭</a> ');
+                        }else{
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick=""><i class="fa fa-remove"></i>开启</a> ');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#btnExpand').click(function () {
+        $._tree.expandAll(true);
+        $(this).hide();
+        $('#btnCollapse').show();
+    });
+
+    $('#btnCollapse').click(function () {
+        $._tree.expandAll(false);
+        $(this).hide();
+        $('#btnExpand').show();
+    });
+
+    function create(){
+        var url = prefix + '/create';
+        $.modal.open("添加机器人", url);
+    }
+
+    function edit(){
+        var url = prefix + '/querydetail?userID=' + userID + '&orderID=' + orderID;
+        $.modal.open("佣金详情", url);
+    }
+
+</script>
+</body>
+</html>

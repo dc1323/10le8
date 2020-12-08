@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.AndroidConfigInfoMapper">
+
+    <resultMap type="com.ruoyi.games.domain.AndroidConfigInfo" id="AndroidConfigInfoResult">
+        <result property="batchID" column="BatchID"/>
+        <result property="kindID" column="KindID"/>
+        <result property="kindName" column="KindName"/>
+        <result property="cellScore" column="CellScore"/>
+        <result property="androidCount" column="AndroidCount"/>
+        <result property="score" column="Score"/>
+        <result property="enterMinInterval" column="EnterMinInterval"/>
+        <result property="enterMaxInterval" column="EnterMaxInterval"/>
+        <result property="leaveMinInterval" column="LeaveMinInterval"/>
+        <result property="leaveMaxInterval" column="LeaveMaxInterval"/>
+        <result property="nullity" column="Nullity"/>
+        <result property="serverID" column="ServerID"/>
+        <result property="takeMinScore" column="TakeMinScore"/>
+        <result property="showCellScore" column="ShowCellScore"/>
+    </resultMap>
+
+    <select id="getAndroidConfigList" resultMap="AndroidConfigInfoResult"
+            parameterType="com.ruoyi.games.domain.AndroidConfigInfo">
+        select * from RYAccountsDB.dbo.V_GetAndroidConfigList
+        where 1=1
+        <if test="kindID != null and kindID > 0">
+            and KindID = #{kindID,jdbcType=INTEGER}
+        </if>
+        <if test="serverID != null and serverID > 0">
+            and ServerID = #{serverID,jdbcType=INTEGER}
+        </if>
+        ${params.dataScope}
+    </select>
+
+    <select id="getRoomAll" resultMap="AndroidConfigInfoResult">
+        SELECT
+            KindName,
+            CellScore,
+            ServerID
+        FROM
+            RYAccountsDB.dbo.V_GetAndroidConfigList
+    </select>
+
+</mapper> 

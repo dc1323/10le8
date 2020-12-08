@@ -3,10 +3,7 @@ package com.ruoyi.web.controller.game;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.games.domain.GameKindItem;
-import com.ruoyi.games.domain.GameRoomInfo;
-import com.ruoyi.games.domain.RecordAchievement;
-import com.ruoyi.games.domain.RoomRecord;
+import com.ruoyi.games.domain.*;
 import com.ruoyi.games.service.AppService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +64,33 @@ public class AppController extends BaseController {
         startPage();
         List<RoomRecord> list = appService.getRoomsRecordList(info);
         return getDataTable(list);
+    }
+
+    @RequiresPermissions("games:app:androidconfiginfo")
+    @GetMapping("/androidconfiginfo")
+    public String androidConfigInfo(ModelMap mmap) {
+        List<AndroidConfigInfo> roomList = appService.getRoomAll();
+        List<GameKindItem> gameKindItemList = appService.getGameList();
+        mmap.put("roomList", roomList);
+        mmap.put("gameKindItemList", gameKindItemList);
+        return prefix + "/androidconfiginfo";
+    }
+
+    @RequiresPermissions("games:app:androidconfiginfolist")
+    @PostMapping("/androidconfiginfolist")
+    @ResponseBody
+    public TableDataInfo androidConfigInfoList(AndroidConfigInfo info) {
+        startPage();
+        List<AndroidConfigInfo> list = appService.getAndroidConfigInfoList(info);
+        return getDataTable(list);
+    }
+
+    @RequiresPermissions("games:app:create")
+    @GetMapping("/create")
+    public String create(ModelMap mmap) {
+        List<GameKindItem> gameKindItemList = appService.getGameList();
+        mmap.put("gameKindItemList", gameKindItemList);
+        return prefix + "/create";
     }
 
 }
