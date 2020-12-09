@@ -21,20 +21,6 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">归属部门：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group">
-                            <input name="deptName" onclick="selectDeptTree()" id="treeName" type="text"
-                                   placeholder="请选择归属部门" class="form-control">
-                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
                     <label class="col-sm-4 control-label">手机号码：</label>
                     <div class="col-sm-8">
                         <div class="input-group">
@@ -45,6 +31,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">邮箱：</label>
@@ -57,8 +45,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label is-required">登录账号：</label>
@@ -68,6 +54,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label is-required">登录密码：</label>
@@ -82,8 +70,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">用户性别：</label>
@@ -95,6 +81,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">用户状态：</label>
@@ -103,19 +91,6 @@
                             <input type="checkbox" id="status" checked>
                             <span></span>
                         </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="col-xs-2 control-label">岗位：</label>
-                    <div class="col-xs-4">
-                        <select id="post" class="form-control select2-multiple" multiple>
-                            <option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}"
-                                    th:disabled="${post.status == '1'}"></option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -145,15 +120,6 @@
             </div>
         </div>
     </form>
-</div>
-
-<div class="row">
-    <div class="col-sm-offset-5 col-sm-10">
-        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存
-        </button>&nbsp;
-        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
-        </button>
-    </div>
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: select2-js"/>
@@ -235,29 +201,8 @@
         var chrtype = [[${#strings.defaultString(@config.getKey('sys.account.chrtype'), 0)}]];
         var password = $("#password").val();
         if ($.validate.form() && checkpwd(chrtype, password)) {
-            var data = $("#form-user-add").serializeArray();
-            var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
-            var roleIds = $.form.selectCheckeds("role");
-            var postIds = $.form.selectSelects("post");
-            data.push({"name": "status", "value": status});
-            data.push({"name": "roleIds", "value": roleIds});
-            data.push({"name": "postIds", "value": postIds});
-            $.operate.saveTab(prefix + "/add", data);
+            add();
         }
-    }
-
-    /* 用户管理-新增-选择部门树 */
-    function selectDeptTree() {
-        var treeId = $("#treeId").val();
-        var deptId = $.common.isEmpty(treeId) ? "100" : $("#treeId").val();
-        var url = ctx + "system/dept/selectDeptTree/" + deptId;
-        var options = {
-            title: '选择部门',
-            width: "380",
-            url: url,
-            callBack: doSubmit
-        };
-        $.modal.openOptions(options);
     }
 
     function doSubmit(index, layero) {
@@ -268,12 +213,26 @@
         layer.close(index);
     }
 
-    $(function () {
-        $('#post').select2({
-            placeholder: "请选择岗位",
-            allowClear: true
+    function add() {
+        var data = $("#form-user-add").serializeArray();
+        var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+        var roleIds = $.form.selectCheckeds("role");
+        data.push({"name": "status", "value": status});
+        data.push({"name": "roleIds", "value": roleIds});
+        $.ajax({
+            cache: true,
+            type: "POST",
+            url: prefix + "/add",
+            data: data,
+            async: false,
+            error: function (request) {
+                $.modal.alertError("系统错误");
+            },
+            success: function (data) {
+                $.operate.successCallback(data);
+            }
         });
-    })
+    }
 </script>
 </body>
 </html>
