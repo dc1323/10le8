@@ -65,4 +65,9 @@ public class OnLineOrderServiceImpl implements OnLineOrderService {
         TableDataInfo dataInfo = new TableDataInfo(list, total);
         return AjaxResult.success("获取成功", dataInfo);
     }
+
+    @Override
+    public AjaxResult getAgentExtension(Integer userID, Integer gameID) {
+        return null;
+    }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.AgentExtensionMapper">
+
+    <resultMap type="com.ruoyi.games.domain.AgentExtension" id="AgentExtensionResult">
+        <result property="firstLowerLevelCount" column="FirstLowerLevelCount"/>
+        <result property="twoLowerLevelCount" column="TwoLowerLevelCount"/>
+        <result property="todayAddLowerCount" column="TodayAddLowerCount"/>
+        <result property="weekAddLowerCount" column="WeekAddLowerCount"/>
+        <result property="monthIncome" column="MonthIncome"/>
+        <result property="collectedIncome" column="CollectedIncome"/>
+    </resultMap>
+
+    <select id="getAgentExtension" parameterType="java.util.Map" resultMap="AgentExtensionResult" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_GetMyPromotion(
+                #{userID,mode=IN,jdbcType=INTEGER},
+                #{gameID,mode=IN,jdbcType=INTEGER})}
+    </select>
+
+</mapper> 

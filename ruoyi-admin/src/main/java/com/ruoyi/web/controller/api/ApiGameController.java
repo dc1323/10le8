@@ -3,19 +3,18 @@ package com.ruoyi.web.controller.api;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.games.domain.AccountInfo;
-import com.ruoyi.games.domain.RecordAchievement;
 import com.ruoyi.games.service.AccountInfoService;
+import com.ruoyi.games.service.AgentExtensionService;
 import com.ruoyi.games.service.OnLineOrderService;
-import io.swagger.annotations.*;
-import io.swagger.models.auth.In;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author liuyang17
@@ -23,7 +22,7 @@ import java.util.List;
  * @date 2020/12/6 21:54
  */
 @Api("游戏管理")
-@Controller
+@RestController
 @RequestMapping("/api/game")
 public class ApiGameController extends BaseController {
 
@@ -32,6 +31,9 @@ public class ApiGameController extends BaseController {
 
     @Autowired
     private OnLineOrderService onLineOrderService;
+
+    @Autowired
+    private AgentExtensionService agentExtensionService;
 
     @ApiOperation("绑定上级")
     @ApiImplicitParams({
@@ -109,6 +111,16 @@ public class ApiGameController extends BaseController {
     @GetMapping("/getuserdistilllist")
     public AjaxResult getUserDistillList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
         return onLineOrderService.getUserDistillList(userID, gameID, pageIndex, pageSize);
+    }
+
+    @ApiOperation("获取推广信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "Integer")
+    })
+    @GetMapping("/getagentextension")
+    public AjaxResult getAgentExtension(Integer userID, Integer gameID) {
+        return agentExtensionService.agentExtension(userID, gameID);
     }
 
 }

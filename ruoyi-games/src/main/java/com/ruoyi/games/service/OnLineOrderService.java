@@ -13,4 +13,6 @@ public interface OnLineOrderService {
 
     AjaxResult getUserDistillList(Integer userID,Integer gameID,Integer pageIndex, Integer pageSize);
 
+    AjaxResult getAgentExtension(Integer userID, Integer gameID);
+
 }
