@@ -2,79 +2,110 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('添加机器人')"/>
+    <th:block th:include="include :: select2-css"/>
 </head>
-<body class="white-bg">
-<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-dict-add">
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">游戏类型：</label>
-            <div class="col-sm-8">
-                <select name="kindID" id="kindID" class="form-control">
-                    <option th:each="data,dataStat : ${gameKindItemList}" th:value="${data.kindID}"
-                            th:text="${data.kindName}"></option>
-                </select>
+<body>
+<div class="main-content">
+    <form id="form-user-add" class="form-horizontal">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">游戏类型：</label>
+                    <div class="col-sm-8">
+                        <select name="kindID" class="form-control m-b">
+                            <option th:each="data : ${gameKindItemList}" th:text="${data.kindName}"
+                                    th:value="${data.kindID}"></option>
+                        </select>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">游戏底注：</label>
-            <div class="col-sm-8">
-                <input class="form-control" type="text" name="cellScore" id="cellScore" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">机器人数：</label>
-            <div class="col-sm-8">
-                <input class="form-control" type="text" id="androidCount" name="androidCount" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">每个机器人携带分数(分)：</label>
-            <div class="col-sm-8">
-                <input class="form-control" type="text" id="takeMinScore" name="takeMinScore" maxlength="10">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">机器人补桌：</label>
-            <div class="col-sm-8">
-                <label class="checkbox-inline check-box">
-                <input type="checkbox" id="checkEnter" name="checkEnter">
-                </label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">补桌间隔：</label>
-            <div class="col-sm-10">
-                <div class="row">
-                    <div class="col-md-2">
-                        <input class="form-control" type="text" name="enterMinInterval" id="enterMinInterval" maxlength="10"
-                               required>-
-                        <input class="form-control" type="text" name="enterMaxInterval" id="enterMaxInterval" maxlength="10"
-                               required>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">游戏底注：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="cellScore" required>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">机器人离场：</label>
-            <div class="col-sm-8">
-                <label class="checkbox-inline check-box">
-                    <input type="checkbox" id="checkLeave" name="checkLeave">
-                </label>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">机器人数：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="androidCount" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">每个机器人携带分数(分)：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="takeMinScore">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label is-required">离场间隔：</label>
-            <div class="col-sm-8">
-                <input class="form-control" type="text" name="leaveMinInterval" id="leaveMinInterval" maxlength="10"
-                       required>-
-                <input class="form-control" type="text" name="leaveMaxInterval" id="leaveMaxInterval" maxlength="10"
-                       required>秒
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label is-required">机器人补桌：</label>
+                    <div class="col-sm-8">
+                        <input type="checkbox" id="checkEnter" name="checkEnter">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">机器人离场：</label>
+                    <div class="col-sm-8">
+                        <input type="checkbox" id="checkLeave" name="checkLeave">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">补桌间隔(秒)：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="enterMinInterval" id="enterMinInterval"
+                               required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">-</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="enterMaxInterval" id="enterMaxInterval" required>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">离场间隔(秒)：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="leaveMinInterval" id="leaveMinInterval">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">-</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="leaveMaxInterval" id="leaveMaxInterval">
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
 <script type="text/javascript">
     var prefix = ctx + "games/app";
 
