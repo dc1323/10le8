@@ -290,8 +290,7 @@
                                 <div class="panel-body">
                                     <div class="container-div">
                                         <div class="btn-group-sm" id="toolbar" role="group">
-                                            <a class="btn btn-primary" onclick="addHorseLamp()"
-                                               shiro:hasPermission="games:game:horselamp">
+                                            <a class="btn btn-primary" onclick="addHorseLamp()">
                                                 <i class="glyphicon glyphicon-upload icon-white"></i> 添加
                                             </a>
                                         </div>
@@ -319,7 +318,6 @@
 <th:block th:include="include :: bootstrap-table-export-js"/>
 <th:block th:include="include :: summernote-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('games:game:remove')}]];
     var prefix = ctx + "games/game";
 
     $(function () {
@@ -467,7 +465,7 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-edit"></i>删除</a> ');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-edit"></i>删除</a> ');
                         return actions.join('');
                     }
                 }]

@@ -653,7 +653,6 @@ public class GameController extends BaseController {
      * @author liuyang
      * @date 2020/12/9 14:44
      */
-    @RequiresPermissions("games:game:horselamplist")
     @PostMapping("/horselamplist")
     @ResponseBody
     public TableDataInfo horseLampList(HorseLamp info) {
@@ -662,7 +661,6 @@ public class GameController extends BaseController {
         return getDataTable(list);
     }
 
-    @RequiresPermissions("games:game:remove")
     @PostMapping("/horselamp/remove")
     @ResponseBody
     public AjaxResult removeHorseLamp(String[] ids){
@@ -670,13 +668,11 @@ public class GameController extends BaseController {
         return AjaxResult.success();
     }
 
-    @RequiresPermissions("games:game:horselamp")
     @GetMapping("/horselamp")
     public String horselamp(ModelMap mmap) {
         return prefix + "/horse_lamp_add";
     }
 
-    @RequiresPermissions("games:app:horselamp")
     @PostMapping("/horselamp/save")
     @ResponseBody
     public AjaxResult saveHorseLamp(HorseLamp horseLamp){
