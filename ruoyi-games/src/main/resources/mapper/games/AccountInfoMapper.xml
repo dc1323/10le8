@@ -57,22 +57,47 @@
     </select>
 
     <select id="selectAccountByUserID" resultMap="AccountInfoResult">
-        SELECT UserID,
-               GameID,
-               Accounts,
-               NickName,
-               IsAgent,
-               RegisterMobile,
-               Compellation,
-               UserType,
-               PlayTimeCount,
-               PlayingGame,
-               RegisterDate,
-               LastLogonIp,
-               LastLogonDate,
-               Nullity
-        FROM RYAccountsDB.dbo.AccountsInfo
-        WHERE UserID = #{userID,jdbcType=INTEGER}
+        SELECT
+            ai.UserID,
+            ai.GameID,
+            ai.Accounts,
+            ai.RegisterMobile,
+            ai.Compellation,
+            ai.Nullity,
+            ai.IsAgent,
+            ai.PlayingGame,
+            ISNULL( gsi.Score, 0 ) AS Score,
+            ISNULL( gsi.InsureScore, 0 ) AS InsureScore,
+            ai.UserType,
+            gsi.PlayTimeCount,
+            ai.RegisterDate,
+            gsi.LastLogonIp,
+            gsi.LastLogonDate,
+            isnull(
+                    (
+                        SELECT
+                            isnull( SUM ( OrderAmount ), 0 )
+                        FROM
+                            RYTreasureDB.dbo.ShareDetailInfo
+                        WHERE
+                            ShareID IN ( 201, 202 )
+                          AND UserID = ai.UserID
+                    ),
+                    0
+                ) AS OrderAmount,
+            isnull(
+                    ( SELECT isnull( SUM ( OrderAmount ), 0 ) FROM RYTreasureDB.dbo.ShareDetailInfo WHERE ShareID = 700 AND UserID = ai.UserID ),
+                    0
+                ) AS TotalCommission,
+            isnull(
+                    ( SELECT isnull( SUM ( Money ), 0 ) FROM RYTreasureDB.dbo.UserDistills WHERE Result = 1 AND UserID = ai.UserID ),
+                    0
+                ) AS Money
+        FROM
+            RYAccountsDB.dbo.AccountsInfo ai
+            INNER JOIN RYTreasureDB.dbo.GameScoreInfo gsi ON ai.UserID = gsi.UserID
+        WHERE ai.IsAndroid = 0
+        and ai.UserID = #{userID,jdbcType=INTEGER}
     </select>
 
     <update id="freezeAccount">

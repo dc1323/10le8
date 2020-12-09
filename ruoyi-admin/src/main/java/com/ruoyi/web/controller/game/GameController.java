@@ -10,6 +10,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.games.domain.*;
 import com.ruoyi.games.service.AccountInfoService;
 import com.ruoyi.games.service.GameService;
+import com.ruoyi.games.service.HorseLampService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class GameController extends BaseController {
     private GameService gameService;
     @Autowired
     private AccountInfoService accountInfoService;
+    @Autowired
+    private HorseLampService horseLampService;
     @Value("${DataBaseName}")
     private String dataBaseName;
     @Value("${DataBaseAddr}")
@@ -643,4 +646,44 @@ public class GameController extends BaseController {
         }
         return success(oper + "成功!");
     }
+
+
+    /**
+     * @description: 跑马灯
+     * @author liuyang
+     * @date 2020/12/9 14:44
+     */
+    @RequiresPermissions("games:game:horselamplist")
+    @PostMapping("/horselamplist")
+    @ResponseBody
+    public TableDataInfo horseLampList(HorseLamp info) {
+        startPage();
+        List<HorseLamp> list = horseLampService.getHorseLampList(info);
+        return getDataTable(list);
+    }
+
+    @RequiresPermissions("games:game:remove")
+    @PostMapping("/horselamp/remove")
+    @ResponseBody
+    public AjaxResult removeHorseLamp(String[] ids){
+        horseLampService.deleteHorseLamp(ids);
+        return AjaxResult.success();
+    }
+
+    @RequiresPermissions("games:game:horselamp")
+    @GetMapping("/horselamp")
+    public String horselamp(ModelMap mmap) {
+        return prefix + "/horse_lamp_add";
+    }
+
+    @RequiresPermissions("games:app:horselamp")
+    @PostMapping("/horselamp/save")
+    @ResponseBody
+    public AjaxResult saveHorseLamp(HorseLamp horseLamp){
+        horseLamp.setStartTime(DateUtils.getNowDate());
+        horseLamp.setEndTime(DateUtils.getNowDate());
+        horseLampService.saveHorseLamp(horseLamp);
+        return AjaxResult.success();
+    }
+
 }

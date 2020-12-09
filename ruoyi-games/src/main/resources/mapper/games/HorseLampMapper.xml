@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.HorseLampMapper">
+
+    <resultMap type="com.ruoyi.games.domain.HorseLamp" id="HorseLampResult">
+        <id property="id" column="ID"/>
+        <result property="txtBody" column="txtBody"/>
+        <result property="startTime" column="StartTime"/>
+        <result property="endTime" column="EndTime"/>
+    </resultMap>
+
+    <select id="getHorseLampList" parameterType="com.ruoyi.games.domain.HorseLamp" resultMap="HorseLampResult">
+        SELECT *
+        FROM RYNativeWebDB.dbo.HorseLamp
+        WHERE 1 = 1
+            ${params.dataScope}
+    </select>
+
+    <insert id="saveHorseLamp" parameterType="com.ruoyi.games.domain.HorseLamp">
+        insert into RYNativeWebDB.dbo.HorseLamp(txtBody, StartTime, EndTime)
+        values (#{txtBody}, #{startTime}, #{endTime})
+    </insert>
+
+    <delete id="deleteHorseLamp">
+        delete
+        from RYNativeWebDB.dbo.HorseLamp
+        where ID = #{id}
+    </delete>
+
+</mapper>

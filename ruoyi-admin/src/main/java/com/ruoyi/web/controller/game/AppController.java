@@ -1,10 +1,12 @@
 package com.ruoyi.web.controller.game;
 
 import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.games.domain.*;
 import com.ruoyi.games.service.AppService;
+import com.ruoyi.games.service.HorseLampService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,9 @@ public class AppController extends BaseController {
 
     @Autowired
     private AppService appService;
+
+    @Autowired
+    private HorseLampService horseLampService;
 
     @RequiresPermissions("games:app:onlinerooms")
     @GetMapping("/onlinerooms")

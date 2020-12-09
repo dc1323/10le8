@@ -125,7 +125,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
             if (null != orderInfos && orderInfos.size() > 0) {
                 OrderInfo orderInfo = orderInfos.get(0);
                 String param = "{\"userid\":" + orderInfo.getUserid() + ", \"payamount\":" + orderInfo.getPayamount() + "}";
-                HttpUtils.sendPost(serverUrl, param);
+                //HttpUtils.sendPost(serverUrl, param);
                 AccountInfo accountInfo = accountInfoMapper.selectAccountByUserID(userID);
                 String operatingName = "充值";
                 String operatingAccounts = user.getUserName();

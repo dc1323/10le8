@@ -10,11 +10,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author liuyang17
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2020/12/6 21:54
  */
 @Api("游戏管理")
+@RequiresGuest
 @RestController
 @RequestMapping("/api/game")
 public class ApiGameController extends BaseController {
@@ -42,6 +41,7 @@ public class ApiGameController extends BaseController {
             @ApiImplicitParam(name = "playingGame", value = "上级游戏ID", required = true, dataType = "Integer")
     })
     @PostMapping("/bindsuperior")
+    @ResponseBody
     public AjaxResult bindSuperior(Integer userID, Integer gameID, Integer playingGame) {
         return accountInfoService.bindPlayingGame(userID, gameID, playingGame);
     }
@@ -54,6 +54,7 @@ public class ApiGameController extends BaseController {
             @ApiImplicitParam(name = "bankCardNumber", value = "银行卡号", required = true, dataType = "String")
     })
     @PostMapping("/userdistillali")
+    @ResponseBody
     public AjaxResult userDistillAli(Integer userID, Integer gameID, Double distillMoney, String bankCardNumber) {
         return accountInfoService.userDistillAli(userID, gameID, distillMoney, bankCardNumber);
     }
@@ -70,6 +71,7 @@ public class ApiGameController extends BaseController {
             @ApiImplicitParam(name = "phoneCode", value = "验证码", required = true, dataType = "String")
     })
     @PostMapping("/bindbank")
+    @ResponseBody
     public AjaxResult BindBank(Integer userID, Integer gameID, String bankName,
                                String bankCardNumber, String bankUserName,
                                String bankTypeName, String phoneNumber, String phoneCode) {
@@ -85,6 +87,7 @@ public class ApiGameController extends BaseController {
             @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "Integer")
     })
     @PostMapping("/cachout")
+    @ResponseBody
     public AjaxResult cachOut(Integer userID, Integer gameID) {
         return accountInfoService.cachOut(userID, gameID);
     }

@@ -47,6 +47,7 @@
 
     //充值
     function grant() {
+        $.modal.loading("正在处理，请稍后...");
         var userID = $("input[name='userID']").val();
         var money = $("input[name='money']").val();
         $.ajax({
@@ -59,9 +60,11 @@
             },
             async: false,
             error: function (request) {
+                $.modal.closeLoading();
                 $.modal.alertError("系统错误");
             },
             success: function (data) {
+                $.modal.closeLoading();
                 $.operate.successCallback(data);
             }
         });

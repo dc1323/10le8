@@ -288,7 +288,18 @@
 
                             <div id="tab-7" class="tab-pane">
                                 <div class="panel-body">
-                                    7
+                                    <div class="container-div">
+                                        <div class="btn-group-sm" id="toolbar" role="group">
+                                            <a class="btn btn-primary" onclick="addHorseLamp()"
+                                               shiro:hasPermission="games:game:horselamp">
+                                                <i class="glyphicon glyphicon-upload icon-white"></i> 添加
+                                            </a>
+                                        </div>
+
+                                        <div class="col-sm-12 select-table table-striped">
+                                            <table id="bootstrap-table"></table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -307,7 +318,8 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: bootstrap-table-export-js"/>
 <th:block th:include="include :: summernote-js"/>
-<script>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('games:game:remove')}]];
     var prefix = ctx + "games/game";
 
     $(function () {
@@ -393,6 +405,8 @@
 
         var gameRulesContent = $("#GameRules").val();
         $('#editorGameRules').summernote('code', gameRulesContent);
+
+        queryUserList();
     });
 
     function zhzs(value) {
@@ -423,6 +437,54 @@
             }, 1000);
         });
     }
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/horselamplist",
+            removeUrl: prefix + "/horselamp/remove",
+            sortName: "ID",
+            sortOrder: "desc",
+            modalName: "跑马灯",
+            columns: [
+                {
+                    field: 'id',
+                    title: '序号'
+                },
+                {
+                    field: 'txtBody',
+                    title: '内容'
+                },
+                {
+                    field: 'startTime',
+                    title: '开始时间'
+                },
+                {
+                    field: 'endTime',
+                    title: '结束时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-edit"></i>删除</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function addHorseLamp(){
+        layer.prompt({title: '输入内容', formType: 2,area: ['300px', '100px']}, function (pass, index) {
+            var url = prefix + "/horselamp/save";
+            layer.close(index);
+            var data = {"txtBody": pass};
+            $.operate.submit(url, "post", "json", data);
+            queryUserList();
+        });
+    }
+
 </script>
 </body>
 </html>
