@@ -48,4 +48,6 @@ public interface GameRoomInfoMapper {
     int deleteGameRoomInfo(@Param("serverID") int serverID);
 
     int deleteAndroidConfigure(@Param("serverID") int serverID);
+
+    List<GameRoomInfo> getGameRoomByName(@Param("serverName") String serverName);
 }

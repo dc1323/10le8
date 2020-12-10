@@ -34,13 +34,65 @@
         ${params.dataScope}
     </select>
 
-    <select id="getRoomAll" resultMap="AndroidConfigInfoResult">
-        SELECT
-            KindName,
-            CellScore,
-            ServerID
-        FROM
-            RYAccountsDB.dbo.V_GetAndroidConfigList
+    <select id="getConfigInfoById" resultMap="AndroidConfigInfoResult">
+        select * from RYAccountsDB.dbo.V_GetAndroidConfigList
+             WHERE and BatchID = #{batchID}
     </select>
 
+    <select id="getAndroidConfigInfo" resultMap="AndroidConfigInfoResult"
+            parameterType="com.ruoyi.games.domain.AndroidConfigInfo">
+        select top 1 * from RYAccountsDB.dbo.AndroidConfigure
+        where 1=1
+        <if test="batchID != null and batchID > 0">
+            and BatchID = #{batchID,jdbcType=INTEGER}
+        </if>
+        <if test="serverID != null and serverID > 0">
+            and ServerID = #{serverID,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <update id="updateAndroidConfigureById">
+        UPDATE RYAccountsDB.dbo.AndroidConfigure set Nullity = #{nullity} where BatchID = #{batchID}
+    </update>
+
+    <select id="getRoomAll" resultMap="AndroidConfigInfoResult">
+        SELECT
+            ServerID,
+            ServerName as kindName
+        FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK) WHERE ServerType=1 ORDER BY GameID ASC
+    </select>
+
+    <update id="updateAndroidConfigByID" parameterType="com.ruoyi.games.domain.AndroidConfigInfo">
+        update RYAccountsDB.dbo.AndroidConfigure set CellScore = #{cellScore}, AndroidCount = #{androidCount},
+               TakeMinScore = #{takeMinScore}, TakeMaxScore = #{takeMaxScore},
+               EnterMinInterval = #{enterMinInterval}, EnterMaxInterval = #{enterMaxInterval},
+               LeaveMinInterval = #{leaveMinInterval}, LeaveMaxInterval= #{leaveMaxInterval}
+            where BatchID = #{batchID}
+    </update>
+
+    <select id="createAndroidConfig" parameterType="java.util.Map" resultType="java.util.Map"
+            statementType="CALLABLE">
+        {call RYAccountsDB.dbo.JSON_InsertAndroidConfig(
+            #{wServerID,mode=IN,jdbcType=VARCHAR},
+            #{dwServiceMode,mode=IN,jdbcType=VARCHAR},
+            #{dwAndroidCount,mode=IN,jdbcType=VARCHAR},
+            #{dwEnterTime,mode=IN,jdbcType=VARCHAR},
+            #{dwLeaveTime,mode=IN,jdbcType=VARCHAR},
+            #{dwEnterMinInterval,mode=IN,jdbcType=VARCHAR},
+            #{dwEnterMaxInterval,mode=IN,jdbcType=VARCHAR},
+            #{dwLeaveMinInterval,mode=IN,jdbcType=VARCHAR},
+            #{dwLeaveMaxInterval,mode=IN,jdbcType=VARCHAR},
+            #{lTakeMinScore,mode=IN,jdbcType=VARCHAR},
+            #{lTakeMaxScore,mode=IN,jdbcType=VARCHAR},
+            #{dwSwitchMinInnings,mode=IN,jdbcType=VARCHAR},
+            #{dwSwitchMaxInnings,mode=IN,jdbcType=VARCHAR},
+            #{dwAndroidCountMember0,mode=IN,jdbcType=VARCHAR},
+            #{dwAndroidCountMember1,mode=IN,jdbcType=VARCHAR},
+            #{dwAndroidCountMember2,mode=IN,jdbcType=VARCHAR},
+            #{dwAndroidCountMember3,mode=IN,jdbcType=VARCHAR},
+            #{dwAndroidCountMember4,mode=IN,jdbcType=VARCHAR},
+            #{dwAndroidCountMember5,mode=IN,jdbcType=VARCHAR},
+            #{CellScore,mode=IN,jdbcType=VARCHAR},
+            #{strErrorDescribe,mode=OUT,jdbcType=VARCHAR})}
+    </select>
 </mapper> 

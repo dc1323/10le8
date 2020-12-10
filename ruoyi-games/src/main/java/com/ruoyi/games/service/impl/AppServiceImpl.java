@@ -10,12 +10,15 @@ import com.ruoyi.games.mapper.GameKindItemMapper;
 import com.ruoyi.games.mapper.GameRoomInfoMapper;
 import com.ruoyi.games.mapper.RoomRecordMapper;
 import com.ruoyi.games.service.AppService;
+import com.ruoyi.games.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -40,7 +43,6 @@ public class AppServiceImpl implements AppService {
 
     @Value("${GameServerUrl}")
     private String gameServerUrl;
-
 
     @Override
     public List<GameRoomInfo> getGameOnlineRooms(GameRoomInfo info) {
@@ -142,8 +144,60 @@ public class AppServiceImpl implements AppService {
         List<AndroidConfigInfo> list = androidConfigInfoMapper.getRoomAll();
         AndroidConfigInfo info = new AndroidConfigInfo();
         info.setKindName("全部房间");
-        info.setServerID(0);
+        info.setKindID(0);
         list.add(0,info);
         return list;
+    }
+
+    @Override
+    public List<GameRoomInfo> getGameRoomByName(String serverName) {
+        return gameRoomInfoMapper.getGameRoomByName(serverName);
+    }
+
+    @Override
+    public int updateAndroidConfigByID(AndroidConfigInfo info) {
+        return androidConfigInfoMapper.updateAndroidConfigByID(info);
+    }
+
+    @Override
+    public AndroidConfigInfo getAndroidConfigInfo(AndroidConfigInfo info) {
+        return androidConfigInfoMapper.getAndroidConfigInfo(info);
+    }
+
+    @Override
+    public int updateAndroidConfigureById(int nullity, int batchID) {
+        return androidConfigInfoMapper.updateAndroidConfigureById(nullity, batchID);
+    }
+
+    @Override
+    public AndroidConfigInfo getConfigInfoById(int batchID) {
+        return androidConfigInfoMapper.getConfigInfoById(batchID);
+    }
+
+    @Override
+    public Map<String, Object> createAndroidConfig(AndroidConfigInfo android) {
+        Map<String, String> param = new HashMap<>();
+        param.put("wServerID", android.getKindID() + "");
+        param.put("dwServiceMode", android.getServiceMode() + "");
+        param.put("dwAndroidCount", android.getAndroidCount() + "");
+        param.put("dwEnterTime", android.getEnterTime() + "");
+        param.put("dwLeaveTime", android.getLeaveTime() + "");
+        param.put("dwEnterMinInterval", android.getEnterMinInterval() + "");
+        param.put("dwEnterMaxInterval", android.getEnterMaxInterval() + "");
+        param.put("dwLeaveMinInterval", android.getLeaveMinInterval() + "");
+        param.put("dwLeaveMaxInterval", android.getLeaveMaxInterval() + "");
+        param.put("lTakeMinScore", android.getTakeMinScore() + "");
+        param.put("lTakeMaxScore", android.getTakeMaxScore() + "");
+        param.put("dwSwitchMinInnings", android.getSwitchMinInnings() + "");
+        param.put("dwSwitchMaxInnings", android.getSwitchMaxInnings() + "");
+        param.put("dwAndroidCountMember0", android.getAndroidCount() + "");
+        param.put("dwAndroidCountMember1", "0");
+        param.put("dwAndroidCountMember2", "0");
+        param.put("dwAndroidCountMember3", "0");
+        param.put("dwAndroidCountMember4", "0");
+        param.put("dwAndroidCountMember5", "0");
+        param.put("CellScore", android.getCellScore().toString());
+        param.put("strErrorDescribe", "");
+        return androidConfigInfoMapper.createAndroidConfig(param);
     }
 }

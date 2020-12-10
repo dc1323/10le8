@@ -71,6 +71,10 @@
         SELECT * FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK) WHERE Kindid=#{kindId}
     </select>
 
+    <select id="getGameRoomByName" resultMap="GameRoomInfoResult">
+        select * from RYPlatformDB.dbo.GameRoomInfo where ServerName = #{serverName}
+    </select>
+
     <select id="getGameRoomInfoByUserID" parameterType="java.lang.Integer" resultMap="GameRoomInfoResult">
         SELECT gri.*
         FROM RYPlatformDB.dbo.GameRoomInfo(NOLOCK) gri
