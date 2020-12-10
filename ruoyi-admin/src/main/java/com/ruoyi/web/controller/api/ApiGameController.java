@@ -10,7 +10,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
  * @date 2020/12/6 21:54
  */
 @Api("游戏管理")
-@RequiresGuest
 @RestController
 @RequestMapping("/api/game")
 public class ApiGameController extends BaseController {
@@ -36,9 +34,9 @@ public class ApiGameController extends BaseController {
 
     @ApiOperation("绑定上级")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "playingGame", value = "上级游戏ID", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "body"),
+            @ApiImplicitParam(name = "playingGame", value = "上级游戏ID", required = true, dataType = "int", paramType = "body")
     })
     @PostMapping("/bindsuperior")
     @ResponseBody
@@ -48,10 +46,10 @@ public class ApiGameController extends BaseController {
 
     @ApiOperation("用户申请提款")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "distillMoney", value = "提款金额", required = true, dataType = "Double"),
-            @ApiImplicitParam(name = "bankCardNumber", value = "银行卡号", required = true, dataType = "String")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "body"),
+            @ApiImplicitParam(name = "distillMoney", value = "提款金额", required = true, dataType = "Double", paramType = "body"),
+            @ApiImplicitParam(name = "bankCardNumber", value = "银行卡号", required = true, dataType = "String", paramType = "body")
     })
     @PostMapping("/userdistillali")
     @ResponseBody
@@ -61,14 +59,14 @@ public class ApiGameController extends BaseController {
 
     @ApiOperation("绑定银行卡")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "bankName", value = "银行名称", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "bankCardNumber", value = "银行卡号", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "bankUserName", value = "户名", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "bankTypeName", value = "银行类型", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "phoneNumber", value = "手机号码", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "phoneCode", value = "验证码", required = true, dataType = "String")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "body"),
+            @ApiImplicitParam(name = "bankName", value = "银行名称", required = true, dataType = "String", paramType = "body"),
+            @ApiImplicitParam(name = "bankCardNumber", value = "银行卡号", required = true, dataType = "String", paramType = "body"),
+            @ApiImplicitParam(name = "bankUserName", value = "户名", required = true, dataType = "String", paramType = "body"),
+            @ApiImplicitParam(name = "bankTypeName", value = "银行类型", required = true, dataType = "String", paramType = "body"),
+            @ApiImplicitParam(name = "phoneNumber", value = "手机号码", required = true, dataType = "String", paramType = "body"),
+            @ApiImplicitParam(name = "phoneCode", value = "验证码", required = true, dataType = "String", paramType = "body")
     })
     @PostMapping("/bindbank")
     @ResponseBody
@@ -83,8 +81,8 @@ public class ApiGameController extends BaseController {
 
     @ApiOperation("领取佣金")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "body")
     })
     @PostMapping("/cachout")
     @ResponseBody
@@ -93,23 +91,26 @@ public class ApiGameController extends BaseController {
     }
 
     @ApiOperation("获取充值记录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "pageIndex", value = "页码", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "Integer")
-    })
     @GetMapping("/getsharedetaillist")
-    public AjaxResult getShareDetailList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageIndex", value = "页码", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "int", paramType = "query")
+    })
+    public AjaxResult getShareDetailList(Integer userID,
+                                         Integer gameID,
+                                         Integer pageIndex,
+                                         Integer pageSize) {
         return onLineOrderService.getShareDetailList(userID, gameID, pageIndex, pageSize);
     }
 
     @ApiOperation("获取提现记录")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "pageIndex", value = "页码", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageIndex", value = "页码", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "int", paramType = "query")
     })
     @GetMapping("/getuserdistilllist")
     public AjaxResult getUserDistillList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
@@ -118,8 +119,8 @@ public class ApiGameController extends BaseController {
 
     @ApiOperation("获取推广信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "Integer"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "Integer")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
     })
     @GetMapping("/getagentextension")
     public AjaxResult getAgentExtension(Integer userID, Integer gameID) {

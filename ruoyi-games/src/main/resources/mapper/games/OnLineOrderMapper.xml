@@ -12,8 +12,7 @@
         <result property="shareID" column="ShareID"/>
     </resultMap>
 
-    <select id="getOnLineOrderList" parameterType="com.ruoyi.games.domain.OnLineOrder"
-            resultMap="OnLineOrderResult">
+    <select id="getOnLineOrderList" resultMap="OnLineOrderResult">
         select *
         from RYTreasureDB.dbo.OnLineOrder
         WHERE 1 = 1
@@ -21,7 +20,7 @@
           AND UserID = #{userID}
           AND PayAmount > 0
         ORDER BY ApplyDate DESC
-        offset #{pageNum} row fetch next #{pageSize} row only
+        offset #{index} row fetch next #{size} row only
     </select>
 
     <select id="getOnLineOrderCount"  resultType="int">

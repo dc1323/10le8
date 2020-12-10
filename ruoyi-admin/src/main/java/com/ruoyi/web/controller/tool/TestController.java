@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,11 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 
 /**
  * swagger 用户测试方法
@@ -39,7 +35,11 @@ public class TestController extends BaseController {
 
     @ApiOperation("获取用户列表")
     @GetMapping("/list")
-    public AjaxResult userList() {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "userName", value = "用户名称", required = true, dataType = "String", paramType = "query")
+    })
+    public AjaxResult userList(Integer userId, String userName) {
         List<UserEntity> userList = new ArrayList<UserEntity>(users.values());
         return AjaxResult.success(userList);
     }

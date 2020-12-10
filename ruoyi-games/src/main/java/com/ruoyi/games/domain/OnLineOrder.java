@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class OnLineOrder {
 
-    private Integer orderID;
+    private String orderID;
     private Date applyDate;
     private String payAmount;
     private Integer orderStatus;
@@ -23,11 +23,11 @@ public class OnLineOrder {
 
     private Map<String,Object> params;
 
-    public Integer getOrderID() {
+    public String getOrderID() {
         return orderID;
     }
 
-    public void setOrderID(Integer orderID) {
+    public void setOrderID(String orderID) {
         this.orderID = orderID;
     }
 

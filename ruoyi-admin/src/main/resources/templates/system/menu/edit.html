@@ -149,8 +149,10 @@
             });
 
             function submitHandler() {
+                var data = $('#form-menu-edit').serialize();
+                debugger;
                 if ($.validate.form()) {
-                    $.operate.save(prefix + "/edit", $('#form-menu-edit').serialize());
+                    $.operate.save(prefix + "/edit", data);
                 }
             }
 

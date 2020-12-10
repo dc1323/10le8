@@ -23,8 +23,8 @@ public interface UserDistillsMapper {
     Integer distillPay(Map<String, Object> param);
 
     List<UserDistills> getUserDistillsList(@Param("userID") Integer userID,
-                                           @Param("pageNum") Integer pageNum,
-                                           @Param("pageSize") Integer pageSize);
+                                           @Param("index") Integer index,
+                                           @Param("size") Integer size);
 
     int getUserDistillsCount(@Param("userID") Integer userID);
 

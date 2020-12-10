@@ -132,7 +132,7 @@
         where 1=1
           and UserID = #{userID}
         ORDER BY HandleDateTime DESC
-        offset #{pageNum} row fetch next #{pageSize} row only
+        offset #{index} row fetch next #{size} row only
     </select>
 
     <select id="getUserDistillsCount" resultType="int">

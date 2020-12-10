@@ -15,8 +15,8 @@ import java.util.List;
 public interface OnLineOrderMapper {
 
     List<OnLineOrder> getOnLineOrderList(@Param("userID") Integer userID,
-                                         @Param("pageNum") Integer pageNum,
-                                         @Param("pageSize") Integer pageSize);
+                                         @Param("index") Integer index,
+                                         @Param("size") Integer size);
 
     int getOnLineOrderCount(@Param("userID") Integer userID);
 
