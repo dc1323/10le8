@@ -2,9 +2,13 @@ package com.ruoyi.web.controller.api;
 
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.games.domain.AccountInfo;
+import com.ruoyi.games.domain.Members;
 import com.ruoyi.games.service.AccountInfoService;
 import com.ruoyi.games.service.AgentExtensionService;
+import com.ruoyi.games.service.MembersService;
 import com.ruoyi.games.service.OnLineOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,6 +16,9 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @description:
@@ -30,6 +37,9 @@ public class ApiGameController extends BaseController {
 
     @Autowired
     private AgentExtensionService agentExtensionService;
+
+    @Autowired
+    private MembersService membersService;
 
     @ApiOperation("绑定上级")
     @ApiImplicitParams({
@@ -124,6 +134,26 @@ public class ApiGameController extends BaseController {
     @GetMapping("/getagentextension")
     public AjaxResult getAgentExtension(Integer userID, Integer gameID) {
         return agentExtensionService.agentExtension(userID, gameID);
+    }
+
+    @ApiOperation("获取团队成员")
+    @GetMapping("/getmemberslist")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "sGameID", value = "下级游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageIndex", value = "页码", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "int", paramType = "query")
+    })
+    public AjaxResult getMembersList(Integer userID,
+                                     Integer gameID,
+                                     Integer sGameID,
+                                     Integer pageIndex,
+                                     Integer pageSize) {
+        Map<String, Object> dataMap = membersService.getMembersList(userID, gameID, sGameID, pageIndex, pageSize);
+        List<Members> list = (List<Members>) dataMap.get("dataList");
+        int total = (int) dataMap.get("total");
+        return AjaxResult.success("获取成功", getPageDataTable(list, total));
     }
 
 }

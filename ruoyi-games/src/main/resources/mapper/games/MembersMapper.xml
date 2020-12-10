@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.MembersMapper">
+
+    <resultMap type="com.ruoyi.games.domain.Members" id="MembersResult">
+        <result property="userID" column="UserID"/>
+        <result property="gameID" column="GameID"/>
+        <result property="nickName" column="NickName"/>
+        <result property="registerDate" column="RegisterDate"/>
+        <result property="loclevel" column="Loclevel"/>
+        <result property="members" column="members"/>
+        <result property="commission" column="YestodayCommission"/>
+    </resultMap>
+
+    <select id="getMembersList" parameterType="java.util.Map" resultMap="MembersResult" statementType="CALLABLE">
+        {call RYTreasureDB.dbo.JSON_GetMembersList(
+                #{userID,mode=IN},
+                #{gameID,mode=IN},
+                #{strWhere,mode=IN},
+                #{pageSize,mode=IN},
+                #{pageIndex,mode=IN},
+                #{pageCount,mode=OUT,jdbcType=INTEGER},
+                #{recordCount,mode=OUT,jdbcType=INTEGER})}
+    </select>
+
+</mapper> 
