@@ -13,17 +13,39 @@
         <result property="remark" column="Remark"/>
         <result property="objectAccounts" column="ObjectAccounts"/>
     </resultMap>
-    
+
     <insert id="insert" parameterType="com.ruoyi.games.domain.SystemSecurity">
-        insert into SystemSecurity (OperatingTime ,OperatingName ,OperatingIP ,OperatingAccounts, Remark,ObjectAccounts)
-        values (
-                GETDATE(),
+        insert into RYPlatformManagerDB.dbo.SystemSecurity (OperatingTime, OperatingName, OperatingIP,
+                                                            OperatingAccounts, Remark, ObjectAccounts)
+        values (GETDATE(),
                 #{operatingName,jdbcType=VARCHAR},
                 #{operatingIP,jdbcType=VARCHAR},
                 #{operatingAccounts,jdbcType=VARCHAR},
                 #{remark,jdbcType=VARCHAR},
-                #{objectAccounts,jdbcType=VARCHAR}
-               )
+                #{objectAccounts,jdbcType=VARCHAR})
     </insert>
+
+    <select id="getSystemSecurityList" parameterType="com.ruoyi.games.domain.SystemSecurity"
+            resultMap="SystemSecurityResult">
+        select *
+        from RYPlatformManagerDB.dbo.SystemSecurity
+        where OperatingName = '充值'
+        <if test="objectAccounts != null and objectAccounts != ''">
+            and ObjectAccounts = #{objectAccounts}
+        </if>
+        <if test="operatingIP != null and operatingIP != ''">
+            and OperatingIP = #{operatingIP}
+        </if>
+        <if test="remark != null">
+            and Remark like '%'+#{remark}+'%'
+        </if>
+        <if test="startDate != null">
+            and OperatingTime &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and OperatingTime &lt;= #{endDate}
+        </if>
+        ${params.dataScope}
+    </select>
 
 </mapper> 

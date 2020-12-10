@@ -3,7 +3,6 @@ package com.ruoyi.games.domain;
 import java.math.BigDecimal;
 
 /**
- * @author liuyang17
  * @description: 获取每日房间抽水
  * @date 2020/12/3 22:21
  */

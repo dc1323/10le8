@@ -3,7 +3,6 @@ package com.ruoyi.games.domain;
 import com.ruoyi.common.utils.StringUtils;
 
 /**
- * @author liuyang17
  * @description:
  * @date 2020/12/5 11:26
  */
