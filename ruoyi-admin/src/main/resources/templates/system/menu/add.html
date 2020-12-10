@@ -139,7 +139,8 @@
 
             function submitHandler() {
                 if ($.validate.form()) {
-                    $.operate.save(prefix + "/add", $('#form-menu-add').serialize());
+                    // $.operate.save(prefix + "/add", $('#form-menu-add').serialize());
+                    add();
                 }
             }
 
@@ -199,6 +200,23 @@
                 $("#treeId").val(body.find('#treeId').val());
                 $("#treeName").val(body.find('#treeName').val());
                 layer.close(index);
+            }
+
+            function add() {
+                var data = $("#form-menu-add").serializeArray();
+                $.ajax({
+                    cache: true,
+                    type: "POST",
+                    url: prefix + "/add",
+                    data: data,
+                    async: false,
+                    error: function (request) {
+                        $.modal.alertError("系统错误");
+                    },
+                    success: function (data) {
+                        $.operate.successCallback(data);
+                    }
+                });
             }
         </script>
     </body>
