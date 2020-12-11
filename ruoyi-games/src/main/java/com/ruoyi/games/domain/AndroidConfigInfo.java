@@ -15,7 +15,7 @@ public class AndroidConfigInfo {
     private int kindID;
     private int serverID;
     private String kindName;
-    private BigDecimal cellScore;
+    private int cellScore;
     private int androidCount;
     private BigDecimal score;
     private int enterMinInterval;
@@ -23,8 +23,8 @@ public class AndroidConfigInfo {
     private int leaveMinInterval;
     private int leaveMaxInterval;
     private int nullity;
-    private BigDecimal takeMinScore;
-    private BigDecimal showCellScore;
+    private long takeMinScore;
+    private int showCellScore;
     private int checkEnter;
     private int checkLeave;
 
@@ -165,11 +165,11 @@ public class AndroidConfigInfo {
         this.kindName = kindName;
     }
 
-    public BigDecimal getCellScore() {
+    public int getCellScore() {
         return cellScore;
     }
 
-    public void setCellScore(BigDecimal cellScore) {
+    public void setCellScore(int cellScore) {
         this.cellScore = cellScore;
     }
 
@@ -225,26 +225,23 @@ public class AndroidConfigInfo {
         return nullity;
     }
 
-    public BigDecimal getTakeMinScore() {
+    public long getTakeMinScore() {
         return takeMinScore;
     }
 
-    public void setTakeMinScore(BigDecimal takeMinScore) {
+    public void setTakeMinScore(long takeMinScore) {
         this.takeMinScore = takeMinScore;
     }
 
-    public BigDecimal getShowCellScore() {
+    public int getShowCellScore() {
         return showCellScore;
     }
 
-    public void setShowCellScore(BigDecimal showCellScore) {
+    public void setShowCellScore(int showCellScore) {
         this.showCellScore = showCellScore;
     }
 
     public String getName() {
-        if (null == cellScore) {
-            return kindName;
-        }
         return kindName + "_" + cellScore;
     }
 

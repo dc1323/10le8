@@ -7,13 +7,17 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-dict-add" th:object="${param}">
         <input type="hidden" id="batchID" name="batchID" th:field="*{batchID}"/>
-        <input type="hidden" id="txtKindName" name="txtKindName" th:field="*{kindName}"/>
+        <input type="hidden" id="kindIDHd" name="kindIDHd" th:field="*{kindID}"/>
+        <input type="hidden" id="kindNameHd" name="kindNameHd" th:field="*{kindName}"/>
+        <input type="hidden" id="checkEnterHd" th:field="*{checkEnter}"/>
+        <input type="hidden" id="checkLeaveHd" th:field="*{checkLeave}"/>
+
         <div class="form-group">
             <label class="col-sm-3 control-label is-required">游戏类型：</label>
             <div class="col-sm-8">
                 <select name="kindID" id="kindID" class="form-control">
                     <option th:each="data,dataStat : ${gameKindItemList}" th:value="${data.kindID}"
-                            th:text="${data.kindName}" th:selected="${data.kindID} == ${param.kindID}"></option>
+                            th:text="${data.kindName}"></option>
                 </select>
             </div>
         </div>
@@ -41,7 +45,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">机器人补桌：</label>
             <div class="col-sm-8" style="vertical-align:text-bottom;">
-                <input type="checkbox" id="checkEnter" style="margin-top: 8px;" th:field="*{checkEnter}">
+                <input type="checkbox" id="checkEnter" style="margin-top: 8px;" >
             </div>
         </div>
         <div class="form-group">
@@ -66,7 +70,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">机器人离场：</label>
             <div class="col-sm-8" style="vertical-align:text-bottom;">
-                <input type="checkbox" id="checkLeave" style="margin-top: 8px;" th:field="*{checkLeave}">
+                <input type="checkbox" id="checkLeave" style="margin-top: 8px;" >
             </div>
         </div>
         <div class="form-group">
@@ -104,8 +108,14 @@
             $("#leaveMaxInterval").val("0");
         }
 
-        var checkEnter = $("#checkEnter").val();
-        var checkLeave = $("#checkLeave").val();
+        var kindIDHd = $("#kindIDHd").val();
+        if (kindIDHd > 0) {
+            $("#kindID").find("option[value='"+ kindIDHd +"']").attr("selected",true);
+            $("#kindID").attr("disabled","disabled").css("background-color","#EEEEEE");
+        }
+
+        var checkEnter = $("#checkEnterHd").val();
+        var checkLeave = $("#checkLeaveHd").val();
         if (checkEnter == 1) {
             $("#checkEnter").attr('checked', 'true');
             $("#enterMinInterval").removeAttr("readonly");
@@ -127,7 +137,7 @@
         }
 
         //机器人补桌复选框
-        $("input[id='checkEnter']").on('change', function () {
+        $("#checkEnter").on('change', function () {
             if ($('#checkEnter').is(':checked')) {
                 $("#enterMinInterval").removeAttr("readonly");
                 $("#enterMaxInterval").removeAttr("readonly");
@@ -153,11 +163,13 @@
 
     function submitHandler() {
         var id = $("#batchID").val();
-        var kindName = "";
+        var data = {};
         if (id == -1) {
-            kindName = $("#kindID option:selected").text();
+            data.kindID = $("#kindID").val();
+            data.kindName = $("#kindID option:selected").text();
         } else {
-            kindName = $("#txtKindName").val();
+            data.kindID = $("#kindIDHd").val();
+            data.kindName = $("#kindNameHd").val();
         }
 
         var cellScore = $("#txtCellScore").val();
@@ -182,10 +194,8 @@
             alert("输入错误");
             return
         }
-        var data = {};
+
         data.batchID = id;
-        data.kindName = kindName;
-        data.kindID = $("#kindID").val();
         data.cellScore = cellScore;
         data.androidCount = androidCount;
         data.takeMinScore = takeMinScore;

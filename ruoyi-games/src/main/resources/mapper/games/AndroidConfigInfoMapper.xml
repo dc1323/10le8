@@ -36,7 +36,7 @@
 
     <select id="getConfigInfoById" resultMap="AndroidConfigInfoResult">
         select * from RYAccountsDB.dbo.V_GetAndroidConfigList
-             WHERE and BatchID = #{batchID}
+             WHERE BatchID = #{batchID}
     </select>
 
     <select id="getAndroidConfigInfo" resultMap="AndroidConfigInfoResult"

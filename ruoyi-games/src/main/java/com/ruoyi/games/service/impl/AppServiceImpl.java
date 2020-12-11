@@ -196,7 +196,7 @@ public class AppServiceImpl implements AppService {
         param.put("dwAndroidCountMember3", "0");
         param.put("dwAndroidCountMember4", "0");
         param.put("dwAndroidCountMember5", "0");
-        param.put("CellScore", android.getCellScore().toString());
+        param.put("CellScore", android.getCellScore() + "");
         param.put("strErrorDescribe", "");
         return androidConfigInfoMapper.createAndroidConfig(param);
     }
