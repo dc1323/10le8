@@ -2,10 +2,7 @@ package com.ruoyi.games.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.IpUtils;
-import com.ruoyi.common.utils.ShiroUtils;
-import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.*;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.games.domain.*;
@@ -357,6 +354,58 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Override
     public Map<String, String> registerAccountByMessage(Map<String, String> param) {
         return accountInfoMapper.registerAccountByMessage(param);
+    }
+
+    @Override
+    public AjaxResult sendMsg(String phoneNumber, int userID, int typeID) {
+        PhoneSms sms = new PhoneSms();
+        sms.setPhoneNumber(phoneNumber);
+        sms.setUserID(userID);
+        sms.setTypeID((short)typeID);
+        sms.setIsUse((short)0);
+        sms.setInsertTime(new Date());;
+        String phoneCode = CodeUtils.randomNum(100000, 999999) + "";
+        sms.setSmsCode(phoneCode);
+        int count = phoneSmsMapper.addPhoneSMS(sms);
+        if (count > 0) {
+            List<SystemFunctionStatusInfo> list = systemFunctionStatusInfoMapper.getFunctionStatusInfoList(new SystemFunctionStatusInfo());
+            Map<String, String> dic = new HashMap<String, String>();
+            int i = 0;
+            int j = 0;
+            String accessKeyID = "";
+            String accessKeySecret = "";
+            for (SystemFunctionStatusInfo info : list) {
+                if (info.getStatusName().equals("SiteCode")) {
+                    if (i == 0){
+                        accessKeyID = info.getStatusValue();
+                    }
+                    i++;
+                }
+
+                if (info.getStatusName().equals("SiteSecret")) {
+                    if (j == 0){
+                        accessKeySecret = info.getStatusValue();
+                    }
+                    j++;
+                }
+            }
+
+            dic.put("AccessKeyID", accessKeyID);
+            dic.put("AccessKeySecret", accessKeySecret);
+            dic.put("PhoneNumber", sms.getPhoneNumber());
+            dic.put("PhoneCode", sms.getSmsCode());
+
+            /*
+            var response = SMSHelper.Current.SendSms(dic);
+            if (!response.Code.ToUpper().Equals("OK"))
+            {
+                ajv.SetFail("发送失败");
+
+                return ajv;
+            }*/
+            return AjaxResult.success("发送成功");
+        }
+        return AjaxResult.error("发送失败");
     }
 
     @Override

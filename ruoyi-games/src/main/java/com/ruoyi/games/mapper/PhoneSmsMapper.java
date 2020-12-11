@@ -18,4 +18,6 @@ public interface PhoneSmsMapper {
 
     PhoneSms getPhoneSmsByPhoneNumber(@Param("phoneNumber") String phoneNumber,
                                       @Param("smsCode") String smsCode);
+
+    int addPhoneSMS(PhoneSms sms);
 }

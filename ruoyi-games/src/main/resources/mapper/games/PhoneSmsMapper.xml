@@ -28,4 +28,9 @@
          select top 1 * from RYTreasureDB.dbo.PhoneSMS where PhoneNumber = #{phoneNumber}
                and SmsCode = #{smsCode} and TypeID = 1 and IsUse = 0 order by ID desc
     </select>
+
+    <insert id="addPhoneSMS" parameterType="com.ruoyi.games.domain.PhoneSms">
+        INSERT INTO RYTreasureDB.dbo.PhoneSMS(UserID, SmsCode, TypeID, IsUse, InsertTime, PhoneNumber)
+            VALUES (#{userID}, #{smsCode}, #{typeID}, #{isUse}, #{insertTime}, #{phoneNumber})
+    </insert>
 </mapper>

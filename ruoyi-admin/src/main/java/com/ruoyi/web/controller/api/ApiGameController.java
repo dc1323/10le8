@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.PageDomain;
+import com.ruoyi.common.utils.CodeUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.games.domain.*;
 import com.ruoyi.games.service.*;
@@ -15,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @description:
@@ -249,4 +247,17 @@ public class ApiGameController extends BaseController {
                 machineID, nickName, playingGame, request);
     }
 
+    @ApiOperation("发送短信")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "phoneNumber", value = "手机号码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "typeID", value = "类型(1:注册,2:绑定银行卡),默认类型为1", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/sendSms")
+    public AjaxResult sendSms(String phoneNumber, int userID, int typeID) {
+        if (phoneNumber.length() != 11) {
+            return AjaxResult.error("手机号码有误");
+        }
+        return accountInfoService.sendMsg(phoneNumber, userID, typeID);
+    }
 }

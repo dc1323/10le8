@@ -104,4 +104,6 @@ public interface AccountInfoService {
                                String nickName, int playingGame, HttpServletRequest request);
 
     Map<String, String> registerAccountByMessage(Map<String, String> param);
+
+    AjaxResult sendMsg(String phoneNumber, int userID, int typeID);
 }
