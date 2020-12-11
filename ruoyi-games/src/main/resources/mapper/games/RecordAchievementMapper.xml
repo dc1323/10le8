@@ -35,6 +35,13 @@
         <result property="insertTime" column="InsertTime"/>
     </resultMap>
 
+    <resultMap type="com.ruoyi.games.domain.ShareDetailInfo" id="ShareDetailInfoResult">
+        <result property="gold" column="Gold"/>
+        <result property="payAmount" column="PayAmount"/>
+        <result property="collectDate" column="ApplyDate"/>
+        <result property="beforeGold" column="BeforeGold"/>
+    </resultMap>
+
     <select id="getRecordAchievementInfo" parameterType="com.ruoyi.games.domain.RecordAchievement"
             resultMap="RecordAchievementResult">
         select * from RYTreasureDB.dbo.V_GetShareDetailInfo20200719
@@ -107,6 +114,18 @@
         <if test="endDate != null">
             and ApplyDate &lt;= #{endDate}
         </if>
+    </select>
+    
+    <select id="getShareDetailInfoList" resultMap="ShareDetailInfoResult">
+        select * from RYTreasureDB.dbo.ShareDetailInfo
+        where 1=1 and ShareID = 700 and UserID = #{userID}
+        ORDER BY ApplyDate DESC
+        offset #{index} row fetch next #{size} row only
+    </select>
+
+    <select id="getShareDetailInfoCount" resultType="int">
+        select count(1) from RYTreasureDB.dbo.ShareDetailInfo
+        where 1=1 and ShareID = 700 and UserID = #{userID}
     </select>
 
 </mapper> 

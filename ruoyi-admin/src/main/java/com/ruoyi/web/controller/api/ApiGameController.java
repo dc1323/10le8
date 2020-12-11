@@ -208,18 +208,31 @@ public class ApiGameController extends BaseController {
     })
     @GetMapping("/getrechargecs")
     public AjaxResult getRechargeCS(Integer userID, Integer gameID) {
-        List<Map<String,Object>> result = null;
+        List<Map<String, Object>> result = null;
         List<Customer> list = filledService.getCustomers();
-        if(null != list && list.size() > 0){
+        if (null != list && list.size() > 0) {
             result = new ArrayList<>();
-            for(Customer info : list){
-                Map<String,Object> map = new HashMap<>();
-                map.put("type",info.getTypeID());
-                map.put("name",info.getCustomerValue());
-                map.put("title",info.getTypeName());
+            for (Customer info : list) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("type", info.getTypeID());
+                map.put("name", info.getCustomerValue());
+                map.put("title", info.getTypeName());
                 result.add(map);
             }
         }
-        return AjaxResult.success("获取成功",result);
+        return AjaxResult.success("获取成功", result);
     }
+
+    @ApiOperation("获取领取记录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageIndex", value = "页码", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getrecordachievementlist")
+    public AjaxResult getShareDetailInfoList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
+        return filledService.getShareDetailInfoList(userID, gameID, pageIndex, pageSize);
+    }
+
 }

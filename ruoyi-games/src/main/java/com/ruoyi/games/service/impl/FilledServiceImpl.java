@@ -143,4 +143,27 @@ public class FilledServiceImpl implements FilledService {
         customerMapper.updateCustomer(customer);
         return AjaxResult.success();
     }
+
+    @Override
+    public AjaxResult getShareDetailInfoList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
+        int index = 0;
+        if(null == pageIndex){
+            pageIndex = 0;
+        }
+        if(null == pageSize){
+            pageSize = 0;
+        }
+        if(pageIndex > 0){
+            index = (pageIndex -1)*pageSize;
+        }
+        int total = recordAchievementMapper.getShareDetailInfoCount(userID);
+        if(total > 0){
+            List<ShareDetailInfo> list = recordAchievementMapper.getShareDetailInfoList(userID,index,pageSize);
+            Map<String,Object> result = new HashMap<>();
+            result.put("total",total);
+            result.put("data",list);
+            return AjaxResult.success("获取成功",result);
+        }
+        return AjaxResult.success();
+    }
 }

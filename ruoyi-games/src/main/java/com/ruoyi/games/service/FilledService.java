@@ -19,7 +19,7 @@ public interface FilledService {
 
     AjaxResult accept(Integer id, Integer userID, int operaType, String reason);
 
-    AjaxResult distillPay(Integer id, Integer userID, String reason,String money);
+    AjaxResult distillPay(Integer id, Integer userID, String reason, String money);
 
     List<Customer> getCustomerList(Customer customer);
 
@@ -30,5 +30,7 @@ public interface FilledService {
     Customer getCustomerInfoById(Integer id);
 
     AjaxResult editCustomer(Customer customer);
+
+    AjaxResult getShareDetailInfoList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize);
 
 }
