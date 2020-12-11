@@ -41,6 +41,10 @@
         <result property="payamount" column="payamount"/>
     </resultMap>
 
+    <select id="getAccountInfoByGameID" resultMap="AccountInfoResult">
+        SELECT * FROM AccountsInfo(NOLOCK) WHERE GameID=#{gameID}
+    </select>
+
     <update id="updateNickNameByUserID">
           UPDATE RYAccountsDB.dbo.AccountsInfo SET NickName=#{nickName} WHERE UserID=#{userID}
     </update>
@@ -225,4 +229,19 @@
                 #{strErr,mode=OUT,jdbcType=VARCHAR})}
     </select>
 
+    <select id="registerAccountByMessage" parameterType="java.util.Map" statementType="CALLABLE">
+        {call RYAccountsDB.dbo.JSON_RegisterAccount(
+                #{strAccounts,mode=IN,jdbcType=VARCHAR},
+                #{strNickName,mode=IN,jdbcType=VARCHAR},
+                #{strLogonPass,mode=IN,jdbcType=VARCHAR},
+                #{wFaceID,mode=IN,jdbcType=VARCHAR},
+                #{cbGender,mode=IN,jdbcType=VARCHAR},
+                #{strPassPortID,mode=IN,jdbcType=VARCHAR},
+                #{strCompellation,mode=IN,jdbcType=VARCHAR},
+                #{strClientIP,mode=IN,jdbcType=VARCHAR},
+                #{strMachineID,mode=IN,jdbcType=VARCHAR},
+                #{strRegisterMobile,mode=IN,jdbcType=VARCHAR},
+                #{nPlayingGame,mode=IN,jdbcType=VARCHAR},
+                #{strErrorDescribe,mode=OUT,jdbcType=VARCHAR})}
+    </select>
 </mapper>

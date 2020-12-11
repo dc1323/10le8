@@ -16,4 +16,6 @@ public interface PhoneSmsMapper {
                          @Param("smsCode") String smsCode,
                          @Param("typeID") short typeID);
 
+    PhoneSms getPhoneSmsByPhoneNumber(@Param("phoneNumber") String phoneNumber,
+                                      @Param("smsCode") String smsCode);
 }

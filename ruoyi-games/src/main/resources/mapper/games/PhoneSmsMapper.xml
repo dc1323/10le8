@@ -24,4 +24,8 @@
         order by ID desc
     </select>
 
-</mapper> 
+    <select id="getPhoneSmsByPhoneNumber">
+         select top 1 * from RYTreasureDB.dbo.PhoneSMS where PhoneNumber = #{phoneNumber}
+               and SmsCode = #{smsCode} and TypeID = 1 and IsUse = 0 order by ID desc
+    </select>
+</mapper>
