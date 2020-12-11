@@ -3,9 +3,11 @@ package com.ruoyi.games.service.impl;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.IpUtils;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
+import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.games.domain.*;
 import com.ruoyi.games.mapper.*;
 import com.ruoyi.games.service.AccountInfoService;
@@ -16,7 +18,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.util.*;
 
 @Service
@@ -296,6 +300,63 @@ public class AccountInfoServiceImpl implements AccountInfoService {
             return AjaxResult.success(result);
         }
         return AjaxResult.error(result);
+    }
+
+    @Override
+    public AjaxResult registerAccount(String phoneNumber, String phoneCode, String passWord,
+                                      String machineID, String nickName, int playingGame,
+                                      HttpServletRequest request) {
+        PhoneSms phoneSms = phoneSmsMapper.getPhoneSmsByPhoneNumber(phoneNumber, phoneCode);
+        if (null == phoneSms || phoneSms.getId().intValue() == 0) {
+            return AjaxResult.error("请发送手机验证码");
+        }
+
+        if (playingGame != -1) {
+            AccountInfo info = accountInfoMapper.getAccountInfoByGameID(playingGame);
+            if (null == info || info.getUserID() == null || info.getUserID().intValue() == 0) {
+                return AjaxResult.error("上级用户不存在");
+            }
+        }
+
+        Date endTime = new Date();
+        Date startTime = phoneSms.getInsertTime();
+        long timeSpan = endTime.getTime() - startTime.getTime();
+        if (timeSpan > 300) {
+            return AjaxResult.error("验证码有效期为5分钟,请重新发送手机验证码");
+        }
+
+        if (phoneSms.getIsUse() == 1) {
+            return AjaxResult.error("短信码已被验证过,请重新发送手机验证码");
+        }
+
+        //注册账号
+        Map<String, String> dic = new HashMap<>();
+        String strAccounts = phoneNumber;
+        String strNickName = nickName;
+        String strLogonPass = Md5Utils.hash(passWord);
+
+        dic.put("strAccounts", strAccounts);
+        dic.put("strNickName", strNickName);
+        dic.put("strLogonPass", strLogonPass);
+        dic.put("wFaceID", "0");
+        dic.put("cbGender", "0");
+        dic.put("strPassPortID", "");
+        dic.put("strCompellation", "");
+        dic.put("strClientIP", IpUtils.getIpAddr(request));
+        dic.put("strMachineID", machineID);
+        dic.put("strRegisterMobile", phoneNumber);
+        dic.put("nPlayingGame", playingGame + "");
+
+        Map<String, String> message = registerAccountByMessage(dic);
+        if (message.size() > 0) {
+            return AjaxResult.error("注册失败", message);
+        }
+        return AjaxResult.success("注册成功");
+    }
+
+    @Override
+    public Map<String, String> registerAccountByMessage(Map<String, String> param) {
+        return accountInfoMapper.registerAccountByMessage(param);
     }
 
     @Override

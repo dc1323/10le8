@@ -5,10 +5,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.games.domain.AccountInfo;
-import com.ruoyi.games.domain.Customer;
-import com.ruoyi.games.domain.Members;
-import com.ruoyi.games.domain.SystemFunctionStatusInfo;
+import com.ruoyi.games.domain.*;
 import com.ruoyi.games.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -233,6 +231,22 @@ public class ApiGameController extends BaseController {
     @GetMapping("/getrecordachievementlist")
     public AjaxResult getShareDetailInfoList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
         return filledService.getShareDetailInfoList(userID, gameID, pageIndex, pageSize);
+    }
+
+    @ApiOperation("注册账号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "phoneNumber", value = "手机号码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "phoneCode", value = "短信码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "passWord", value = "密码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "machineID", value = "机器码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "nickName", value = "昵称", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "playingGame", value = "上级游戏ID(默认为-1)", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/registerAccount")
+    public AjaxResult registerAccount(String phoneNumber, String phoneCode, String passWord, String machineID,
+                                      String nickName, int playingGame, HttpServletRequest request) {
+        return accountInfoService.registerAccount(phoneNumber, phoneCode, passWord,
+                machineID, nickName, playingGame, request);
     }
 
 }

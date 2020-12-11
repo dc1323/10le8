@@ -4,6 +4,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.games.domain.*;
 import org.apache.ibatis.annotations.Param;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -98,4 +99,9 @@ public interface AccountInfoService {
     AjaxResult cachOut(Integer userID, Integer gameID);
 
     int updateNickNameByUserID(String nickName, int userID);
+
+    AjaxResult registerAccount(String phoneNumber, String phoneCode, String passWord, String machineID,
+                               String nickName, int playingGame, HttpServletRequest request);
+
+    Map<String, String> registerAccountByMessage(Map<String, String> param);
 }

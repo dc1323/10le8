@@ -48,4 +48,8 @@ public interface AccountInfoMapper {
     void cachOut(Map<String, Object> param);
 
     int updateNickNameByUserID(@Param("nickName") String nickName, @Param("userID") int userID);
+
+    AccountInfo getAccountInfoByGameID(@Param("gameID") int gameID);
+
+    Map<String, String> registerAccountByMessage(Map<String, String> param);
 }
