@@ -2,6 +2,7 @@ package com.ruoyi.games.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.games.domain.*;
@@ -159,10 +160,8 @@ public class FilledServiceImpl implements FilledService {
         int total = recordAchievementMapper.getShareDetailInfoCount(userID);
         if(total > 0){
             List<ShareDetailInfo> list = recordAchievementMapper.getShareDetailInfoList(userID,index,pageSize);
-            Map<String,Object> result = new HashMap<>();
-            result.put("total",total);
-            result.put("data",list);
-            return AjaxResult.success("获取成功",result);
+            TableDataInfo dataInfo = new TableDataInfo(list, total);
+            return AjaxResult.success("获取成功",dataInfo);
         }
         return AjaxResult.success();
     }
