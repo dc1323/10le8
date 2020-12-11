@@ -354,4 +354,16 @@ public class ApiGameController extends BaseController {
         }
     }
 
+    @ApiOperation("获取银行列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageIndex", value = "页码", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getbanklist")
+    public AjaxResult getBankList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
+        return accountInfoService.getBankList(userID, gameID, pageIndex, pageSize);
+    }
+
 }
