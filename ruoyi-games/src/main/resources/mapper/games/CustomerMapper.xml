@@ -22,6 +22,11 @@
         ${params.dataScope}
     </select>
 
+    <select id="getCustomers" resultMap="CustomerResult" >
+        SELECT * FROM RYTreasureDB.dbo.V_GetCustomerList
+        WHERE 1= 1 and Nullity = 0
+    </select>
+
     <select id="getCustomerType" resultMap="CustomerResult">
         select TypeID, TypeName from RYTreasureDB.dbo.CustomerType
     </select>

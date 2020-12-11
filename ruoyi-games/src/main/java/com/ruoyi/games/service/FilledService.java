@@ -23,6 +23,8 @@ public interface FilledService {
 
     List<Customer> getCustomerList(Customer customer);
 
+    List<Customer> getCustomers();
+
     List<Customer> getCustomerType();
 
     Customer getCustomerInfoById(Integer id);

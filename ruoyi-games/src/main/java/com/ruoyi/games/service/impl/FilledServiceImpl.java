@@ -115,6 +115,11 @@ public class FilledServiceImpl implements FilledService {
     }
 
     @Override
+    public List<Customer> getCustomers() {
+        return customerMapper.getCustomers();
+    }
+
+    @Override
     public List<Customer> getCustomerType() {
         return customerMapper.getCustomerType();
     }

@@ -6,12 +6,10 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.games.domain.AccountInfo;
+import com.ruoyi.games.domain.Customer;
 import com.ruoyi.games.domain.Members;
 import com.ruoyi.games.domain.SystemFunctionStatusInfo;
-import com.ruoyi.games.service.AccountInfoService;
-import com.ruoyi.games.service.AgentExtensionService;
-import com.ruoyi.games.service.MembersService;
-import com.ruoyi.games.service.OnLineOrderService;
+import com.ruoyi.games.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -19,6 +17,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +42,9 @@ public class ApiGameController extends BaseController {
 
     @Autowired
     private MembersService membersService;
+
+    @Autowired
+    private FilledService filledService;
 
     @ApiOperation("绑定上级")
     @ApiImplicitParams({
@@ -196,5 +199,27 @@ public class ApiGameController extends BaseController {
             return AjaxResult.error("修改昵称失败");
         }
         return AjaxResult.success("修改成功");
+    }
+
+    @ApiOperation("获取充值客服")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getrechargecs")
+    public AjaxResult getRechargeCS(Integer userID, Integer gameID) {
+        List<Map<String,Object>> result = null;
+        List<Customer> list = filledService.getCustomers();
+        if(null != list && list.size() > 0){
+            result = new ArrayList<>();
+            for(Customer info : list){
+                Map<String,Object> map = new HashMap<>();
+                map.put("type",info.getTypeID());
+                map.put("name",info.getCustomerValue());
+                map.put("title",info.getTypeName());
+                result.add(map);
+            }
+        }
+        return AjaxResult.success("获取成功",result);
     }
 }
