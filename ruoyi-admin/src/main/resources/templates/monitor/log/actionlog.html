@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('充值日志列表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+</head>
+<body class="gray-bg">
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="operlog-form">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>操作人员： </label><input type="text" name="operatingName"/>
+                            </li>
+                            <li>
+                                <label>IP地址： </label><input type="text" name="operatingIP"/>
+                            </li>
+                            <li class="select-time">
+                                <label>操作时间： </label>
+                                <input type="text" id="startDate" placeholder="开始时间"
+                                       name="startDate" th:value="${startDate}" readonly/>
+                                <span>-</span>
+                                <input type="text" id="endDate" placeholder="结束时间"
+                                       name="endDate" th:value="${endDate}" readonly/>
+                            </li>
+                            <li>
+                                <label>操作信息： </label><input type="text" name="remark"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "monitor/log";
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        // 回到顶部绑定
+        if ($.fn.toTop !== undefined) {
+            var opt = {
+                win: $('.ui-layout-center'),
+                doc: $('.ui-layout-center')
+            };
+            $('#scroll-up').toTop(opt);
+        }
+
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            laydate.render({
+                elem: '#startDate',
+                type: 'datetime',
+                trigger: 'click'
+            });
+
+            laydate.render({
+                elem: '#endDate',
+                type: 'datetime',
+                trigger: 'click'
+            });
+
+        });
+        queryList();
+    });
+
+    function queryList() {
+        var options = {
+            url: prefix + "/list",
+            sortName: "RecordID",
+            sortOrder: "desc",
+            modalName: "充值日志",
+            columns: [
+                {
+                    field: 'operatingTime',
+                    title: '操作时间'
+                },
+                {
+                    field: 'operatingIP',
+                    title: '操作IP'
+                },
+                {
+                    field: 'operatingAccounts',
+                    title: '操作人'
+                },
+                {
+                    field: 'operatingName',
+                    title: '类型'
+                },
+                {
+                    field: 'objectAccounts',
+                    title: '被操作人'
+                },
+                {
+                    field: 'remark',
+                    title: '操作信息'
+                }]
+        };
+        $.table.init(options);
+    }
+</script>
+</body>
+</html>

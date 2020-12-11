@@ -3,7 +3,6 @@ package com.ruoyi.games.domain;
 import java.util.Date;
 
 /**
- * @author liuyang17
  * @description:
  * @date 2020/12/7 20:28
  */

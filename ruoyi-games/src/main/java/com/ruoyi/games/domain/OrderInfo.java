@@ -1,7 +1,6 @@
 package com.ruoyi.games.domain;
 
 /**
- * @author liuyang17
  * @description:
  * @date 2020/12/3 0:18
  */
