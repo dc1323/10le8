@@ -347,4 +347,9 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         String data = accountInfoMapper.getCanCachOut(param);
         return AjaxResult.success("操作成功",data);
     }
+
+    @Override
+    public int updateNickNameByUserID(String nickName, int userID) {
+        return accountInfoMapper.updateNickNameByUserID(nickName, userID);
+    }
 }

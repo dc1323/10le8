@@ -2,6 +2,7 @@ package com.ruoyi.games.service;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.games.domain.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -95,4 +96,6 @@ public interface AccountInfoService {
                         String bankTypeName, String phoneNumber, String phoneCode);
 
     AjaxResult cachOut(Integer userID, Integer gameID);
+
+    int updateNickNameByUserID(String nickName, int userID);
 }

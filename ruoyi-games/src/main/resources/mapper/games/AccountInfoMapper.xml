@@ -41,6 +41,10 @@
         <result property="payamount" column="payamount"/>
     </resultMap>
 
+    <update id="updateNickNameByUserID">
+          UPDATE RYAccountsDB.dbo.AccountsInfo SET NickName=#{nickName} WHERE UserID=#{userID}
+    </update>
+
     <select id="selectAccountPage" parameterType="java.util.Map" resultMap="AccountInfoResult" statementType="CALLABLE">
         {call RYTreasureDB.dbo.JSON_GetAccountsList(
                 #{strWhere,mode=IN,jdbcType=VARCHAR},

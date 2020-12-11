@@ -181,4 +181,20 @@ public class ApiGameController extends BaseController {
         return AjaxResult.success("获取成功", map);
     }
 
+    @ApiOperation("修改昵称")
+    @GetMapping("/updateNickName")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "nickName", value = "昵称", required = true, dataType = "String", paramType = "query"),
+    })
+    public AjaxResult UpdateNickName(Integer userID,
+                                     Integer gameID,
+                                     String nickName) {
+        int count = accountInfoService.updateNickNameByUserID(nickName, userID);
+        if (count <= 0) {
+            return AjaxResult.error("修改昵称失败");
+        }
+        return AjaxResult.success("修改成功");
+    }
 }

@@ -46,4 +46,6 @@ public interface AccountInfoMapper {
                                    @Param("userId") Integer userId);
 
     void cachOut(Map<String, Object> param);
+
+    int updateNickNameByUserID(@Param("nickName") String nickName, @Param("userID") int userID);
 }
