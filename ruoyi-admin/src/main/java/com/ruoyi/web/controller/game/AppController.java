@@ -113,7 +113,7 @@ public class AppController extends BaseController {
     @PostMapping(value="/add")
     public AjaxResult add(@RequestBody AndroidConfigInfo info) {
         try {
-            if (info.getCellScore().intValue() == 0) {
+            if (info.getCellScore() == 0) {
                 return error("底注有误");
             }
 
@@ -121,7 +121,7 @@ public class AppController extends BaseController {
                 return error("机器人有误");
             }
 
-            if (info.getTakeMinScore().intValue() == 0) {
+            if (info.getTakeMinScore() == 0) {
                 return error("携带分数有误");
             }
 
@@ -137,7 +137,7 @@ public class AppController extends BaseController {
 
             GameRoomInfo gameRoomInfo = gameRoomInfos.get(0);
             long minEnterScore = gameRoomInfo.getMinEnterScore();
-            if (minEnterScore > info.getTakeMinScore().intValue()) {
+            if (minEnterScore > info.getTakeMinScore()) {
                 return error("机器人携带分数不能低于房间最小入场分数");
             }
 
