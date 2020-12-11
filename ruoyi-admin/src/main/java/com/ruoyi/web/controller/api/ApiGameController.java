@@ -1,11 +1,13 @@
 package com.ruoyi.web.controller.api;
 
+import com.google.common.collect.Maps;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.PageDomain;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.games.domain.AccountInfo;
 import com.ruoyi.games.domain.Members;
+import com.ruoyi.games.domain.SystemFunctionStatusInfo;
 import com.ruoyi.games.service.AccountInfoService;
 import com.ruoyi.games.service.AgentExtensionService;
 import com.ruoyi.games.service.MembersService;
@@ -154,6 +156,29 @@ public class ApiGameController extends BaseController {
         List<Members> list = (List<Members>) dataMap.get("dataList");
         int total = (int) dataMap.get("total");
         return AjaxResult.success("获取成功", getPageDataTable(list, total));
+    }
+
+    @ApiOperation("获取提款时间")
+    @GetMapping("/getDistillTime")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    public AjaxResult getDistillTime(Integer userID,
+                                     Integer gameID) {
+        SystemFunctionStatusInfo info = accountInfoService.getInfoByStatusName("DistillsTime");
+        if (null == info || StringUtils.isEmpty(info.getStatusValue())) {
+            return AjaxResult.error("获取失败");
+        }
+
+        String[] arryTime = info.getStatusValue().split("-");
+        String minTime = arryTime[0];
+        String maxTime = arryTime[1];
+
+        Map<String, String> map = Maps.newHashMap();
+        map.put("minTime", minTime);
+        map.put("maxTime", maxTime);
+        return AjaxResult.success("获取成功", map);
     }
 
 }
