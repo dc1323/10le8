@@ -42,7 +42,11 @@
     </resultMap>
 
     <select id="queryFunctionSet" resultMap="functionSetResult">
-        SELECT * FROM RYAccountsDB.dbo.SystemFunctionStatusInfo
+        SELECT * FROM RYAccountsDB.dbo.SystemFunctionStatusInfo(NOLOCK)
+    </select>
+
+    <select id="getFunctionSetByKey" resultMap="functionSetResult">
+        SELECT * FROM RYAccountsDB.dbo.SystemFunctionStatusInfo(NOLOCK) WHERE StatusName = #{statusName}
     </select>
 
     <update id="updateFunctionSet" parameterType="com.ruoyi.games.domain.GameFunctionSet">

@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +42,9 @@ public class ApiGameController extends BaseController {
 
     @Autowired
     private FilledService filledService;
+
+    @Autowired
+    private GameService gameService;
 
     @ApiOperation("绑定上级")
     @ApiImplicitParams({
@@ -260,4 +264,94 @@ public class ApiGameController extends BaseController {
         }
         return accountInfoService.sendMsg(phoneNumber, userID, typeID);
     }
+
+    @ApiOperation("获取功能设置,默认获取游戏规则")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "statusName", value = "关键字", dataType = "String", paramType = "query")
+    })
+    @GetMapping("/getfuncset")
+    public AjaxResult getFuncSet(Integer userID, Integer gameID, String statusName) {
+        if (StringUtils.isEmpty(statusName)) {
+            statusName = "GameRules";
+        }
+        GameFunctionSet info = gameService.getFunctionSetByKey(statusName);
+        if (null == info) {
+            return AjaxResult.success();
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            map.put("values", info.getStatusValue());
+            return AjaxResult.success("获取成功", map);
+        }
+    }
+
+    @ApiOperation("获取游戏规则")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getgamerules")
+    public AjaxResult getGameRules(Integer userID, Integer gameID) {
+        GameFunctionSet info = gameService.getFunctionSetByKey("GameRules");
+        if (null == info) {
+            return AjaxResult.success();
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            map.put("values", info.getStatusValue());
+            return AjaxResult.success("获取成功", map);
+        }
+    }
+
+    @ApiOperation("获取第三方客服链接")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getthirdservice")
+    public AjaxResult getThirdService(Integer userID, Integer gameID) {
+        GameFunctionSet info = gameService.getFunctionSetByKey("ThirdService");
+        if (null == info) {
+            return AjaxResult.success();
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            map.put("values", info.getStatusValue());
+            return AjaxResult.success("获取成功", map);
+        }
+    }
+
+    @ApiOperation("获取公告")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getnotice")
+    public AjaxResult getNotice(Integer userID, Integer gameID) {
+        GameFunctionSet info = gameService.getFunctionSetByKey("Notice");
+        if (null == info) {
+            return AjaxResult.success();
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            map.put("values", info.getStatusValue());
+            return AjaxResult.success("获取成功", map);
+        }
+    }
+
+    @ApiOperation("获取活动")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getactive")
+    public AjaxResult getActive(Integer userID, Integer gameID) {
+        GameFunctionSet info = gameService.getFunctionSetByKey("Active");
+        if (null == info) {
+            return AjaxResult.success();
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            map.put("values", info.getStatusValue());
+            return AjaxResult.success("获取成功", map);
+        }
+    }
+
 }

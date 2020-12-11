@@ -31,6 +31,15 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public GameFunctionSet getFunctionSetByKey(String statusName) {
+        List<GameFunctionSet> list = gameMapper.getFunctionSetByKey(statusName);
+        if (null != list && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public boolean updateFunctionSet(String statusName, String statusValue) {
         if (StringUtils.isEmpty(statusName) || StringUtils.isEmpty(statusValue)) {
             return false;
@@ -106,7 +115,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public boolean updateGameRoomCBEndTime(int kindId, boolean needRestart ){
+    public boolean updateGameRoomCBEndTime(int kindId, boolean needRestart) {
         List<GameRoomInfo> roomInfos = getGameRoomInfoByKindId(kindId);
         if (CollectionUtils.isEmpty(roomInfos)) {
             return false;
@@ -132,7 +141,7 @@ public class GameServiceImpl implements GameService {
         int count = updateCustomRuleByKindId(customRule, kindId);
         if (count > 0) {
             if (needRestart) {
-                for (int i = 0; i < roomInfos.size(); i++){
+                for (int i = 0; i < roomInfos.size(); i++) {
                     startGameService(roomInfos.get(i).getServerID());
                 }
             }
@@ -158,7 +167,7 @@ public class GameServiceImpl implements GameService {
         boolean flag = false;
         String postdata = "{\"msgid\":11, \"content\":{\"ServerID\": " + serverID + "}}";
         String result = HttpUtils.sendPost(gameServerUrl, postdata);
-        if(result.indexOf("ok") > -1) {
+        if (result.indexOf("ok") > -1) {
             flag = true;
         }
         return flag;
@@ -171,20 +180,20 @@ public class GameServiceImpl implements GameService {
             return map;
         }
 
-        map.put("cbFreeTime", Integer.parseInt(getNewSubstring(customRule.substring(0, 4)),16));
-        map.put("cbBetTime", Integer.parseInt(getNewSubstring(customRule.substring(4, 8)),16));
-        map.put("cbEndTime", Integer.parseInt(getNewSubstring(customRule.substring(8, 12)),16));
-        map.put("cbDWZWin", Integer.parseInt(getNewSubstring(customRule.substring(12, 16)),16));
-        map.put("cbXWZWin", Integer.parseInt(getNewSubstring(customRule.substring(16, 20)),16));
-        map.put("cbWZWin",  Integer.parseInt(getNewSubstring(customRule.substring(20, 24)),16));
-        map.put("cbDLLost", Integer.parseInt(getNewSubstring(customRule.substring(24, 28)),16));
-        map.put("cbXLLost", Integer.parseInt(getNewSubstring(customRule.substring(28, 32)),16));
+        map.put("cbFreeTime", Integer.parseInt(getNewSubstring(customRule.substring(0, 4)), 16));
+        map.put("cbBetTime", Integer.parseInt(getNewSubstring(customRule.substring(4, 8)), 16));
+        map.put("cbEndTime", Integer.parseInt(getNewSubstring(customRule.substring(8, 12)), 16));
+        map.put("cbDWZWin", Integer.parseInt(getNewSubstring(customRule.substring(12, 16)), 16));
+        map.put("cbXWZWin", Integer.parseInt(getNewSubstring(customRule.substring(16, 20)), 16));
+        map.put("cbWZWin", Integer.parseInt(getNewSubstring(customRule.substring(20, 24)), 16));
+        map.put("cbDLLost", Integer.parseInt(getNewSubstring(customRule.substring(24, 28)), 16));
+        map.put("cbXLLost", Integer.parseInt(getNewSubstring(customRule.substring(28, 32)), 16));
         return map;
     }
 
     public String appendString(Map<String, Integer> dic, String surplusStr) {
         String outString = "";
-        for (String key : dic.keySet()){
+        for (String key : dic.keySet()) {
             Integer value = dic.get(key);
             outString += getNewSubstring(StringUtils.intTohex(value));
         }
@@ -215,7 +224,7 @@ public class GameServiceImpl implements GameService {
         map.put("lServiceScore", info.getServiceScore() + "");
 
         map.put("lRestrictScore", info.getRestrictScore() + "");
-        map.put("lMinTableScore", info.getMinTableScore()  + "");
+        map.put("lMinTableScore", info.getMinTableScore() + "");
         map.put("lMinEnterScore", info.getMinEnterScore() + "");
         map.put("lMaxEnterScore", info.getMaxEnterScore() + "");
 
@@ -255,7 +264,7 @@ public class GameServiceImpl implements GameService {
         return gameRoomInfoMapper.updateGameRoom(info);
     }
 
-    public String getNewSubstring(String needString){
+    public String getNewSubstring(String needString) {
         String frontStr = needString.substring(0, 2);
         String laterStr = needString.substring(2, needString.length());
         String str = laterStr + frontStr;
@@ -357,7 +366,7 @@ public class GameServiceImpl implements GameService {
                 oList.add(row.getServerPort());
             }
             int lastServerPort = oList.get(oList.size() - 1);
-            serverPort = rad.nextInt() * (65534-lastServerPort+1)+ lastServerPort;
+            serverPort = rad.nextInt() * (65534 - lastServerPort + 1) + lastServerPort;
         } else {
             serverPort = rad.nextInt() * (50000 - 10000 + 1);
             oList.add(serverPort);
