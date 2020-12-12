@@ -9,6 +9,8 @@ public interface GameService {
 
     List<GameFunctionSet> queryFunctionSet();
 
+    GameFunctionSet getFunctionSetByKey(String statusName);
+
     boolean updateFunctionSet(String statusName, String statusValue);
 
     List<CaiPiaoDiZhi> getCaiPiaoDiZhi(int kindId);
@@ -70,4 +72,9 @@ public interface GameService {
     Map<String, Object> createRoom(GameRoomInfo info);
 
     int updateGameRoom(GameRoomInfo info);
+
+    GameRecord getGameRecordList(Integer userID,
+                                                  Integer kindID,
+                                                  Integer month,
+                                                  Integer matchType);
 }

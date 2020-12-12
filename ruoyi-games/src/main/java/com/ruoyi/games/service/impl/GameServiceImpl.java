@@ -1,10 +1,12 @@
 package com.ruoyi.games.service.impl;
 
 import com.ruoyi.common.utils.CodeUtils;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.games.domain.*;
 import com.ruoyi.games.mapper.GameMapper;
+import com.ruoyi.games.mapper.GameRecordMapper;
 import com.ruoyi.games.mapper.GameRoomInfoMapper;
 import com.ruoyi.games.service.GameService;
 import org.apache.commons.collections.CollectionUtils;
@@ -20,6 +22,8 @@ public class GameServiceImpl implements GameService {
     private GameMapper gameMapper;
     @Autowired
     private GameRoomInfoMapper gameRoomInfoMapper;
+    @Autowired
+    private GameRecordMapper gameRecordMapper;
 
     @Value("${GameServerUrl}")
     private String gameServerUrl;
@@ -29,6 +33,15 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<GameFunctionSet> queryFunctionSet() {
         return gameMapper.queryFunctionSet();
+    }
+
+    @Override
+    public GameFunctionSet getFunctionSetByKey(String statusName) {
+        List<GameFunctionSet> list = gameMapper.getFunctionSetByKey(statusName);
+        if (null != list && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
     }
 
     @Override
@@ -107,7 +120,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public boolean updateGameRoomCBEndTime(int kindId, boolean needRestart ){
+    public boolean updateGameRoomCBEndTime(int kindId, boolean needRestart) {
         List<GameRoomInfo> roomInfos = getGameRoomInfoByKindId(kindId);
         if (CollectionUtils.isEmpty(roomInfos)) {
             return false;
@@ -133,7 +146,7 @@ public class GameServiceImpl implements GameService {
         int count = updateCustomRuleByKindId(customRule, kindId);
         if (count > 0) {
             if (needRestart) {
-                for (int i = 0; i < roomInfos.size(); i++){
+                for (int i = 0; i < roomInfos.size(); i++) {
                     startGameService(roomInfos.get(i).getServerID());
                 }
             }
@@ -159,7 +172,7 @@ public class GameServiceImpl implements GameService {
         boolean flag = false;
         String postdata = "{\"msgid\":11, \"content\":{\"ServerID\": " + serverID + "}}";
         String result = HttpUtils.sendPost(gameServerUrl, postdata);
-        if(result.indexOf("ok") > -1) {
+        if (result.indexOf("ok") > -1) {
             flag = true;
         }
         return flag;
@@ -172,20 +185,20 @@ public class GameServiceImpl implements GameService {
             return map;
         }
 
-        map.put("cbFreeTime", Integer.parseInt(getNewSubstring(customRule.substring(0, 4)),16));
-        map.put("cbBetTime", Integer.parseInt(getNewSubstring(customRule.substring(4, 8)),16));
-        map.put("cbEndTime", Integer.parseInt(getNewSubstring(customRule.substring(8, 12)),16));
-        map.put("cbDWZWin", Integer.parseInt(getNewSubstring(customRule.substring(12, 16)),16));
-        map.put("cbXWZWin", Integer.parseInt(getNewSubstring(customRule.substring(16, 20)),16));
-        map.put("cbWZWin",  Integer.parseInt(getNewSubstring(customRule.substring(20, 24)),16));
-        map.put("cbDLLost", Integer.parseInt(getNewSubstring(customRule.substring(24, 28)),16));
-        map.put("cbXLLost", Integer.parseInt(getNewSubstring(customRule.substring(28, 32)),16));
+        map.put("cbFreeTime", Integer.parseInt(getNewSubstring(customRule.substring(0, 4)), 16));
+        map.put("cbBetTime", Integer.parseInt(getNewSubstring(customRule.substring(4, 8)), 16));
+        map.put("cbEndTime", Integer.parseInt(getNewSubstring(customRule.substring(8, 12)), 16));
+        map.put("cbDWZWin", Integer.parseInt(getNewSubstring(customRule.substring(12, 16)), 16));
+        map.put("cbXWZWin", Integer.parseInt(getNewSubstring(customRule.substring(16, 20)), 16));
+        map.put("cbWZWin", Integer.parseInt(getNewSubstring(customRule.substring(20, 24)), 16));
+        map.put("cbDLLost", Integer.parseInt(getNewSubstring(customRule.substring(24, 28)), 16));
+        map.put("cbXLLost", Integer.parseInt(getNewSubstring(customRule.substring(28, 32)), 16));
         return map;
     }
 
     public String appendString(Map<String, Integer> dic, String surplusStr) {
         String outString = "";
-        for (String key : dic.keySet()){
+        for (String key : dic.keySet()) {
             Integer value = dic.get(key);
             outString += getNewSubstring(StringUtils.intTohex(value));
         }
@@ -249,7 +262,18 @@ public class GameServiceImpl implements GameService {
         return gameRoomInfoMapper.updateGameRoom(info);
     }
 
-    public String getNewSubstring(String needString){
+    @Override
+    public GameRecord getGameRecordList(Integer userID, Integer kindID, Integer month, Integer matchType) {
+        Calendar cal = Calendar.getInstance();
+        int nYear = cal.get(Calendar.YEAR);
+        List<GameRecord> list = gameRecordMapper.getGameRecordList(userID, nYear, kindID, month, matchType);
+        if (null != list && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    public String getNewSubstring(String needString) {
         String frontStr = needString.substring(0, 2);
         String laterStr = needString.substring(2, needString.length());
         String str = laterStr + frontStr;

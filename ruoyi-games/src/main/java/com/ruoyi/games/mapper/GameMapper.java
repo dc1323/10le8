@@ -12,6 +12,8 @@ public interface GameMapper {
 
     List<GameFunctionSet> queryFunctionSet();
 
+    List<GameFunctionSet> getFunctionSetByKey(@Param("statusName") String statusName);
+
     int updateFunctionSet(@Param("statusName") String statusName, @Param("statusValue") String statusValue);
 
     List<CaiPiaoDiZhi> getCaiPiaoDiZhi(@Param("kindId") int kindId);

@@ -28,4 +28,16 @@
         </where>
     </select>
 
+    <select id="getBankList" resultMap="AccountsInfoBankResult">
+        SELECT * FROM RYAccountsDB.dbo.AccountsInfoBank(NOLOCK)
+        where Gameid = #{gameID}
+        ORDER BY time asc
+        offset #{index} row fetch next #{size} row only
+    </select>
+
+    <select id="getBankCount" resultType="int">
+        SELECT  count(1)  FROM RYAccountsDB.dbo.AccountsInfoBank(NOLOCK)
+        where Gameid = #{gameID}
+    </select>
+
 </mapper> 

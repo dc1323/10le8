@@ -1,6 +1,7 @@
 package com.ruoyi.games.mapper;
 
 import com.ruoyi.games.domain.HorseLamp;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,5 +18,7 @@ public interface HorseLampMapper {
     void saveHorseLamp(HorseLamp horseLamp);
 
     void deleteHorseLamp(Integer id);
+
+    List<HorseLamp> getHorseLampTop(@Param("topNumber") int topNumber);
 
 }

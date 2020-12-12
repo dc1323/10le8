@@ -106,4 +106,6 @@ public interface AccountInfoService {
     Map<String, String> registerAccountByMessage(Map<String, String> param);
 
     AjaxResult sendMsg(String phoneNumber, int userID, int typeID);
+
+    AjaxResult getBankList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize);
 }

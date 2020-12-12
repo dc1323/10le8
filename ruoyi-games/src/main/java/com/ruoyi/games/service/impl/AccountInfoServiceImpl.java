@@ -2,6 +2,7 @@ package com.ruoyi.games.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.*;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.common.utils.security.Md5Utils;
@@ -361,9 +362,10 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         PhoneSms sms = new PhoneSms();
         sms.setPhoneNumber(phoneNumber);
         sms.setUserID(userID);
-        sms.setTypeID((short)typeID);
-        sms.setIsUse((short)0);
-        sms.setInsertTime(new Date());;
+        sms.setTypeID((short) typeID);
+        sms.setIsUse((short) 0);
+        sms.setInsertTime(new Date());
+        ;
         String phoneCode = CodeUtils.randomNum(100000, 999999) + "";
         sms.setSmsCode(phoneCode);
         int count = phoneSmsMapper.addPhoneSMS(sms);
@@ -376,14 +378,14 @@ public class AccountInfoServiceImpl implements AccountInfoService {
             String accessKeySecret = "";
             for (SystemFunctionStatusInfo info : list) {
                 if (info.getStatusName().equals("SiteCode")) {
-                    if (i == 0){
+                    if (i == 0) {
                         accessKeyID = info.getStatusValue();
                     }
                     i++;
                 }
 
                 if (info.getStatusName().equals("SiteSecret")) {
-                    if (j == 0){
+                    if (j == 0) {
                         accessKeySecret = info.getStatusValue();
                     }
                     j++;
@@ -406,6 +408,32 @@ public class AccountInfoServiceImpl implements AccountInfoService {
             return AjaxResult.success("发送成功");
         }
         return AjaxResult.error("发送失败");
+    }
+
+    @Override
+    public AjaxResult getBankList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
+        if (null == pageSize) {
+            pageSize = 0;
+        }
+        int index = 0;
+        if (null != pageIndex && pageIndex > 0) {
+            index = (pageIndex - 1) * pageSize;
+        }
+        int total = accountsInfoBankMapper.getBankCount(gameID);
+        if (total == 0) {
+            return AjaxResult.success();
+        }
+        List<AccountsInfoBank> list = accountsInfoBankMapper.getBankList(gameID, index, pageSize);
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (AccountsInfoBank bank : list) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("bankTypeName", bank.getBankTypeName());
+            map.put("bankUserName", bank.getBankUserName());
+            map.put("bankCardNumber", bank.getBankCardNumber());
+            result.add(map);
+        }
+        TableDataInfo info = new TableDataInfo(result, total);
+        return AjaxResult.success("获取成功", info);
     }
 
     @Override
@@ -446,16 +474,16 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     @Override
     public AjaxResult cachOut(Integer userID, Integer gameID) {
-        Map<String,Object> param = new HashMap<>();
-        param.put("userID",userID);
-        param.put("gameID",gameID);
+        Map<String, Object> param = new HashMap<>();
+        param.put("userID", userID);
+        param.put("gameID", gameID);
         accountInfoMapper.cachOut(param);
-        String result = (String)param.get("strErr");
-        if(StringUtils.isNotEmpty(result)){
+        String result = (String) param.get("strErr");
+        if (StringUtils.isNotEmpty(result)) {
             return AjaxResult.error(result);
         }
         String data = accountInfoMapper.getCanCachOut(param);
-        return AjaxResult.success("操作成功",data);
+        return AjaxResult.success("操作成功", data);
     }
 
     @Override

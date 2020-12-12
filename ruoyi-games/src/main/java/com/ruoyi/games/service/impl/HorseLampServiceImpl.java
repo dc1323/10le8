@@ -4,13 +4,11 @@ import com.ruoyi.games.domain.HorseLamp;
 import com.ruoyi.games.mapper.HorseLampMapper;
 import com.ruoyi.games.service.HorseLampService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
-
  * @description:
  * @date 2020/12/9 14:42
  */
@@ -32,11 +30,16 @@ public class HorseLampServiceImpl implements HorseLampService {
 
     @Override
     public void deleteHorseLamp(String[] ids) {
-        if(null != ids && ids.length > 0){
-            for(String id : ids){
+        if (null != ids && ids.length > 0) {
+            for (String id : ids) {
                 Integer iid = Integer.parseInt(id);
                 horseLampMapper.deleteHorseLamp(iid);
             }
         }
+    }
+
+    @Override
+    public List<HorseLamp> getHorseLampTop(int topNumber) {
+        return horseLampMapper.getHorseLampTop(topNumber);
     }
 }
