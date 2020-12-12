@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.RotationImageMapper">
+
+    <resultMap type="com.ruoyi.games.domain.RotationImage" id="RotationImageResult">
+        <id property="id" column="ID"/>
+        <result property="fileName" column="FileName"/>
+    </resultMap>
+
+    <select id="getRotationImageList" resultMap="RotationImageResult">
+        select top #{topNumber} ID, FileName from RYNativeWebDB.dbo.RotationImage order by SortID desc
+    </select>
+
+</mapper> 

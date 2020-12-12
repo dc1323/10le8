@@ -72,4 +72,9 @@ public interface GameService {
     Map<String, String> createRoom(GameRoomInfo info);
 
     int updateGameRoom(GameRoomInfo info);
+
+    GameRecord getGameRecordList(Integer userID,
+                                                  Integer kindID,
+                                                  Integer month,
+                                                  Integer matchType);
 }

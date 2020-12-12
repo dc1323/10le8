@@ -46,6 +46,9 @@ public class ApiGameController extends BaseController {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    private RotationImageService rotationImageService;
+
     @ApiOperation("绑定上级")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
@@ -364,6 +367,32 @@ public class ApiGameController extends BaseController {
     @GetMapping("/getbanklist")
     public AjaxResult getBankList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
         return accountInfoService.getBankList(userID, gameID, pageIndex, pageSize);
+    }
+
+    @ApiOperation("获取轮播图")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "topNumber", value = "轮播图片的张数", dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getrotitionlist")
+    public AjaxResult getRotitionList(Integer userID, Integer gameID, Integer topNumber) {
+        List<RotationImage> list = rotationImageService.getRotationImageList(topNumber);
+        return AjaxResult.success("获取成功", list);
+    }
+
+    @ApiOperation("获取战绩")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "matchType", value = "匹配类型: 0,系统 1,自定义", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "kindID", value = "游戏类型", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "month", value = "月份", dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getgamerecordbyuser")
+    public AjaxResult getGameRecordByUser(Integer userID, Integer gameID, int matchType, Integer kindID, int month) {
+        GameRecord gameRecord = gameService.getGameRecordList(userID, kindID, month, matchType);
+        return AjaxResult.success("获取成功", gameRecord);
     }
 
 }

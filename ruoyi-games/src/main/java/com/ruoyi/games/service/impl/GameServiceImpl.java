@@ -1,9 +1,11 @@
 package com.ruoyi.games.service.impl;
 
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.games.domain.*;
 import com.ruoyi.games.mapper.GameMapper;
+import com.ruoyi.games.mapper.GameRecordMapper;
 import com.ruoyi.games.mapper.GameRoomInfoMapper;
 import com.ruoyi.games.service.GameService;
 import org.apache.commons.collections.CollectionUtils;
@@ -19,6 +21,8 @@ public class GameServiceImpl implements GameService {
     private GameMapper gameMapper;
     @Autowired
     private GameRoomInfoMapper gameRoomInfoMapper;
+    @Autowired
+    private GameRecordMapper gameRecordMapper;
 
     @Value("${GameServerUrl}")
     private String gameServerUrl;
@@ -262,6 +266,17 @@ public class GameServiceImpl implements GameService {
     @Override
     public int updateGameRoom(GameRoomInfo info) {
         return gameRoomInfoMapper.updateGameRoom(info);
+    }
+
+    @Override
+    public GameRecord getGameRecordList(Integer userID, Integer kindID, Integer month, Integer matchType) {
+        Calendar cal = Calendar.getInstance();
+        int nYear = cal.get(Calendar.YEAR);
+        List<GameRecord> list = gameRecordMapper.getGameRecordList(userID, nYear, kindID, month, matchType);
+        if (null != list && list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
     }
 
     public String getNewSubstring(String needString) {

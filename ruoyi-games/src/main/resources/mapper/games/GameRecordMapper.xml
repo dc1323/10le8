@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.GameRecordMapper">
+
+    <resultMap type="com.ruoyi.games.domain.GameRecord" id="GameRecordResult">
+        <result property="score" column="score"/>
+        <result property="curMonth" column="curMonth"/>
+        <result property="kindID" column="KindID"/>
+    </resultMap>
+
+    <select id="getGameRecordList" resultMap="GameRecordResult">
+        SELECT ISNULL(SUM(rds.Score), 0) score, MONTH(rds.InsertTime) curMonth, rdi.KindID AS KindID
+        FROM RYTreasureDB.dbo.RecordDrawInfo rdi
+        INNER JOIN RYTreasureDB.dbo.RecordDrawScore rds ON rds.DrawID = rdi.DrawID
+        where rds.UserID = #{userID} AND YEAR(rds.InsertTime) = #{nYear}
+        <if test="kindID != null and kindID > 0">
+            and rdi.KindID = #{kindID}
+        </if>
+        <if test="month!=null and month > 0">
+            and MONTH(rds.InsertTime) = #{month}
+        </if>
+        <if test="matchType!=null and matchType == 0">
+            and rdi.RoomNumber = 0
+        </if>
+        <if test="matchType!=null and matchType == 1">
+            and rdi.RoomNumber > 0
+        </if>
+        GROUP BY MONTH(rds.InsertTime), rdi.KindID ORDER BY curMonth asc
+    </select>
+
+</mapper> 
