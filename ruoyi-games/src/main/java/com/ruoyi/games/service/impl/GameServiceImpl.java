@@ -365,16 +365,27 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public int getServerPort() {
+    public int getServerPort(GameRoomInfo info) {
         List<GameRoomInfo> list = queryRoomList();
         List<Integer> oList = new ArrayList<Integer>();
         int serverPort = 10086;
         if (CollectionUtils.isNotEmpty(list)) {
+            boolean flag = false;
             for (GameRoomInfo row : list) {
                 oList.add(row.getServerPort());
+                if (info.getServerPort() != 0) {
+                    if (row.getServerPort() == info.getServerPort()) {
+                        flag = true;
+                    }
+                }
             }
-            int lastServerPort = oList.get(oList.size() - 1);
-            serverPort = CodeUtils.randomNum(lastServerPort + 1, 65534);
+
+            if (flag) {
+                int lastServerPort = oList.get(oList.size() - 1);
+                serverPort = CodeUtils.randomNum(lastServerPort + 1, 65534);
+            } else {
+                serverPort = info.getServerPort();
+            }
         } else {
             serverPort = CodeUtils.randomNum(10000, 50000);
             oList.add(serverPort);

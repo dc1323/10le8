@@ -57,12 +57,44 @@
         </div>
 
         <div class="row" style="margin-top:15px;margin-bottom:15px;">
+            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">排列号：</div>
+            <div class="col-xs-3">
+                <input id="txtSortID" name="sortID" placeholder="请输入排序号" required
+                       class="form-control input-sm" th:field="*{sortID}" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                       type="text" ></div>
+        </div>
+
+        <div class="row" style="margin-top:15px;margin-bottom:15px;">
+            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">服务端口：</div>
+            <div class="col-xs-3">
+                <input id="txtServerPort" name="serverPort" placeholder="请输入服务端口" required
+                       class="form-control input-sm" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                       th:field="*{serverPort}" type="text" ></div>
+        </div>
+
+        <div class="row" style="margin-top:15px;margin-bottom:15px;">
+            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">房间等级：</div>
+            <div class="col-xs-3">
+                <input id="txtServerLevel" name="serverLevel" placeholder="请输入房间等级" required
+                       class="form-control input-sm" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                       th:field="*{serverLevel}" type="text" ></div>
+        </div>
+
+        <div class="row" style="margin-top:15px;margin-bottom:15px;">
+            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">游戏人数：</div>
+            <div class="col-xs-3">
+                <input id="txtMaxPlayer" name="maxPlayer" placeholder="请输入游戏人数" required
+                       class="form-control input-sm" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                       th:field="*{maxPlayer}" type="text" ></div>
+        </div>
+
+        <div class="row" style="margin-top:15px;margin-bottom:15px;">
             <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">大王炸赢：</div>
             <div class="col-xs-2">
                 <input id="txtcbDWZWin" name="cbDWZWin" placeholder="大王炸赢必须为9的倍数" required
                        class="form-control input-sm" th:field="*{cbDWZWin}" type="text">
             </div>
-            <div class="col-xs-2 " style="text-align:right;margin-left:-100px">九人每位赔：</div>
+            <div class="col-xs-2 " style="text-align:right;margin-left:-100px;padding-top:7px;margin-bottom:0;">九人每位赔：</div>
             <div class="col-xs-2">
                 <input id="txtcbDWZWin2Nine" name="cbDWZWin2Nine" placeholder="请输入每位赔的金额" required
                        class="form-control input-sm" th:field="*{cbDWZWin2Nine}" type="text">
@@ -76,13 +108,13 @@
                        class="form-control input-sm" th:field="*{cbXWZWin}" type="text">
             </div>
 
-            <div class="col-xs-2" style="text-align:right;margin-left:-100px">小炸赢：</div>
+            <div class="col-xs-2" style="text-align:right;margin-left:-100px;padding-top:7px;margin-bottom:0;">小炸赢：</div>
             <div class="col-xs-2">
                 <input id="txtcbWZWin" name="cbWZWin" placeholder="大雷输和小雷输之和为8的倍数" required
                        class="form-control input-sm" th:field="*{cbWZWin}" type="text">
             </div>
 
-            <div class="col-xs-2 " style="text-align:right;margin-left:-100px">八人每位赔：</div>
+            <div class="col-xs-2 " style="text-align:right;margin-left:-100px;padding-top:7px;margin-bottom:0;">八人每位赔：</div>
             <div class="col-xs-2">
                 <input id="txtcbXLLost2Eigbht" name="cbXLLost2Eigbht" placeholder="请输入八人每位赔" required
                        class="form-control input-sm" th:field="*{cbXLLost2Eigbht}" type="text"></div>元
@@ -94,13 +126,13 @@
                 <input id="txtcbDLLost" name="cbDLLost" placeholder="请输入大雷赔金额" required
                        class="form-control input-sm" th:field="*{cbDLLost}" type="text"></div>
 
-            <div class="col-xs-2" style="text-align:right;margin-left:-100px">小雷赔：</div>
+            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;margin-left:-100px">小雷赔：</div>
             <div class="col-xs-2">
                 <input id="txtcbXLLost" name="cbXLLost" placeholder="请输入小雷赔金额" required
                        class="form-control input-sm" th:field="*{cbXLLost}" type="text">
             </div>
 
-            <div class="col-xs-2 " style="text-align:right;margin-left:-100px">八人每位赢：</div>
+            <div class="col-xs-2 " style="text-align:right;margin-left:-100px;padding-top:7px;margin-bottom:0;">八人每位赢：</div>
             <div class="col-xs-2">
                 <input id="txtcbWZWin2Eight" name="cbWZWin2Eight" placeholder="请输入八人每位赢" required
                        class="form-control input-sm" th:field="*{cbWZWin2Eight}" type="text">

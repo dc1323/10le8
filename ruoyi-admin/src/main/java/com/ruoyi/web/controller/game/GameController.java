@@ -539,7 +539,6 @@ public class GameController extends BaseController {
             }
 
             String cbArry = info.getCbDWZWin2Nine() + "," + info.getCbXLLost2Eigbht() + "," + info.getCbWZWin2Eight();
-            int serverLevel = 5;
             String cmd = info.getCmd();
             List<Game2CaiPiaoParam> caiPiaoDiZhiList = gameService.getGame2CaiPiaoParamList(info.getKindID());
             Game2CaiPiaoParam param = caiPiaoDiZhiList.get(0);
@@ -548,9 +547,9 @@ public class GameController extends BaseController {
             int cbBetTime = param.cbBetTime;
             int cbEndTime = param.cbEndTime;
 
-            if (cmd.equals("update")) {
+            if (cmd.equals("update") && StringUtils.isEmpty(info.getServerLevel())) {
                 GameRoomInfo gameRoomInfo1 = gameService.getGameRoomInfo(info.getServerID());
-                serverLevel = Integer.parseInt(gameRoomInfo1.getServerLevel());
+                info.setServerLevel(gameRoomInfo1.getServerLevel());
             }
 
             if (info.getCbDWZWin() < 0 || info.getCbXWZWin() < 0 || info.getCbWZWin() < 0
@@ -598,8 +597,7 @@ public class GameController extends BaseController {
 
             info.setServerRule(Integer.parseInt(rule));
             info.setAttachUserRight(info.getKindID());
-            info.setServerPort(gameService.getServerPort());
-            info.setServerLevel(String.valueOf(serverLevel));
+            info.setServerPort(gameService.getServerPort(info));
             info.setDataBaseName(dataBaseName);
             info.setDataBaseAddr(dataBaseAddr);
             info.setCustomRule(strCustom);

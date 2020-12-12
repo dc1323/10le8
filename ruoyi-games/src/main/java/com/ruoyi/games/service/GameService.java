@@ -65,7 +65,7 @@ public interface GameService {
 
     String getRule(int kindId);
 
-    int getServerPort();
+    int getServerPort(GameRoomInfo info);
 
     String appendString(Map<String, Integer> dic);
 
