@@ -29,4 +29,10 @@
         where ID = #{id}
     </delete>
 
+    <select id="getHorseLampTop" resultMap="HorseLampResult">
+        SELECT top #{topNumber} ID, txtBody, StartTime, EndTime
+        FROM RYNativeWebDB.dbo.HorseLamp
+        order by ID desc
+    </select>
+
 </mapper>

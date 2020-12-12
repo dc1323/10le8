@@ -49,6 +49,9 @@ public class ApiGameController extends BaseController {
     @Autowired
     private RotationImageService rotationImageService;
 
+    @Autowired
+    private HorseLampService horseLampService;
+
     @ApiOperation("绑定上级")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
@@ -377,6 +380,9 @@ public class ApiGameController extends BaseController {
     })
     @GetMapping("/getrotitionlist")
     public AjaxResult getRotitionList(Integer userID, Integer gameID, Integer topNumber) {
+        if (null == topNumber || Objects.equals(0, topNumber)) {
+            topNumber = 6;
+        }
         List<RotationImage> list = rotationImageService.getRotationImageList(topNumber);
         return AjaxResult.success("获取成功", list);
     }
@@ -393,6 +399,53 @@ public class ApiGameController extends BaseController {
     public AjaxResult getGameRecordByUser(Integer userID, Integer gameID, int matchType, Integer kindID, int month) {
         GameRecord gameRecord = gameService.getGameRecordList(userID, kindID, month, matchType);
         return AjaxResult.success("获取成功", gameRecord);
+    }
+
+    @ApiOperation("获取跑马灯列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "topNumber", value = "跑马灯数量(默认6条)", dataType = "int", paramType = "query")
+    })
+    @GetMapping("/gethorselamplist")
+    public AjaxResult getHorseLampList(Integer userID, Integer gameID, Integer topNumber) {
+        if (null == topNumber || Objects.equals(0, topNumber)) {
+            topNumber = 6;
+        }
+        List<HorseLamp> list = horseLampService.getHorseLampTop(topNumber);
+        return AjaxResult.success("获取成功", list);
+    }
+
+    @ApiOperation("获取用户银行信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getgamescoreinfobyuserid")
+    public AjaxResult getGameScoreInfoByUserID(Integer userID, Integer gameID) {
+        AccountInfo info = accountInfoService.selectAccountByUserID(userID);
+        if (null == info) {
+            return AjaxResult.success();
+        } else {
+            return AjaxResult.success("获取成功", info);
+        }
+    }
+
+    @ApiOperation("获取返利说明")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getrebatescaleremark")
+    public AjaxResult getRebateScaleRemark(Integer userID, Integer gameID) {
+        GameFunctionSet info = gameService.getFunctionSetByKey("RevenueRemark");
+        if (null == info) {
+            return AjaxResult.success();
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            map.put("values", info.getStatusValue());
+            return AjaxResult.success("获取成功", map);
+        }
     }
 
 }
