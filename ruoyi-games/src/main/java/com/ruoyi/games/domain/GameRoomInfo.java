@@ -7,18 +7,18 @@ import java.util.Map;
 
 public class GameRoomInfo {
 
-    private Integer serverID;
+    private int serverID;
 
     private String serverName;
 
-    private Integer kindID;
+    private int kindID;
     private String kindName;
 
     private int nodeID;
 
     private int sortID;
 
-    private Integer gameID;
+    private int gameID;
 
     private int tableCount;
 
@@ -36,7 +36,7 @@ public class GameRoomInfo {
 
     private String cellScore;
 
-    private float revenueRatio;
+    private int revenueRatio;
 
     private long serviceScore;
 
@@ -238,11 +238,11 @@ public class GameRoomInfo {
      */
     private Map<String, Object> params;
 
-    public Integer getServerID() {
+    public int getServerID() {
         return serverID;
     }
 
-    public void setServerID(Integer serverID) {
+    public void setServerID(int serverID) {
         this.serverID = serverID;
     }
 
@@ -254,11 +254,11 @@ public class GameRoomInfo {
         this.serverName = serverName;
     }
 
-    public Integer getKindID() {
+    public int getKindID() {
         return kindID;
     }
 
-    public void setKindID(Integer kindID) {
+    public void setKindID(int kindID) {
         this.kindID = kindID;
     }
 
@@ -286,11 +286,11 @@ public class GameRoomInfo {
         this.sortID = sortID;
     }
 
-    public Integer getGameID() {
+    public int getGameID() {
         return gameID;
     }
 
-    public void setGameID(Integer gameID) {
+    public void setGameID(int gameID) {
         this.gameID = gameID;
     }
 
@@ -358,11 +358,11 @@ public class GameRoomInfo {
         this.cellScore = cellScore;
     }
 
-    public float getRevenueRatio() {
+    public int getRevenueRatio() {
         return revenueRatio;
     }
 
-    public void setRevenueRatio(float revenueRatio) {
+    public void setRevenueRatio(int revenueRatio) {
         this.revenueRatio = revenueRatio;
     }
 

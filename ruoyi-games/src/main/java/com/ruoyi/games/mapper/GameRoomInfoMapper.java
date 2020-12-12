@@ -29,7 +29,7 @@ public interface GameRoomInfoMapper {
      */
     List<GameRoomCommission> getCommissionByServerForAll();
 
-    Map<String, String> createRoom(Map<String, String> map);
+    Map<String, Object> createRoom(Map<String, Object> map);
 
     List<GameRoomInfo> getGameRoomInfoByKindId(Integer kindId);
 

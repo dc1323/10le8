@@ -1,5 +1,6 @@
 package com.ruoyi.games.service.impl;
 
+import com.ruoyi.common.utils.CodeUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.games.domain.*;
@@ -197,50 +198,43 @@ public class GameServiceImpl implements GameService {
         String outString = "";
         for (String key : dic.keySet()) {
             Integer value = dic.get(key);
-            outString += getNewSubstring(StringUtils.intTohex(value));
+            outString += getNewSubstring(String.format("%04X", value));
         }
         return outString;
     }
 
     @Override
-    public Map<String, String> createRoom(GameRoomInfo info) {
-        Map<String, String> map = new HashMap<>();
-        map.put("wGameID", info.getKindID() + "");
-        map.put("wKindID", info.getKindID() + "");
-        map.put("wNodeID", info.getNodeID() + "");
-        map.put("wSortID", info.getSortID() + "");
-
+    public Map<String, Object> createRoom(GameRoomInfo info) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("wGameID", info.getKindID());
+        map.put("wKindID", info.getKindID());
+        map.put("wNodeID", info.getNodeID());
+        map.put("wSortID", info.getSortID());
         map.put("lCellScore", info.getCellScore());
-        map.put("wRevenueRatio", info.getRevenueRatio() + "");
-        map.put("lServiceScore", info.getServiceScore() + "");
-
-        map.put("lRestrictScore", info.getRestrictScore() + "");
-        map.put("lMinTableScore", info.getMinTableScore()  + "");
-        map.put("lMinEnterScore", info.getMinEnterScore() + "");
-        map.put("lMaxEnterScore", info.getMaxEnterScore() + "");
-
-        map.put("cbMinEnterMember", info.getMinEnterMember() + "");
-        map.put("cbMaxEnterMember", info.getMaxEnterMember() + "");
-
-        map.put("dwServerRule", info.getServerRule() + "");
-        map.put("dwAttachUserRight", info.getAttachUserRight() + "");
-
-        map.put("wMaxPlayer", info.getMaxPlayer() + "");
-        map.put("wTableCount", info.getTableCount() + "");
-        map.put("wServerPort", info.getServerPort() + "");
-        map.put("wServerKind", info.getServerKind() + "");
-        map.put("wServerType", info.getServerType() + "");
+        map.put("wRevenueRatio", info.getRevenueRatio());
+        map.put("lServiceScore", info.getServiceScore());
+        map.put("lRestrictScore", info.getRestrictScore());
+        map.put("lMinTableScore", info.getMinTableScore());
+        map.put("lMinEnterScore", info.getMinEnterScore());
+        map.put("lMaxEnterScore", info.getMaxEnterScore());
+        map.put("cbMinEnterMember", info.getMinEnterMember());
+        map.put("cbMaxEnterMember", info.getMaxEnterMember());
+        map.put("dwServerRule", info.getServerRule());
+        map.put("dwAttachUserRight", info.getAttachUserRight());
+        map.put("wMaxPlayer", info.getMaxPlayer());
+        map.put("wTableCount", info.getTableCount());
+        map.put("wServerPort", info.getServerPort());
+        map.put("wServerKind", info.getServerKind());
+        map.put("wServerType", info.getServerType());
         map.put("wServerLevel", info.getServerLevel());
         map.put("strServerName", info.getServerName());
         map.put("strServerPasswd", info.getServerPasswd());
-
-        map.put("cbDistributeRule", info.getDistributeRule() + "");
-        map.put("wMinDistributeUser", info.getMinDistributeUser() + "");
-        map.put("wDistributeTimeSpace", info.getDistributeTimeSpace() + "");
-        map.put("wDistributeDrawCount", info.getDistributeDrawCount() + "");
-        map.put("wMinPartakeGameUser", info.getMinPartakeGameUser() + "");
-        map.put("wMaxPartakeGameUser", info.getMaxPartakeGameUser() + "");
-
+        map.put("cbDistributeRule", info.getDistributeRule());
+        map.put("wMinDistributeUser", info.getMinDistributeUser());
+        map.put("wDistributeTimeSpace", info.getDistributeTimeSpace());
+        map.put("wDistributeDrawCount", info.getDistributeDrawCount());
+        map.put("wMinPartakeGameUser", info.getMinPartakeGameUser());
+        map.put("wMaxPartakeGameUser", info.getMaxPartakeGameUser());
         map.put("strDataBaseName", info.getDataBaseName());
         map.put("strDataBaseAddr", info.getDataBaseAddr());
         map.put("strCustomRule", info.getCustomRule());
@@ -350,20 +344,17 @@ public class GameServiceImpl implements GameService {
     public int getServerPort() {
         List<GameRoomInfo> list = queryRoomList();
         List<Integer> oList = new ArrayList<Integer>();
-        Random rad = new Random();
         int serverPort = 10086;
         if (CollectionUtils.isNotEmpty(list)) {
             for (GameRoomInfo row : list) {
                 oList.add(row.getServerPort());
             }
             int lastServerPort = oList.get(oList.size() - 1);
-            serverPort = rad.nextInt() * (65534-lastServerPort+1)+ lastServerPort;
+            serverPort = CodeUtils.randomNum(lastServerPort + 1, 65534);
         } else {
-            serverPort = rad.nextInt() * (50000 - 10000 + 1);
+            serverPort = CodeUtils.randomNum(10000, 50000);
             oList.add(serverPort);
         }
-
-        Collections.sort(oList);
         return serverPort;
     }
 }

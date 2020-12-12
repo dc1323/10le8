@@ -67,7 +67,7 @@ public interface GameService {
 
     String appendString(Map<String, Integer> dic);
 
-    Map<String, String> createRoom(GameRoomInfo info);
+    Map<String, Object> createRoom(GameRoomInfo info);
 
     int updateGameRoom(GameRoomInfo info);
 }

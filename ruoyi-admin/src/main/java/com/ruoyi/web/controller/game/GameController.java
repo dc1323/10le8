@@ -487,8 +487,8 @@ public class GameController extends BaseController {
         return prefix + "/game_info_edit";
     }
 
-    @GetMapping("/doEditGame/{serverID}")
-    public String doEditGame(@PathVariable("serverID") String serverID, ModelMap map) {
+    @GetMapping("/doEditGame/{id}")
+    public String doEditGame(@PathVariable("id") String serverID, ModelMap map) {
         GameRoomInfo info = gameService.getGameRoomInfo(Integer.parseInt(serverID));
         Map<String, Integer> dic = gameService.getRules(info.getCustomRule().substring(0, 32));
         info.setCbFreeTime(dic.get("cbFreeTime"));
@@ -517,7 +517,7 @@ public class GameController extends BaseController {
     @Log(title = "游戏编辑", businessType = BusinessType.UPDATE)
     @ResponseBody
     @PostMapping(value="/editOrAdd")
-    public AjaxResult editOrAdd(@RequestBody GameRoomInfo info) {
+    public AjaxResult editOrAdd(GameRoomInfo info) {
         String oper = "修改";
 
         try {
@@ -530,7 +530,7 @@ public class GameController extends BaseController {
                 return error("大王炸赢金额与九人每人赔的金额总计不相等!");
             }
 
-            if ((info.getCbXWZWin() + info.getCbDWZWin()) != info.getCbXLLost2Eigbht() * 8) {
+            if ((info.getCbXWZWin() + info.getCbWZWin()) != info.getCbXLLost2Eigbht() * 8) {
                 return error("小王炸赢与小炸加每八人赔总计金额不相等!");
             }
 
@@ -543,14 +543,6 @@ public class GameController extends BaseController {
             String cmd = info.getCmd();
             List<Game2CaiPiaoParam> caiPiaoDiZhiList = gameService.getGame2CaiPiaoParamList(info.getKindID());
             Game2CaiPiaoParam param = caiPiaoDiZhiList.get(0);
-            String serverName = "";
-            if (cmd.equals("add")) {
-                serverName = param.getKindName() + "_" + info.getCellScore();
-            }
-
-            if (StringUtils.isEmpty(serverName)) {
-                return error("房间名称有误!");
-            }
 
             int cbFreeTime = param.cbFreeTime;
             int cbBetTime = param.cbBetTime;
@@ -592,7 +584,7 @@ public class GameController extends BaseController {
                 return error("服务规则有误,请联系技术人员!");
             }
 
-            Map<String, Integer> map = new HashMap<String, Integer>();
+            Map<String, Integer> map = new LinkedHashMap<>();
             map.put("cbFreeTime", cbFreeTime);
             map.put("cbBetTime", cbBetTime);
             map.put("cbEndTime", cbEndTime);
@@ -602,7 +594,7 @@ public class GameController extends BaseController {
             map.put("cbDLLost", info.getCbDLLost());
             map.put("cbXLLost", info.getCbXLLost());
             String strCustom = gameService.appendString(map);
-            strCustom = StringUtils.rightPad(strCustom, 2048);
+            strCustom = StringUtils.rightPad(strCustom, 2048, "0");
 
             info.setServerRule(Integer.parseInt(rule));
             info.setAttachUserRight(info.getKindID());
@@ -625,11 +617,11 @@ public class GameController extends BaseController {
             }
 
             if (cmd.equals("add")) {
-                Map<String, String> result = gameService.createRoom(info);
+                Map<String, Object> result = gameService.createRoom(info);
                 if(result.size() > 0) {
-                    int serverID = Integer.parseInt(result.get("ServerID"));
+                    int serverID = Integer.parseInt(result.get("ServerID").toString());
                     if (serverID > 0) {
-                        gameService.startGameService(serverID);
+                        //gameService.startGameService(serverID);
                     }
                 }
             } else {
