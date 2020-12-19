@@ -77,4 +77,6 @@ public interface GameService {
                                                   Integer kindID,
                                                   Integer month,
                                                   Integer matchType);
+
+    GameItem getGameItemByGameId(Integer gameID);
 }

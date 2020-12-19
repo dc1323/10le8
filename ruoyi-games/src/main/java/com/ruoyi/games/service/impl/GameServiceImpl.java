@@ -5,6 +5,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.http.HttpUtils;
 import com.ruoyi.games.domain.*;
+import com.ruoyi.games.mapper.GameItemMapper;
 import com.ruoyi.games.mapper.GameMapper;
 import com.ruoyi.games.mapper.GameRecordMapper;
 import com.ruoyi.games.mapper.GameRoomInfoMapper;
@@ -24,6 +25,8 @@ public class GameServiceImpl implements GameService {
     private GameRoomInfoMapper gameRoomInfoMapper;
     @Autowired
     private GameRecordMapper gameRecordMapper;
+    @Autowired
+    private GameItemMapper gameItemMapper;
 
     @Value("${GameServerUrl}")
     private String gameServerUrl;
@@ -271,6 +274,11 @@ public class GameServiceImpl implements GameService {
             return list.get(0);
         }
         return null;
+    }
+
+    @Override
+    public GameItem getGameItemByGameId(Integer gameID) {
+        return gameItemMapper.getGameItemByGameId(gameID);
     }
 
     public String getNewSubstring(String needString) {

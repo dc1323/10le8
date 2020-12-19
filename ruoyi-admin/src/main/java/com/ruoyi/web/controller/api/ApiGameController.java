@@ -448,4 +448,21 @@ public class ApiGameController extends BaseController {
         }
     }
 
+    @ApiOperation("获取游戏版本号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getgameversion")
+    public AjaxResult getGameVersion(Integer userID, Integer gameID) {
+        GameItem info = gameService.getGameItemByGameId(gameID);
+        if (null == info) {
+            return AjaxResult.success();
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            map.put("values", info.getServerVersion());
+            return AjaxResult.success("获取成功", map);
+        }
+    }
+
 }

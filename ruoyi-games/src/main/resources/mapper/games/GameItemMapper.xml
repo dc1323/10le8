@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.games.mapper.GameItemMapper">
+
+    <resultMap type="com.ruoyi.games.domain.GameItem" id="GameItemResult">
+        <result property="gameID" column="GameID"/>
+        <result property="gameName" column="GameName"/>
+        <result property="suportType" column="SuportType"/>
+        <result property="dataBaseAddr" column="DataBaseAddr"/>
+        <result property="dataBaseName" column="DataBaseName"/>
+        <result property="serverVersion" column="ServerVersion"/>
+        <result property="clientVersion" column="ClientVersion"/>
+        <result property="serverDLLName" column="ServerDLLName"/>
+        <result property="clientExeName" column="ClientExeName"/>
+    </resultMap>
+
+    <select id="getGameItemByGameId" resultType="com.ruoyi.games.domain.GameItem">
+        SELECT GameID,GameName,SuportType,DataBaseAddr,DataBaseName,ServerVersion,
+               ClientVersion,ServerDLLName,ClientExeName
+        FROM RYPlatformDB.dbo.GameGameItem
+        where GameID = #{gameID}
+    </select>
+
+</mapper> 
