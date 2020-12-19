@@ -277,8 +277,8 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameItem getGameItemByGameId(Integer gameID) {
-        return gameItemMapper.getGameItemByGameId(gameID);
+    public GameItem getGameItem() {
+        return gameItemMapper.getGameItem();
     }
 
     public String getNewSubstring(String needString) {

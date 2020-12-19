@@ -16,11 +16,10 @@
         <result property="clientExeName" column="ClientExeName"/>
     </resultMap>
 
-    <select id="getGameItemByGameId" resultType="com.ruoyi.games.domain.GameItem">
-        SELECT GameID,GameName,SuportType,DataBaseAddr,DataBaseName,ServerVersion,
+    <select id="getGameItem" resultType="com.ruoyi.games.domain.GameItem">
+        SELECT top 1 GameID,GameName,SuportType,DataBaseAddr,DataBaseName,ServerVersion,
                ClientVersion,ServerDLLName,ClientExeName
         FROM RYPlatformDB.dbo.GameGameItem
-        where GameID = #{gameID}
     </select>
 
 </mapper> 

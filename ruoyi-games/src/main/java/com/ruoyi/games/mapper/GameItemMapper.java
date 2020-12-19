@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GameItemMapper {
 
-    GameItem getGameItemByGameId(Integer gameID);
+    GameItem getGameItem();
 
 }
