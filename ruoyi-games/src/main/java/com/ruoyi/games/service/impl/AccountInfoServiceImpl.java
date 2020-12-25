@@ -283,10 +283,14 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         param.put("playingGame", playingGame);
         accountInfoMapper.bindPlayingGame(param);
         String result = (String) param.get("strErr");
+//        if (StringUtils.isEmpty(result)) {
+//            return AjaxResult.error(result);
+//        }
+//        return AjaxResult.success();
         if (StringUtils.isEmpty(result)) {
-            return AjaxResult.error(result);
+            return AjaxResult.success(result);
         }
-        return AjaxResult.success();
+        return AjaxResult.error();
     }
 
     @Override
@@ -326,7 +330,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         Date endTime = new Date();
         Date startTime = phoneSms.getInsertTime();
         long timeSpan = endTime.getTime() - startTime.getTime();
-        if (timeSpan > 300) {
+        if (timeSpan > 300*100000) {
             return AjaxResult.error("验证码有效期为5分钟,请重新发送手机验证码");
         }
 
@@ -353,7 +357,9 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         dic.put("nPlayingGame", playingGame + "");
 
         Map<String, String> message = registerAccountByMessage(dic);
-        if (message.size() > 0) {
+
+//        if (message.size() > 0) {
+        if (message == null) {
             return AjaxResult.error("注册失败", message);
         }
         return AjaxResult.success("注册成功");

@@ -229,7 +229,8 @@
                 #{strErr,mode=OUT,jdbcType=VARCHAR})}
     </select>
 
-    <select id="registerAccountByMessage" parameterType="java.util.Map" statementType="CALLABLE">
+    <select id="registerAccountByMessage" parameterType="java.util.Map" statementType="CALLABLE"
+            resultType="java.util.Map">
         {call RYAccountsDB.dbo.JSON_RegisterAccount(
                 #{strAccounts,mode=IN,jdbcType=VARCHAR},
                 #{strNickName,mode=IN,jdbcType=VARCHAR},
