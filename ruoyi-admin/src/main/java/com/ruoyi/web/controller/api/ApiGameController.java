@@ -54,45 +54,46 @@ public class ApiGameController extends BaseController {
 
     @ApiOperation("绑定上级")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "body"),
-            @ApiImplicitParam(name = "playingGame", value = "上级游戏ID", required = true, dataType = "int", paramType = "body")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "playingGame", value = "上级游戏ID", required = true, dataType = "int", paramType = "query")
     })
     @PostMapping("/bindsuperior")
     @ResponseBody
-    public AjaxResult bindSuperior(Integer userID, Integer gameID, Integer playingGame) {
+    public AjaxResult bindSuperior(@RequestParam Integer userID, @RequestParam Integer gameID, @RequestParam Integer playingGame) {
         return accountInfoService.bindPlayingGame(userID, gameID, playingGame);
     }
 
     @ApiOperation("用户申请提款")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "body"),
-            @ApiImplicitParam(name = "distillMoney", value = "提款金额", required = true, dataType = "Double", paramType = "body"),
-            @ApiImplicitParam(name = "bankCardNumber", value = "银行卡号", required = true, dataType = "String", paramType = "body")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "distillMoney", value = "提款金额", required = true, dataType = "Double", paramType = "query"),
+            @ApiImplicitParam(name = "bankCardNumber", value = "银行卡号", required = true, dataType = "String", paramType = "query")
     })
     @PostMapping("/userdistillali")
     @ResponseBody
-    public AjaxResult userDistillAli(Integer userID, Integer gameID, Double distillMoney, String bankCardNumber) {
+    public AjaxResult userDistillAli(@RequestParam  Integer userID, @RequestParam Integer gameID,
+                                     @RequestParam Double distillMoney, @RequestParam String bankCardNumber) {
         return accountInfoService.userDistillAli(userID, gameID, distillMoney, bankCardNumber);
     }
 
     @ApiOperation("绑定银行卡")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "body"),
-            @ApiImplicitParam(name = "bankName", value = "银行名称", required = true, dataType = "String", paramType = "body"),
-            @ApiImplicitParam(name = "bankCardNumber", value = "银行卡号", required = true, dataType = "String", paramType = "body"),
-            @ApiImplicitParam(name = "bankUserName", value = "户名", required = true, dataType = "String", paramType = "body"),
-            @ApiImplicitParam(name = "bankTypeName", value = "银行类型", required = true, dataType = "String", paramType = "body"),
-            @ApiImplicitParam(name = "phoneNumber", value = "手机号码", required = true, dataType = "String", paramType = "body"),
-            @ApiImplicitParam(name = "phoneCode", value = "验证码", required = true, dataType = "String", paramType = "body")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "bankName", value = "银行名称", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "bankCardNumber", value = "银行卡号", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "bankUserName", value = "户名", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "bankTypeName", value = "银行类型", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "phoneNumber", value = "手机号码", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "phoneCode", value = "验证码", required = true, dataType = "String", paramType = "query")
     })
     @PostMapping("/bindbank")
     @ResponseBody
-    public AjaxResult BindBank(Integer userID, Integer gameID, String bankName,
-                               String bankCardNumber, String bankUserName,
-                               String bankTypeName, String phoneNumber, String phoneCode) {
+    public AjaxResult BindBank(@RequestParam Integer userID, @RequestParam Integer gameID, @RequestParam String bankName,
+                               @RequestParam String bankCardNumber, @RequestParam String bankUserName,
+                               @RequestParam String bankTypeName, @RequestParam String phoneNumber, @RequestParam String phoneCode) {
         if (StringUtils.isEmpty(bankCardNumber) || StringUtils.isEmpty(bankUserName) || StringUtils.isEmpty(bankTypeName)) {
             return AjaxResult.error("操作失败,参数不合法!");
         }
@@ -101,12 +102,12 @@ public class ApiGameController extends BaseController {
 
     @ApiOperation("领取佣金")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "body"),
-            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "body")
+            @ApiImplicitParam(name = "userID", value = "用户标识", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
     })
     @PostMapping("/cachout")
     @ResponseBody
-    public AjaxResult cachOut(Integer userID, Integer gameID) {
+    public AjaxResult cachOut(@RequestParam Integer userID,@RequestParam Integer gameID) {
         return accountInfoService.cachOut(userID, gameID);
     }
 
