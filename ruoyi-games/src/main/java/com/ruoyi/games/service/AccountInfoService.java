@@ -1,5 +1,6 @@
 package com.ruoyi.games.service;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.games.domain.*;
 import org.apache.ibatis.annotations.Param;

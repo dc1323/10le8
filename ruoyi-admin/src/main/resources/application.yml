@@ -138,3 +138,9 @@ ServiceRule: 123:66062352, 124:62916624
 DataBaseName: RYTreasureDB
 DataBaseAddr: 61.174.243.35
 ServiceMachine: E59E9E727BC7EC666C00F5AD0B747896
+
+# 阿里短信配置信息
+# 短信签名-可在短信控制台中找到
+SignName: 转一转
+# 短信模板-可在短信控制台中找到
+TemplateCode: SMS_167402022

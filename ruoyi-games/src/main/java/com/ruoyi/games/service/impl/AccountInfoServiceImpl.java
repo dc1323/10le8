@@ -1,5 +1,7 @@
 package com.ruoyi.games.service.impl;
 
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -9,6 +11,7 @@ import com.ruoyi.common.utils.security.Md5Utils;
 import com.ruoyi.games.domain.*;
 import com.ruoyi.games.mapper.*;
 import com.ruoyi.games.service.AccountInfoService;
+import com.ruoyi.games.utils.SmsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,10 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 
     @Value("${ServerUrl}")
     private String serverUrl;
+    @Value("${SignName}")
+    private String signName;
+    @Value("${TemplateCode}")
+    private String templateCode;
 
     @Autowired
     private AccountInfoMapper accountInfoMapper;
@@ -396,16 +403,18 @@ public class AccountInfoServiceImpl implements AccountInfoService {
             dic.put("AccessKeySecret", accessKeySecret);
             dic.put("PhoneNumber", sms.getPhoneNumber());
             dic.put("PhoneCode", sms.getSmsCode());
-
-            /*
-            var response = SMSHelper.Current.SendSms(dic);
-            if (!response.Code.ToUpper().Equals("OK"))
-            {
-                ajv.SetFail("发送失败");
-
-                return ajv;
-            }*/
-            return AjaxResult.success("发送成功");
+            dic.put("SignName",signName);
+            dic.put("TemplateCode",templateCode);
+            SendSmsResponse response = null;
+            try {
+                response = SmsUtil.sendSms(dic);
+            }catch (Exception e){
+                log.error("短信发送失败!",e);
+            }
+            if(response.getCode().equalsIgnoreCase("OK")){
+                return AjaxResult.success("发送成功");
+            }
+            return AjaxResult.error("发送失败");
         }
         return AjaxResult.error("发送失败");
     }
