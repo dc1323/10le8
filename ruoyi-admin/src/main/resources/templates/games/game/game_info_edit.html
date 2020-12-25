@@ -30,7 +30,7 @@
             <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">底注金额：</div>
             <div class="col-xs-3">
                 <input id="txtCellScore" name="cellScore" placeholder="请输入底注金额"
-                       required class="form-control input-sm" th:field="*{cellScore}" type="text" >
+                       required class="form-control input-sm" th:field="*{cellScore}" type="text" oninput="ChangeNine();">
             </div>
         </div>
 
@@ -89,54 +89,74 @@
         </div>
 
         <div class="row" style="margin-top:15px;margin-bottom:15px;">
-            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">大王炸赢：</div>
-            <div class="col-xs-2">
-                <input id="txtcbDWZWin" name="cbDWZWin" placeholder="大王炸赢必须为9的倍数" required
-                       class="form-control input-sm" th:field="*{cbDWZWin}" type="text">
-            </div>
+            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">大王炸赢：9倍</div>
+                <div class="col-xs-2" style="text-align:left;padding-top:7px;margin-bottom:0;">总赢额:
+                    <label id="txtcbDWZWin" name="cbDWZWin"  type="text"></label>
+<!--                    <label id="txtcbDWZWin" name="cbDWZWin" type="text" > </label>-->
+                </div>
+<!--            <div class="col-xs-2" >-->
+<!--                <input id="txtcbDWZWin" name="cbDWZWin" placeholder="大王炸赢必须为9的倍数" required-->
+<!--                       class="form-control input-sm" th:field="*{cbDWZWin}" type="text">-->
+<!--            </div>-->
             <div class="col-xs-2 " style="text-align:right;margin-left:-100px;padding-top:7px;margin-bottom:0;">九人每位赔：</div>
             <div class="col-xs-2">
                 <input id="txtcbDWZWin2Nine" name="cbDWZWin2Nine" placeholder="请输入每位赔的金额" required
-                       class="form-control input-sm" th:field="*{cbDWZWin2Nine}" type="text">
-            </div>元
+                       class="form-control input-sm" th:field="*{cbDWZWin2Nine}" type="text" oninput="ChangeNine();" >
+            </div>倍
         </div>
 
         <div class="row" style="margin-top:15px;margin-bottom:15px;">
-            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">小王炸赢：</div>
-            <div class="col-xs-2">
+            <div class="col-xs-1" style="text-align:right;padding-top:7px;margin-bottom:0;">小王炸赢：</div>
+            <div class="col-xs-1">
                 <input id="txtcbXWZWin" name="cbXWZWin" placeholder="小王炸赢和小炸赢之和必须为8的倍数" required
-                       class="form-control input-sm" th:field="*{cbXWZWin}" type="text">
+                       class="form-control input-sm" th:field="*{cbXWZWin}" type="text" oninput="AutoXWZ(this);">
             </div>
 
-            <div class="col-xs-2" style="text-align:right;margin-left:-100px;padding-top:7px;margin-bottom:0;">小炸赢：</div>
-            <div class="col-xs-2">
+            <div class="col-xs-1" style="text-align:right;padding-top:7px;margin-bottom:0;">总赢额:
+                <label id="txtcbXWZWinNum" name="cbXWZWinNum" type="text"> </label>
+            </div>
+
+            <div class="col-xs-1" style="text-align:right;padding-top:7px;margin-bottom:0;">小炸赢：</div>
+            <div class="col-xs-1" >
                 <input id="txtcbWZWin" name="cbWZWin" placeholder="大雷输和小雷输之和为8的倍数" required
-                       class="form-control input-sm" th:field="*{cbWZWin}" type="text">
+                       class="form-control input-sm" th:field="*{cbWZWin}" type="text" oninput="AutoXWZ(this);">
             </div>
 
-            <div class="col-xs-2 " style="text-align:right;margin-left:-100px;padding-top:7px;margin-bottom:0;">八人每位赔：</div>
-            <div class="col-xs-2">
+            <div class="col-xs-1" style="text-align:right;padding-top:7px;margin-bottom:0;">总赢额:
+                <label id="txtcbXZWinNum" name="cbXZWinNum" type="text"> </label>
+            </div>
+
+            <div class="col-xs-1 " style="text-align:right;margin-left:7px;padding-top:7px;margin-bottom:0;">八人每位赔：</div>
+            <div class="col-xs-1">
                 <input id="txtcbXLLost2Eigbht" name="cbXLLost2Eigbht" placeholder="请输入八人每位赔" required
-                       class="form-control input-sm" th:field="*{cbXLLost2Eigbht}" type="text"></div>元
+                       class="form-control input-sm" th:field="*{cbXLLost2Eigbht}" type="text" oninput="XWZorXZ_winnum();"></div>倍
         </div>
 
         <div class="row" style="margin-top:15px;margin-bottom:15px;">
-            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">大雷赔：</div>
-            <div class="col-xs-2">
+            <div class="col-xs-1" style="text-align:right;padding-top:7px;margin-bottom:0;">大雷赔：</div>
+            <div class="col-xs-1">
                 <input id="txtcbDLLost" name="cbDLLost" placeholder="请输入大雷赔金额" required
-                       class="form-control input-sm" th:field="*{cbDLLost}" type="text"></div>
+                       class="form-control input-sm" th:field="*{cbDLLost}" type="text" oninput="AutoXL(this);"></div>
 
-            <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;margin-left:-100px">小雷赔：</div>
-            <div class="col-xs-2">
-                <input id="txtcbXLLost" name="cbXLLost" placeholder="请输入小雷赔金额" required
-                       class="form-control input-sm" th:field="*{cbXLLost}" type="text">
+            <div class="col-xs-1" style="text-align:right;padding-top:7px;margin-bottom:0;">总赢额:
+                <label id="txtDLWinNum" name="cbdlWinNum" type="text"> </label>
             </div>
 
-            <div class="col-xs-2 " style="text-align:right;margin-left:-100px;padding-top:7px;margin-bottom:0;">八人每位赢：</div>
-            <div class="col-xs-2">
+            <div class="col-xs-1" style="text-align:right;padding-top:7px;margin-bottom:0;margin-left:0">小雷赔：</div>
+            <div class="col-xs-1">
+                <input id="txtcbXLLost" name="cbXLLost" placeholder="请输入小雷赔金额" required
+                       class="form-control input-sm" th:field="*{cbXLLost}" type="text" oninput="AutoXL(this);">
+            </div>
+
+            <div class="col-xs-1" style="text-align:right;padding-top:7px;margin-bottom:0;">总赢额:
+                <label id="txtXLWinNum" name="cbxlWinNum" type="text"> </label>
+            </div>
+
+            <div class="col-xs-1 " style="text-align:right;margin-left:7px;padding-top:7px;margin-bottom:0;">八人每位赢：</div>
+            <div class="col-xs-1">
                 <input id="txtcbWZWin2Eight" name="cbWZWin2Eight" placeholder="请输入八人每位赢" required
-                       class="form-control input-sm" th:field="*{cbWZWin2Eight}" type="text">
-            </div>元
+                       class="form-control input-sm" th:field="*{cbWZWin2Eight}" type="text" oninput="DLorXL_winnum();">
+            </div>倍
         </div>
     </form>
 </div>
@@ -152,6 +172,127 @@
 <th:block th:include="include :: select2-js"/>
 <script type="text/javascript">
     var prefix = ctx + "games/game";
+
+    var ninebelv = 9;
+    var eight = 8;
+
+    function XWZorXZ_winnum()
+    {
+
+        var inputCell = document.getElementById("txtCellScore");
+
+        var inputLost = document.getElementById("txtcbXLLost2Eigbht");
+
+        var inputXWZ = document.getElementById("txtcbXWZWin");
+
+        var txtXWZnum = document.getElementById("txtcbXWZWinNum");
+
+        txtXWZnum.innerText = inputLost.value*inputXWZ.value*inputCell.value;
+
+        var inputWZ = document.getElementById("txtcbWZWin");
+
+        var txtXZnum = document.getElementById("txtcbXZWinNum");
+
+        txtXZnum.innerText = inputLost.value*inputWZ.value*inputCell.value;
+
+        var inputDWZ = document.getElementById("txtcbDWZWin2Nine");
+
+        var txtcbDWZWin = document.getElementById("txtcbDWZWin");
+
+        txtcbDWZWin.innerText = ninebelv*inputCell.value*inputDWZ.value;
+    }
+
+
+    function DLorXL_winnum()
+    {
+
+        var inputCell = document.getElementById("txtCellScore");
+
+        var inputLost = document.getElementById("txtcbWZWin2Eight");
+
+        var inputXWZ = document.getElementById("txtcbDLLost");
+
+        var txtXWZnum = document.getElementById("txtDLWinNum");
+
+        txtXWZnum.innerText = inputLost.value*inputXWZ.value*inputCell.value;
+
+        var inputWZ = document.getElementById("txtcbXLLost");
+
+        var txtXZnum = document.getElementById("txtXLWinNum");
+
+        txtXZnum.innerText = inputLost.value*inputWZ.value*inputCell.value;
+    }
+
+    XWZorXZ_winnum()
+    DLorXL_winnum()
+
+    function AutoXL(object)
+    {
+        if(object.value > 8)
+        {
+            object.value = 8;
+        }
+
+        if(object.value < 0)
+        {
+            object.value = 0;
+        }
+        if(object.id == "txtcbDLLost")
+        {
+            var inputcbWZ = document.getElementById("txtcbXLLost");
+            inputcbWZ.value = eight - object.value;
+            // alert("tttttttt===="+inputcbWZ.value);
+        }
+        else
+        {
+            var inputcbXWZ = document.getElementById("txtcbDLLost");
+            inputcbXWZ.value = eight - object.value;
+            // alert("tttttttt2222222===="+inputcbXWZ.value);
+        }
+
+        XWZorXZ_winnum()
+        DLorXL_winnum()
+    }
+
+    function AutoXWZ(object)
+    {
+        if(object.value > 8)
+        {
+            object.value = 8;
+        }
+
+        if(object.value < 0)
+        {
+            object.value = 0;
+        }
+        if(object.id == "txtcbXWZWin")
+        {
+            var inputcbWZ = document.getElementById("txtcbWZWin");
+            inputcbWZ.value = eight - object.value;
+            // alert("tttttttt===="+inputcbWZ.value);
+        }
+        else
+        {
+            var inputcbXWZ = document.getElementById("txtcbXWZWin");
+            inputcbXWZ.value = eight - object.value;
+            // alert("tttttttt2222222===="+inputcbXWZ.value);
+        }
+
+        XWZorXZ_winnum()
+        DLorXL_winnum()
+    }
+
+    function ChangeNine()
+    {
+        var inputDWZ = document.getElementById("txtcbDWZWin");
+        var inputNine = document.getElementById("txtcbDWZWin2Nine");
+        var inputCellScore = document.getElementById("txtCellScore");
+        inputDWZ.value = inputNine.value * ninebelv * inputCellScore.value;
+
+        XWZorXZ_winnum()
+        DLorXL_winnum()
+        // alert("tttttttt===="+inputDWZ.value); //JSON.stringify(json对象) 将json对象转化为json字符串
+    }
 
     function clearNoNum(obj) {
         //修复第一个字符是小数点 的情况.
@@ -277,8 +418,10 @@
 
     function submitHandler() {
         var data = $("#form-game-edit").serializeArray();
+        alert("序列化为json格式为："+JSON.stringify(data)); //JSON.stringify(json对象) 将json对象转化为json字符串
         var serverID = $("#serverID").val();
 
+        data
         var flag = checkForm();
         if (!flag) {
             return;
