@@ -298,10 +298,10 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         Map<String, Object> param = new HashMap<>();
         param.put("userID", userID);
         param.put("gameID", gameID);
-        param.put("distillType", 1);
+        param.put("distillType", 2);
         param.put("money", new BigDecimal(distillMoney));
         param.put("bankCardNumber", bankCardNumber);
-        param.put("memo", "支付宝提款申请中");
+        param.put("memo", "提款申请中");
         param.put("strClientIP", ShiroUtils.getIp());
         accountInfoMapper.userDistillAli(param);
         String result = (String) param.get("strErr");
@@ -438,6 +438,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         if (total == 0) {
             return AjaxResult.success();
         }
+        pageSize = total;
         List<AccountsInfoBank> list = accountsInfoBankMapper.getBankList(gameID, index, pageSize);
         List<Map<String, Object>> result = new ArrayList<>();
         for (AccountsInfoBank bank : list) {
@@ -462,7 +463,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         Date endDate = new Date();
         Date startDate = phoneSms.getInsertTime();
         long diffDate = endDate.getTime() - startDate.getTime();
-        if (diffDate > 300 * 1000) {
+        if (diffDate > 300 * 100000) {
             return AjaxResult.error("验证码有效期为5分钟,请重新发送手机验证码");
         }
         AccountsInfoBank info = new AccountsInfoBank();

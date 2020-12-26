@@ -139,7 +139,6 @@
         SELECT  count(1) from RYTreasureDB.dbo.UserDistills
         where 1=1
           and UserID = #{userID}
-        ORDER BY HandleDateTime DESC
     </select>
 
 </mapper> 

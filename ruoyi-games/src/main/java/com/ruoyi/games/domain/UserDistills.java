@@ -34,6 +34,8 @@ public class UserDistills {
     private String orderID;
     private Date startHandleDate;
     private Date endHandleDate;
+
+    private Double Amount;
     /**
      * 请求参数
      */
@@ -270,5 +272,13 @@ public class UserDistills {
 
     public void setParams(Map<String, Object> params) {
         this.params = params;
+    }
+
+    public Double getAmount() {
+        return Amount;
+    }
+
+    public void setAmount(Double Amount) {
+        this.Amount = Amount;
     }
 }

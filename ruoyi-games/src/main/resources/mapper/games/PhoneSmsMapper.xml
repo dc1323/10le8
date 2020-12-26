@@ -17,8 +17,7 @@
     <select id="getPhoneSms" resultMap="PhoneSmsResult">
         select top 1 *
         from RYTreasureDB.dbo.PhoneSMS
-        where UserID = #{userID}
-        and PhoneNumber = #{phoneNumber}
+        where PhoneNumber = #{phoneNumber}
         and SmsCode = #{smsCode}
         and TypeID = #{typeID}
         order by ID desc
