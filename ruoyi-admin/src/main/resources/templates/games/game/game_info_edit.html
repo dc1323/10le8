@@ -8,7 +8,8 @@
 <div class="main-content">
     <form class="form-horizontal" id="form-game-edit" th:object="${info}">
         <input name="serverID" id="serverID" type="hidden" th:field="*{serverID}"/>
-        <h4 class="form-header h4">游戏创建</h4>
+<!--        <h4 class="form-header h4">游戏创建</h4>-->
+        <h4 class="form-header h4">房间设置</h4>
         <div class="row" style="margin-top:15px;margin-bottom:15px;">
             <div class="col-xs-2" style="text-align:right;padding-top:7px;margin-bottom:0;">游戏类型：</div>
             <div class="col-xs-3">
@@ -325,7 +326,8 @@
         var cellScore = $("#txtCellScore").val();
         var minEnterScore = $("#txtMinEnterScore").val();
         var tableCount = $("#txtTableCount").val();
-        var cbDWZWin = $("#txtcbDWZWin").val();
+        // var cbDWZWin = $("#txtcbDWZWin").val();
+        var cbDWZWin = 9;
         var cbXWZWin = $("#txtcbXWZWin").val();
         var cbWZWin = $("#txtcbWZWin").val();
         var cbDLLost = $("#txtcbDLLost").val();
@@ -359,10 +361,10 @@
             return false;
         }
 
-        if (isValue(cbDWZWin) == 0) {
-            $.modal.alertError("大王炸赢金额有误");
-            return false;
-        }
+        // if (isValue(cbDWZWin) == 0) {
+        //     $.modal.alertError("大王炸赢金额有误");
+        //     return false;
+        // }
 
         if (isValue(cbDWZWin2Nine) == 0) {
             $.modal.alertError("九人每位赔金额有误");
@@ -399,10 +401,10 @@
             return false;
         }
 
-        if (parseFloat(cbDWZWin) != parseFloat(cbDWZWin2Nine) * 9) {
-            $.modal.alertError("大王炸赢金额与九人每人赔的金额总计不相等");
-            return false;
-        }
+        // if (parseFloat(cbDWZWin) != parseFloat(cbDWZWin2Nine) * 9) {
+        //     $.modal.alertError("大王炸赢金额与九人每人赔的金额总计不相等");
+        //     return false;
+        // }
 
         if ((parseFloat(cbXWZWin) + parseFloat(cbWZWin)) != parseFloat(cbXLLost2Eigbht) * 8) {
             $.modal.alertError("小王炸赢与小炸加每八人赔总计金额不相等")
@@ -418,7 +420,7 @@
 
     function submitHandler() {
         var data = $("#form-game-edit").serializeArray();
-        alert("序列化为json格式为："+JSON.stringify(data)); //JSON.stringify(json对象) 将json对象转化为json字符串
+
         var serverID = $("#serverID").val();
 
         data
@@ -427,8 +429,11 @@
             return;
         }
 
+        data.push({"name": "cbDWZWin", "value": 9});
+
         data.push({"name": "kindID", "value": $("#kindID").val()});
         data.push({"name": "kindName", "value": $("#kindID option:selected").text()});
+
 
         var cmd = "add";
         if (parseInt(serverID) > 0) {
@@ -438,6 +443,8 @@
         }
 
         data.push({"name": "cmd", "value": cmd});
+
+        // alert("序列化为json格式为："+JSON.stringify(data)); //JSON.stringify(json对象) 将json对象转化为json字符串
 
         $.ajax({
             cache: true,

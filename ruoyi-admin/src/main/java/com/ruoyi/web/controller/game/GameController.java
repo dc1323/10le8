@@ -427,7 +427,8 @@ public class GameController extends BaseController {
         return getDataTable(roomInfoList);
     }
 
-    @Log(title = "游戏创建", businessType = BusinessType.UPDATE)
+    // @Log(title = "游戏创建", businessType = BusinessType.UPDATE)
+    @Log(title = "房间设置", businessType = BusinessType.UPDATE)
     @ResponseBody
     @PostMapping(value="/stopGame")
     public AjaxResult stopGame(@RequestBody Map<String, String> map) {
@@ -440,7 +441,8 @@ public class GameController extends BaseController {
 
             int count = gameService.updateNullityByKindId(nullity, serverID);
             count = gameService.updateAndroidConfigureByKindId(nullity, serverID);
-            if (count > 0) {
+//            if (count > 0) {
+            if (count >= 0) {
                 if (nullity == 1) {
                     gameService.stopGameService(serverID);
                 } else {
@@ -562,9 +564,13 @@ public class GameController extends BaseController {
                 return error("底注有误!");
             }
 
-            if (Integer.parseInt(StringUtils.defaultString(info.getCellScore(), "0")) <= 0) {
+            int cellscore = (int)Float.parseFloat(info.getCellScore());
+            if (cellscore <= 0) {
                 return error("底注有误!");
             }
+//            if (Integer.parseInt(StringUtils.defaultString(info.getCellScore(), "0")) <= 0) {
+//                return error("底注有误!");
+//            }
 
             if ((info.getCbDWZWin() % 9) != 0) {
                 return error("大王炸炸赢必须为9的倍数!");

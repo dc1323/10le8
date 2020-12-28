@@ -364,6 +364,7 @@ public class GameServiceImpl implements GameService {
         String serviceRules[] = serviceRule.split(",");
         for (int i = 0; i < serviceRules.length; i++) {
             String rule[] = serviceRules[i].split(":");
+            rule[0] = rule[0].replace(" ","");
             if (Integer.parseInt(rule[0]) == kindId) {
                 serverRule = rule[1];
                 break;

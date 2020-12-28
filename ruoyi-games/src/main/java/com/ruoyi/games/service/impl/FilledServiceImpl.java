@@ -158,11 +158,12 @@ public class FilledServiceImpl implements FilledService {
             index = (pageIndex -1)*pageSize;
         }
         int total = recordAchievementMapper.getShareDetailInfoCount(userID);
-        if(total > 0){
+        if(total >= 0){
             List<ShareDetailInfo> list = recordAchievementMapper.getShareDetailInfoList(userID,index,pageSize);
             TableDataInfo dataInfo = new TableDataInfo(list, total);
             return AjaxResult.success("获取成功",dataInfo);
         }
-        return AjaxResult.success();
+
+        return AjaxResult.error();
     }
 }
