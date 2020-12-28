@@ -1104,8 +1104,8 @@ var table = {
                 var config = {
                     url: url,
                     type: "post",
-                    dataType: "json",
-                    contentType:"application/json;charset=utf-8",
+                    // dataType: "json",
+                    // contentType:"application/json;charset=utf-8",
                     data: data,
                     beforeSend: function () {
                         $.modal.loading("正在处理中，请稍后...");

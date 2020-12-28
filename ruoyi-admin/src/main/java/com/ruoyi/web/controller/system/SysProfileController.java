@@ -72,8 +72,9 @@ public class SysProfileController extends BaseController {
 
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
-    @ResponseBody
-    public AjaxResult resetPwd(String oldPassword, String newPassword) {
+//    public AjaxResult resetPwd(String oldPassword, String newPassword) {
+    public AjaxResult resetPwd(@RequestParam(value = "oldPassword",required = false) String oldPassword,
+                               @RequestParam(value = "newPassword",required = false) String newPassword) {
         SysUser user = ShiroUtils.getSysUser();
         if (!passwordService.matches(user, oldPassword)) {
             return error("修改密码失败，旧密码错误");
