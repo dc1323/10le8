@@ -129,11 +129,11 @@
                 },
                 {
                     field: 'bankCardNumber',
-                    title: '银行账号'
+                    title: '银行卡号'
                 },
                 {
                     field: 'money',
-                    title: '金额',
+                    title: '申请金额',
                     footerFormatter: function (value) {
                         var sumBalance = 0;
                         for (var i in value) {
@@ -144,7 +144,7 @@
                 },
                 {
                     field: 'beforeGold',
-                    title: '变更前金额',
+                    title: '申请前金额',
                     footerFormatter: function (value) {
                         var count = 0;
                         for (var i in value) {
@@ -155,7 +155,7 @@
                 },
                 {
                     field: 'afterGold',
-                    title: '变更后金额'
+                    title: '申请后金额'
                 },
                 {
                     field: 'handleDateTime',
@@ -172,10 +172,30 @@
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-danger btn-xs" href="#" onclick="noAccept(\'' + row.id + '\',\'' + row.userID + '\')"><i class="fa fa-remove"></i>提款拒绝</a>');
-                        actions.push('<a class="btn btn-success btn-xs" href="#" onclick="accept(\'' + row.id + '\',\'' + row.userID + '\')"><i class="fa fa-edit"></i>审核通过</a> ');
-                        return actions.join('');
+                        // alert("序列化为json格式为："+row.result);
+                        if(row.result == 1)
+                        {
+                            return "已处理";
+                        }
+                        else if(row.result == -1)
+                        {
+                            return "未通过";
+                        }
+                        else if(row.result == 10)
+                        {
+                            return "正在审核中";
+                        }
+                        else
+                        {
+                            var actions = [];
+                            actions.push('<a class="btn btn-danger btn-xs" href="#" onclick="noAccept(\'' + row.id + '\',\'' + row.userID + '\')"><i class="fa fa-remove"></i>提款拒绝</a>');
+                            actions.push('<a class="btn btn-success btn-xs" href="#" onclick="accept(\'' + row.id + '\',\'' + row.userID + '\')"><i class="fa fa-edit"></i>审核通过</a> ');
+                            return actions.join('');
+                        }
+                        // var actions = [];
+                        // actions.push('<a class="btn btn-danger btn-xs" href="#" onclick="noAccept(\'' + row.id + '\',\'' + row.userID + '\')"><i class="fa fa-remove"></i>提款拒绝</a>');
+                        // actions.push('<a class="btn btn-success btn-xs" href="#" onclick="accept(\'' + row.id + '\',\'' + row.userID + '\')"><i class="fa fa-edit"></i>审核通过</a> ');
+                        // return actions.join('');
                     }
                 }]
         };

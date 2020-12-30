@@ -135,9 +135,9 @@ public class GameServiceImpl implements GameService {
         }
 
         Game2CaiPiaoParam param = piaoParams.get(0);
-        int cbFreeTime = param.cbFreeTime;
-        int cbBetTime = param.cbBetTime;
-        int cbEndTime = param.cbEndTime;
+        int cbFreeTime = param.cbCloseAccountTime;
+        int cbBetTime = param.cbEnterTime;
+        int cbEndTime = param.cbStartTime;
 
         GameRoomInfo model = roomInfos.get(0);
         Map<String, Integer> dic = getRules(model.getCustomRule().substring(0, 32));

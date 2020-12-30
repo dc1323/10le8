@@ -6,9 +6,10 @@ public class Game2CaiPiaoParam implements java.io.Serializable {
     public int id;
     public int kindID;
     public String kindName;
-    public int cbFreeTime;
-    public int cbBetTime;
-    public int cbEndTime;
+    public int cbCloseAccountTime;
+    public int cbEnterTime;
+    public int cbStartTime;
+    public int maxRoundCount;
     public int totalEndTime;
     public int totalTime;
 
@@ -37,28 +38,37 @@ public class Game2CaiPiaoParam implements java.io.Serializable {
     }
 
     public int getCbFreeTime() {
-        return cbFreeTime;
+        return cbCloseAccountTime;
     }
 
-    public void setCbFreeTime(int cbFreeTime) {
-        this.cbFreeTime = cbFreeTime;
+    public void setCbFreeTime(int cbCloseAccountTime) {
+        this.cbCloseAccountTime = cbCloseAccountTime;
     }
 
     public int getCbBetTime() {
-        return cbBetTime;
+        return cbEnterTime;
     }
 
-    public void setCbBetTime(int cbBetTime) {
-        this.cbBetTime = cbBetTime;
+    public void setCbBetTime(int cbEnterTime) {
+        this.cbEnterTime = cbEnterTime;
     }
 
     public int getCbEndTime() {
-        return cbEndTime;
+        return cbStartTime;
     }
 
-    public void setCbEndTime(int cbEndTime) {
-        this.cbEndTime = cbEndTime;
+    public void setCbEndTime(int cbStartTime) {
+        this.cbStartTime = cbStartTime;
     }
+
+    public int getmaxRoundCount() {
+        return maxRoundCount;
+    }
+
+    public void setmaxRoundCount(int maxRoundCount) {
+        this.maxRoundCount = maxRoundCount;
+    }
+
 
     public int getTotalEndTime() {
         return totalEndTime;

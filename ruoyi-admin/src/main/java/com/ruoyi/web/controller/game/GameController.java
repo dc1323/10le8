@@ -250,7 +250,7 @@ public class GameController extends BaseController {
             if (CollectionUtils.isNotEmpty(caiPiaoDiZhiList)) {
                 Game2CaiPiaoParam param = caiPiaoDiZhiList.get(0);
                 totalTime = param.totalTime;
-                cbFreeTime = param.cbFreeTime;
+                cbFreeTime = param.cbCloseAccountTime;
             }
 
             int cbEndTime = totalTime - totalEndTime;
@@ -304,7 +304,7 @@ public class GameController extends BaseController {
             if (CollectionUtils.isNotEmpty(caiPiaoDiZhiList)) {
                 Game2CaiPiaoParam param = caiPiaoDiZhiList.get(0);
                 totalTime = param.totalTime;
-                cbFreeTime = param.cbFreeTime;
+                cbFreeTime = param.cbCloseAccountTime;
             }
 
             int cbEndTime = totalTime - totalEndTime;
@@ -545,9 +545,9 @@ public class GameController extends BaseController {
             List<Game2CaiPiaoParam> caiPiaoDiZhiList = gameService.getGame2CaiPiaoParamList(info.getKindID());
             Game2CaiPiaoParam param = caiPiaoDiZhiList.get(0);
 
-            int cbFreeTime = param.cbFreeTime;
-            int cbBetTime = param.cbBetTime;
-            int cbEndTime = param.cbEndTime;
+            int cbFreeTime = param.cbCloseAccountTime;
+            int cbBetTime = param.cbEnterTime;
+            int cbEndTime = param.cbStartTime;
 
             if (cmd.equals("update") && StringUtils.isEmpty(info.getServerLevel())) {
                 GameRoomInfo gameRoomInfo1 = gameService.getGameRoomInfo(info.getServerID());
