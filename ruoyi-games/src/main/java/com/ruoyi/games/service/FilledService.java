@@ -33,4 +33,6 @@ public interface FilledService {
 
     AjaxResult getShareDetailInfoList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize);
 
+    AjaxResult addCustomer(Customer customer);
+
 }

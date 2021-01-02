@@ -139,6 +139,9 @@ public class GameRoomInfo {
 
     public int getCbDWZWin() {
         return cbDWZWin;
+
+//        int num = (int)Float.parseFloat(this.cellScore);
+//        return this.cbDWZWin2Nine*9*num;
     }
 
     public void setCbDWZWin(int cbDWZWin) {

@@ -10,7 +10,7 @@
 <div class="ui-layout-center">
     <div class="container-div">
         <div class="row">
-            <div class="col-sm-12 search-collapse">
+            <!-- <div class="col-sm-12 search-collapse">
                 <form id="user-form">
                     <div class="select-list">
                         <ul>
@@ -37,14 +37,14 @@
                         </ul>
                     </div>
                 </form>
-            </div>
+            </div> -->
 
-            <div class="btn-group-sm" id="toolbar" role="group">
+            <!-- <div class="btn-group-sm" id="toolbar" role="group">
                 <a class="btn btn-primary" onclick="create()"
                    shiro:hasPermission="games:app:create">
                     <i class="glyphicon glyphicon-ok-circle icon-white"></i> 创建
                 </a>
-            </div>
+            </div> -->
 
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -96,8 +96,10 @@
                     title: '批次'
                 },
                 {
-                    field: 'kindName',
-                    title: '游戏类型'
+                    // field: 'kindName',
+                    // title: '游戏类型'
+                    field: 'serverName',
+                    title: '游戏名'
                 },
                 {
                     field: 'cellScore',
@@ -112,7 +114,11 @@
                 },
                 {
                     field: 'takeMinScore',
-                    title: '携带总分数'
+                    title: '携带最小分数'
+                },
+                {
+                    field: 'takeMaxScore',
+                    title: '携带最大分数'
                 },
                 {
                     title: '机器人补桌',
@@ -147,8 +153,8 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="openDetail(\'' + row.batchID + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + closeFlag + '" serverID="'+row.serverID+'" batchID="'+row.batchID+ '" nullity="'+row.nullity+'" href="javascript:void(0)" onclick="grantManager(1, this)"><i class="fa fa-remove"></i>关闭</a> ');
-                        actions.push('<a class="btn btn-primary btn-xs ' + startFlag + '" serverID="'+row.serverID+'" batchID="'+row.batchID+ '" nullity="'+row.nullity+'" href="javascript:void(0)" onclick="grantManager(0, this)"><i class="fa fa-check"></i>开启</a> ');
+                        // actions.push('<a class="btn btn-danger btn-xs ' + closeFlag + '" serverID="'+row.serverID+'" batchID="'+row.batchID+ '" nullity="'+row.nullity+'" href="javascript:void(0)" onclick="grantManager(1, this)"><i class="fa fa-remove"></i>关闭</a> ');
+                        // actions.push('<a class="btn btn-primary btn-xs ' + startFlag + '" serverID="'+row.serverID+'" batchID="'+row.batchID+ '" nullity="'+row.nullity+'" href="javascript:void(0)" onclick="grantManager(0, this)"><i class="fa fa-check"></i>开启</a> ');
                         return actions.join('');
                     }
                 }]

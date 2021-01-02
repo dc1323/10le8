@@ -288,6 +288,7 @@ public class AccountInfoServiceImpl implements AccountInfoService {
 //        }
 //        return AjaxResult.success();
         if (StringUtils.isEmpty(result)) {
+
             return AjaxResult.success(result);
         }
         return AjaxResult.error();
@@ -362,12 +363,18 @@ public class AccountInfoServiceImpl implements AccountInfoService {
         if (message == null) {
             return AjaxResult.error("注册失败", message);
         }
+
         return AjaxResult.success("注册成功");
     }
 
     @Override
     public Map<String, String> registerAccountByMessage(Map<String, String> param) {
         return accountInfoMapper.registerAccountByMessage(param);
+    }
+
+    @Override
+    public void OpenAgent(int userID,int gameID) {
+        accountInfoMapper.OpenAgent(userID,gameID);
     }
 
     @Override
@@ -456,16 +463,26 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     public AjaxResult bindBank(Integer userID, Integer gameID, String bankName,
                                String bankCardNumber, String bankUserName,
                                String bankTypeName, String phoneNumber, String phoneCode) {
-        PhoneSms phoneSms = phoneSmsMapper.getPhoneSms(userID, phoneNumber, phoneCode, (short) 2);
-        if (null == phoneSms || Objects.equals(0, phoneSms.getId())) {
-            return AjaxResult.error("验证码有误");
+//        PhoneSms phoneSms = phoneSmsMapper.getPhoneSms(userID, phoneNumber, phoneCode, (short) 2);
+//        if (null == phoneSms || Objects.equals(0, phoneSms.getId())) {
+//            return AjaxResult.error("验证码有误");
+//        }
+//        Date endDate = new Date();
+//        Date startDate = phoneSms.getInsertTime();
+//        long diffDate = endDate.getTime() - startDate.getTime();
+//        if (diffDate > 300 * 100000) {
+//            return AjaxResult.error("验证码有效期为5分钟,请重新发送手机验证码");
+//        }
+
+        List<AccountsInfoBank> Banklist = accountsInfoBankMapper.getBankList(gameID, 1, 10);
+        if(Banklist!=null && Banklist.size() > 0)
+        {
+            if(!Banklist.get(0).getBankUserName().equals(bankUserName))
+            {
+                return AjaxResult.error("银行卡用户名必须唯一");
+            }
         }
-        Date endDate = new Date();
-        Date startDate = phoneSms.getInsertTime();
-        long diffDate = endDate.getTime() - startDate.getTime();
-        if (diffDate > 300 * 100000) {
-            return AjaxResult.error("验证码有效期为5分钟,请重新发送手机验证码");
-        }
+
         AccountsInfoBank info = new AccountsInfoBank();
         info.setBankCardNumber(bankCardNumber);
         info.setBankUserName(bankUserName);
@@ -505,5 +522,10 @@ public class AccountInfoServiceImpl implements AccountInfoService {
     @Override
     public int updateNickNameByUserID(String nickName, int userID) {
         return accountInfoMapper.updateNickNameByUserID(nickName, userID);
+    }
+
+    @Override
+    public List<CommissionInfo> getSubUserCommission(int GameID) {
+        return accountInfoMapper.getSubUserCommission(GameID);
     }
 }

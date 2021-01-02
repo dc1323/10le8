@@ -146,6 +146,22 @@ public class FilledServiceImpl implements FilledService {
     }
 
     @Override
+    public AjaxResult addCustomer(Customer customer) {
+        if (null == customer) {
+            return AjaxResult.error("参数不能为空");
+        }
+        if (StringUtils.isEmpty(customer.getCustomerValue())) {
+            return AjaxResult.error("客服账号不能为空");
+        }
+        if (customer.getTypeID() == 0) {
+            return AjaxResult.error("客服类型不能为空");
+        }
+        customerMapper.addCustomer(customer);
+        return AjaxResult.success();
+    }
+
+
+    @Override
     public AjaxResult getShareDetailInfoList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize) {
         int index = 0;
         if(null == pageIndex){

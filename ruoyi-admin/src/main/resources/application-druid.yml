@@ -7,9 +7,15 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:sqlserver://8.134.19.160:1433;DatabaseName=RYPlatformManagerDB
+        # url: jdbc:sqlserver://8.134.19.160:1433;DatabaseName=RYPlatformManagerDB
+        # username: sa
+        # password: abc123@
+        url: jdbc:sqlserver://8.134.10.97:1433;DatabaseName=RYPlatformManagerDB
         username: sa
         password: abc123@
+        # url: jdbc:sqlserver://192.168.3.10:1433;DatabaseName=RYPlatformManagerDB
+        # username: sa
+        # password: 123456789
 #        url: jdbc:mysql://114.115.142.38:3306/game?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
 #        username: root
 #        password: Jiangzhong1314
@@ -23,9 +29,15 @@ spring:
       #从数据库，游戏账号数据库
       accountdb:
         enabled: true
-        url: jdbc:sqlserver://8.134.19.160:1433;DatabaseName=RYAccountsDB
+        # url: jdbc:sqlserver://8.134.19.160:1433;DatabaseName=RYAccountsDB
+        # username: sa
+        # password: abc123@
+        url: jdbc:sqlserver://8.134.10.97:1433;DatabaseName=RYAccountsDB
         username: sa
         password: abc123@
+        # url: jdbc:sqlserver://192.168.3.10:1433;DatabaseName=RYAccountsDB
+        # username: sa
+        # password: 123456789
       # 初始连接数
       initialSize: 5
       # 最小连接池数量

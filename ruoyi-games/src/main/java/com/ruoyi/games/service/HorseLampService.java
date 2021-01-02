@@ -16,6 +16,6 @@ public interface HorseLampService {
 
     void deleteHorseLamp(String[] ids);
 
-    List<HorseLamp> getHorseLampTop(int topNumber);
+    List<HorseLamp> getHorseLampTop(Integer topNumber);
 
 }

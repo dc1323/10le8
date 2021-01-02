@@ -111,7 +111,8 @@ public class AppController extends BaseController {
     @Log(title = "创建机器人", businessType = BusinessType.UPDATE)
     @ResponseBody
     @PostMapping(value="/add")
-    public AjaxResult add(@RequestBody AndroidConfigInfo info) {
+//    public AjaxResult add(@RequestBody AndroidConfigInfo info) {
+    public AjaxResult add(AndroidConfigInfo info) {
         try {
             if (info.getCellScore() == 0) {
                 return error("底注有误");
@@ -125,7 +126,8 @@ public class AppController extends BaseController {
                 return error("携带分数有误");
             }
 
-            String serverName = info.getKindName() + "_" + info.getCellScore();
+            String serverName = info.getKindName();
+//            String serverName = info.getKindName() + "_" + info.getCellScore();
             List<GameRoomInfo> gameRoomInfos = appService.getGameRoomByName(serverName);
             if (null == gameRoomInfos || gameRoomInfos.size() == 0) {
                 return error("游戏房间不存在,请先创建房间");
@@ -140,6 +142,8 @@ public class AppController extends BaseController {
             if (minEnterScore > info.getTakeMinScore()) {
                 return error("机器人携带分数不能低于房间最小入场分数");
             }
+
+            info.setAndroidCountMember0(info.getAndroidCount());
 
             info.setServiceMode(7);
             info.setEnterTime(0);

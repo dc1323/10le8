@@ -18,4 +18,6 @@ public interface CustomerMapper {
 
     void updateCustomer(Customer customer);
 
+    void addCustomer(Customer customer);
+
 }

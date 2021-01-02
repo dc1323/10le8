@@ -449,6 +449,20 @@ public class ApiGameController extends BaseController {
         }
     }
 
+    @ApiOperation("获取所有下级返利")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "gameID", value = "游戏ID", required = true, dataType = "int", paramType = "query")
+    })
+    @GetMapping("/getSubUserCommission")
+    public AjaxResult getSubUserCommission(Integer gameID) {
+        List<CommissionInfo> list = accountInfoService.getSubUserCommission(gameID);
+        if (null == list) {
+            return AjaxResult.success();
+        } else {
+            return AjaxResult.success("获取成功", list);
+        }
+    }
+
     @ApiOperation("获取游戏版本号")
     @GetMapping("/getgameversion")
     public AjaxResult getGameVersion() {

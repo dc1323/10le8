@@ -7,9 +7,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.games.domain.Customer;
-import com.ruoyi.games.domain.RecordAchievement;
-import com.ruoyi.games.domain.UserDistills;
+import com.ruoyi.games.domain.*;
 import com.ruoyi.games.service.FilledService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,6 +153,23 @@ public class FilledController extends BaseController {
         startPage();
         List<Customer> list = filledService.getCustomerList(info);
         return getDataTable(list);
+    }
+
+    @GetMapping("/customer/add")
+    public String customerCreateAdd(ModelMap map) {
+        Customer param = new Customer();
+        List<Customer> typeList = filledService.getCustomerType();
+        map.put("typeList", typeList);
+        map.put("customer", param);
+        return prefix + "/addcustomer";
+    }
+
+    @Log(title = "添加客服信息", businessType = BusinessType.INSERT)
+    @RequiresPermissions("games:filled:addcustomer")
+    @PostMapping("/addcustomer/addcus")
+    @ResponseBody
+    public AjaxResult addCustomer(Customer customer) {
+        return filledService.addCustomer(customer);
     }
 
     @RequiresPermissions("games:filled:customer")

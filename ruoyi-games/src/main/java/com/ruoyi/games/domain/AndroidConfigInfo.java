@@ -13,6 +13,7 @@ public class AndroidConfigInfo {
     private int batchID;
     private int kindID;
     private int serverID;
+    private String serverName;
     private String kindName;
     private int cellScore;
     private int androidCount;
@@ -30,6 +31,8 @@ public class AndroidConfigInfo {
     public long takeMaxScore;
     public int switchMinInnings;
     public int switchMaxInnings;
+
+    public int AndroidCountMember0;
 
     public int enterTime;
     public int leaveTime;
@@ -156,6 +159,14 @@ public class AndroidConfigInfo {
         this.kindID = kindID;
     }
 
+    public String getServerName() {
+        return serverName;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
+
     public String getKindName() {
         return kindName;
     }
@@ -179,6 +190,15 @@ public class AndroidConfigInfo {
     public void setAndroidCount(int androidCount) {
         this.androidCount = androidCount;
     }
+
+    public int getAndroidCountMember0() {
+        return AndroidCountMember0;
+    }
+
+    public void setAndroidCountMember0(int AndroidCountMember0) {
+        this.AndroidCountMember0 = AndroidCountMember0;
+    }
+
 
     public BigDecimal getScore() {
         return score;

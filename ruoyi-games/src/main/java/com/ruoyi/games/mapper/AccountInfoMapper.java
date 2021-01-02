@@ -1,6 +1,7 @@
 package com.ruoyi.games.mapper;
 
 import com.ruoyi.games.domain.AccountInfo;
+import com.ruoyi.games.domain.CommissionInfo;
 import com.ruoyi.games.domain.OrderInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,8 @@ public interface AccountInfoMapper {
     List<AccountInfo> selectAccountPage(Map<String, Object> param);
 
     String getCanCachOut(Map<String, Object> param);
+
+//    int GetUserIDByGameID(@Param("GameID") int GameID);
 
     AccountInfo selectAccountByUserID(Integer userID);
 
@@ -52,4 +55,8 @@ public interface AccountInfoMapper {
     AccountInfo getAccountInfoByGameID(@Param("gameID") int gameID);
 
     Map<String, String> registerAccountByMessage(Map<String, String> param);
+
+    void OpenAgent(@Param("UserID") int UserID,@Param("GameID") int GameID);
+
+    List<CommissionInfo> getSubUserCommission(@Param("GameID") int GameID);
 }

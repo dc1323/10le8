@@ -421,6 +421,7 @@ public class GameController extends BaseController {
         List<GameRoomInfo> roomInfoList = gameService.getRoomsList();
         for (GameRoomInfo info : roomInfoList) {
             info.setRevenueRatio(info.getRevenueRatio()/10);
+//            info.setRevenueRatio(info.getRevenueRatio());
             info.setServerLevel(Integer.parseInt(info.getServerLevel()) >= 10 ? "自定义房间" : "随机匹配房间");
             info.setNullityStatus(Integer.parseInt(info.getNullity()) == 1? "已停止" : "已启动");
         }
@@ -527,6 +528,7 @@ public class GameController extends BaseController {
             if (revenueRatio > 1000 || revenueRatio < 0) {
                 return error("抽水比例不能超过100%且不能小于0!");
             }
+            info.setRevenueRatio((int)revenueRatio);
 
             if (info.getCbDWZWin() != info.getCbDWZWin2Nine() * 9) {
                 return error("大王炸赢金额与九人每人赔的金额总计不相等!");

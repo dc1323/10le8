@@ -104,9 +104,13 @@ public interface AccountInfoService {
     AjaxResult registerAccount(String phoneNumber, String phoneCode, String passWord, String machineID,
                                String nickName, int playingGame, HttpServletRequest request);
 
+    void OpenAgent(int userid,int gameID);
+
     Map<String, String> registerAccountByMessage(Map<String, String> param);
 
     AjaxResult sendMsg(String phoneNumber, int userID, int typeID);
 
     AjaxResult getBankList(Integer userID, Integer gameID, Integer pageIndex, Integer pageSize);
+
+    List<CommissionInfo> getSubUserCommission(int GameID);
 }

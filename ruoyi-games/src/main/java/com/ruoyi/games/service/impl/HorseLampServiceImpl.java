@@ -39,7 +39,7 @@ public class HorseLampServiceImpl implements HorseLampService {
     }
 
     @Override
-    public List<HorseLamp> getHorseLampTop(int topNumber) {
+    public List<HorseLamp> getHorseLampTop(Integer topNumber) {
         return horseLampMapper.getHorseLampTop(topNumber);
     }
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
 <head>
     <th:block th:include="include :: header('提现申请')"/>
     <th:block th:include="include :: layout-latest-css"/>
@@ -65,6 +66,10 @@
 <script th:inline="javascript">
     var datas = [[${@dict.getType('games_account_stats')}]];
     var prefix = ctx + "games/filled";
+
+    // setTimeout(function(){
+    //     location.reload()
+    // },2000);
 
     $(function () {
         var panehHidden = false;
@@ -232,6 +237,7 @@
             var data = {"userID": userID, "id": id, "reason": pass, "operaType": 0};
             $.operate.submit(url, "post", "json", data);
             queryDataList();
+            $.form.reset()
         });
     }
 
@@ -239,6 +245,7 @@
         var url = prefix + "/accept";
         var data = {"userID": userID, "id": id, "reason": "已接受提款，正等待付款", "operaType": 1};
         $.operate.submit(url, "post", "json", data);
+        $.form.reset()
     }
 
 </script>
